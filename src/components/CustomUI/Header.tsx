@@ -16,7 +16,14 @@ const Header = () => {
   const navList = ["내 코인", "코인리스트", "뉴스"];
   return (
     <header className=" w-full h-[90px] flex justify-start items-center pl-[1.5rem] pr-[1.5rem] ">
-      <Image src={LOGO} alt="LOGO" width={100} height={90} />
+      <Image
+        src={LOGO}
+        alt="LOGO"
+        width={100}
+        height={60}
+        className=" cursor-pointer"
+      />
+
       <div className=" w-full h-full flex justify-between items-center pl-[3rem] tablet:justify-end ">
         <ul className=" w-auto h-full flex justify-between items-center gap-[5rem] tablet:hidden">
           {navList.map((items: string, key: number) => {
