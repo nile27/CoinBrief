@@ -1,3 +1,4 @@
+import { Container } from "postcss";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -48,6 +49,28 @@ const config: Config = {
           DEFAULT: "#E0A3C8",
           dark: "#8E7CC3",
         },
+        container: {
+          DEFAULT: "#FFFFFF",
+          dark: "#252735",
+        },
+        border: {
+          DEFAULT: "#E4E4EB",
+          dark: "#404458",
+        },
+      },
+      fontSize: {
+        DEFAULT: "16px",
+        extra: "50px",
+        header: "36px",
+        smallHeader: "20px",
+        medium: "16px",
+        small: "12px",
+      },
+      screens: {
+        mobile: { max: "600px" },
+        tablet: { max: "800px" },
+        tablet900: { max: "900px" },
+        textBoxHalf: { max: "1170px" },
       },
     },
   },

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Dice1, Moon, MoonIcon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
@@ -12,23 +12,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-function DarkModeExample() {
+function DarkBtn() {
   const { setTheme, themes, theme } = useTheme();
-  React.useEffect(() => {
-    console.log(setTheme);
-    console.log(themes, theme);
-  }, []);
 
   return (
     <>
-      <div className=" w-[500px] h-5 text-[red] dark:bg-background-dark bg-background">
-        aslkdjaksldjklasdkasldkk
-      </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="icon">
-            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <Button
+            variant="outline"
+            size="icon"
+            className="bg-background dark:bg-background-dark w-[3rem] h-[3rem] p-0 border-border dark:border-border-dark"
+          >
+            <Sun className="w-24 h-25 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 " />
+            <Moon
+              size={20}
+              className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+            />
             <span className="sr-only">Toggle theme</span>
           </Button>
         </DropdownMenuTrigger>
@@ -48,4 +48,4 @@ function DarkModeExample() {
   );
 }
 
-export default DarkModeExample;
+export default DarkBtn;

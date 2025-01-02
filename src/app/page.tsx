@@ -1,9 +1,12 @@
+import Header from "@/components/CustomUI/Header";
+import LoginMain from "@/components/Main/LoginMain";
 import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-theme-primary">
-      <div>적용된거 맞음?</div>
+    <main className="flex w-full h-full min-h-screen min-w-screen flex-col items-center justify-between bg-theme-primary">
+      <Header />
+      <LoginMain />
     </main>
   );
 }
