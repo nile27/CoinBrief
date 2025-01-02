@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 function DarkBtn() {
-  const { setTheme, themes, theme } = useTheme();
+  const { setTheme } = useTheme();
 
   return (
     <>
@@ -38,9 +38,6 @@ function DarkBtn() {
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setTheme("dark")}>
             Dark
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setTheme("system")}>
-            System
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

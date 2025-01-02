@@ -42,8 +42,8 @@ const config: Config = {
           dark: "#F3D1F4",
         },
         btn: {
-          DEFAULT: "#A593E0",
-          dark: "#E662A8",
+          DEFAULT: "#E662A8",
+          dark: "#A593E0",
         },
         hover: {
           DEFAULT: "#E0A3C8",

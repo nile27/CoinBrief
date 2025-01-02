@@ -1,7 +1,7 @@
 import React from "react";
 
 const LoginMain = () => {
-  return <></>;
+  return <main className="w-full h-full bg-red"></main>;
 };
 
 export default LoginMain;
