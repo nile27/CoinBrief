@@ -11,19 +11,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "next-themes";
 
+import Link from "next/link";
+import { useAuthStore } from "@/store/store";
+import BtnStyle from "./BtnStyle";
+
 const Header = () => {
   const navList = ["내 코인", "코인리스트", "뉴스"];
+  const navLink = ["mycoin", "mycoin", "mycoin"];
   const { theme } = useTheme();
-
-  const isLogin = true;
+  const { isLogin, logout } = useAuthStore();
 
   return (
     <header
-      className={` sticky top-0 w-full h-[90px] flex items-center pl-[1.5rem] pr-[1.5rem] ${
+      className={` sticky top-0 w-full h-[10vh] flex items-center pl-[1.5rem] pr-[1.5rem] ${
         isLogin ? "justify-start" : "justify-between"
       }`}
     >
-      <LogoD />
+      <Link href={"/"}>
+        <LogoD />
+      </Link>
 
       {isLogin ? (
         <div className=" w-full h-full flex justify-between items-center pl-[3rem] tablet:justify-end ">
@@ -35,7 +41,7 @@ const Header = () => {
                   key={key}
                 >
                   <span className="dark:text-text-dark  text-text text-smallHeader font-semibold border-b-[2px] border-transparent hover:border-text dark:hover:border-text-dark ">
-                    {items}
+                    <Link href={navLink[key]}>{items}</Link>
                   </span>
                 </li>
               );
@@ -54,9 +60,10 @@ const Header = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                {navList.map((items: string, key: number) => {
-                  return <DropdownMenuItem key={key}>{items}</DropdownMenuItem>;
-                })}
+                <DropdownMenuItem>
+                  <Link href={"/"}>마이페이지</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={logout}>로그아웃</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <DarkBtn />
@@ -89,9 +96,11 @@ const Header = () => {
         </div>
       ) : (
         <div className=" w-auto h-auto pr-[10px]">
-          <button className=" bg-btn dark:bg-btn-dark w-[100px] h-[40px] hover:bg-hover dark:hover:bg-hover-dark bold rounded-[10px]">
-            Login
-          </button>
+          <Link href={"/login"}>
+            <BtnStyle width="24" height="[40px]">
+              LOGIN
+            </BtnStyle>
+          </Link>
         </div>
       )}
     </header>
