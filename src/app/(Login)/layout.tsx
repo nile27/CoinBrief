@@ -10,7 +10,7 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className=" flex w-[100vw] h-[90vh]   items-center justify-between flex-col">
+    <main className=" flex w-[100vw] h-[90vh] items-center justify-between flex-col">
       {children}
       <Footer />
     </main>

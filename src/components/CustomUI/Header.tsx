@@ -97,9 +97,7 @@ const Header = () => {
       ) : (
         <div className=" w-auto h-auto pr-[10px]">
           <Link href={"/login"}>
-            <BtnStyle width="24" height="[40px]">
-              LOGIN
-            </BtnStyle>
+            <BtnStyle size="small">LOGIN</BtnStyle>
           </Link>
         </div>
       )}

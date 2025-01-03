@@ -7,7 +7,7 @@ interface InputInterface {
 const InputStyle = ({ placeholder }: InputInterface) => {
   return (
     <input
-      className={`w-[300px] h-[40px] pl-4 dark:bg-container-dark bg-container text-text dark:text-text-dark rounded-md border-[2px] dark:border-[0px]  `}
+      className={` w-full min-w-[300px] h-[40px] pl-4 dark:bg-container-dark bg-container text-sm text-text dark:text-text-dark rounded-md border-[2px] dark:border-[0px] outline-none `}
       placeholder={placeholder}
     ></input>
   );

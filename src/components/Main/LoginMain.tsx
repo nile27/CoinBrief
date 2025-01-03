@@ -26,9 +26,7 @@ const LoginMain = () => {
             to learn more.
           </p>
           <Link href={"/login"} className="w-full h-auto mt-20">
-            <BtnStyle width="full" height="[50px]">
-              LOGIN
-            </BtnStyle>
+            <BtnStyle size="XL">LOGIN</BtnStyle>
           </Link>
         </div>
       </div>

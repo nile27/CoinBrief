@@ -17,7 +17,7 @@ const Login = () => {
             CoinBrief의 회원이 아니신가요?
           </p>
           <Link
-            href={"/"}
+            href={"/signup"}
             className=" text-primary dark:text-primary-dark underline"
           >
             회원가입
@@ -28,9 +28,7 @@ const Login = () => {
             <InputStyle placeholder="이메일" />
             <InputStyle placeholder="비밀번호" />
           </div>
-          <BtnStyle width="full" height="[40px]">
-            LOGIN
-          </BtnStyle>
+          <BtnStyle size="medium">LOGIN</BtnStyle>
         </form>
         <div className=" w-full h-auto mt-1 flex gap-2 justify-center items-center">
           <button className="w-full h-[30px] gap-3 bg-container dark:bg-container-dark rounded-md flex justify-center items-center ">
