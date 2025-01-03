@@ -21,7 +21,7 @@ const SignUp = () => {
           </Link>
         </div>
         <form className="flex flex-col gap-5 w-full h-auto  border-[rgba(113,113,113,0.8)] dark:border-[rgba(228,228,235,0.8)] pb-6">
-          <div className="w-full h-auto flex flex-col gap-5 pb-5">
+          <div className="w-full h-auto flex flex-col gap-4 pb-2">
             <InputStyle placeholder="이름" />
             <InputStyle placeholder="이메일" />
             <div className=" w-full h-auto flex justify-center items-center gap-2">
@@ -31,7 +31,13 @@ const SignUp = () => {
             <InputStyle placeholder="닉네임" />
             <InputStyle placeholder="비밀번호 (8~20 영문 숫자, 특수문자 조합)" />
             <InputStyle placeholder="비밀번호 확인" />
+            {true && (
+              <span className=" text-[#DF4646] pb-2 ">
+                비밀번호를 입력해주세요.
+              </span>
+            )}
           </div>
+
           <BtnStyle size="medium">SIGN UP</BtnStyle>
         </form>
       </div>
