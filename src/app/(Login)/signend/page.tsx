@@ -1,6 +1,4 @@
-import InputStyle from "@/components/CustomUI/InputStyle";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
-import Link from "next/link";
 
 const SignEnd = () => {
   return (
