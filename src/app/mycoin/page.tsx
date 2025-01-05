@@ -16,8 +16,8 @@ const Mycoin = () => {
         <div className=" w-full h-[40px] flex justify-between items-center  px-10">
           <h1 className=" text-[24px] font-semibold w-full">내 코인 목록</h1>
           <div className=" w-auto h-full flex justify-center items-center  gap-5">
-            <button className=" flex gap-2 w-auto h-full items-center  rounded-full border border-secondary px-2">
-              <CirclePlus className=" text-secondary " />
+            <button className=" flex gap-2 w-auto h-full items-center  rounded-full border border-green px-2">
+              <CirclePlus className=" text-green " />
               <span className=" whitespace-nowrap">코인 등록</span>
             </button>
             <button className=" flex gap-2 w-auto h-full items-center  rounded-full border border-[#DF4646] px-2">
@@ -26,8 +26,11 @@ const Mycoin = () => {
             </button>
           </div>
         </div>
-        <div className="w-full h-[370px] border-border dark:border-border-dark border-[2px]  flex flex-col justify-center items-center">
+        <div className="w-full h-[370px] border-border dark:border-border-dark border-[2px]  flex gap-10 justify-center items-center">
           {/* 내 코인을 등록해주세요. */}
+          <MyCoinBox />
+          <MyCoinBox />
+          <MyCoinBox />
           <MyCoinBox />
         </div>
       </div>
