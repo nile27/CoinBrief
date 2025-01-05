@@ -57,6 +57,12 @@ const config: Config = {
           DEFAULT: "#E4E4EB",
           dark: "#404458",
         },
+        green: {
+          DEFAULT: "#31EB18",
+        },
+        red: {
+          DEFAULT: "#DF4646",
+        },
       },
       fontSize: {
         DEFAULT: "16px",

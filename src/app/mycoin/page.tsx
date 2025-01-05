@@ -1,5 +1,6 @@
 import React from "react";
 import Chart from "@/components/Chart/Chart";
+import MyCoinBox from "@/components/Mycoin/MyCoinBox";
 import { CirclePlus, CircleX } from "lucide-react";
 
 const Mycoin = () => {
@@ -26,7 +27,8 @@ const Mycoin = () => {
           </div>
         </div>
         <div className="w-full h-[370px] border-border dark:border-border-dark border-[2px]  flex flex-col justify-center items-center">
-          내 코인을 등록해주세요.
+          {/* 내 코인을 등록해주세요. */}
+          <MyCoinBox />
         </div>
       </div>
     </main>
