@@ -23,7 +23,7 @@ const Header = () => {
 
   return (
     <header
-      className={` sticky top-0 w-full h-[10vh] flex items-center pl-[1.5rem] pr-[1.5rem] ${
+      className={`  top-0 w-full h-[10vh] flex items-center pl-[1.5rem] pr-[1.5rem] ${
         isLogin ? "justify-start" : "justify-between"
       }`}
     >
