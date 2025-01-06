@@ -3,10 +3,14 @@ import Ellipse from "@/../public/Ellipse.svg";
 import GreenArrow from "@/../public/GreenArrow.svg";
 import RedArrow from "@/../public/RedArrow.svg";
 
-const MyCoinBox = () => {
+const MyCoinBox = ({ bool }: { bool: boolean }) => {
   return (
-    <div className=" relative w-auto h-[300px] flex items-end  hover:scale-105 duration-150  ">
-      <Ellipse className="absolute z-10 top-0 left-10 " />
+    <div
+      className={` relative w-auto h-[300px] flex items-end  duration-150  ${
+        bool ? "scale-110" : " hover:scale-105"
+      }`}
+    >
+      <Ellipse className="absolute z-10 top-0 left-10 w-[100px] h-[107px]" />
       <div className=" flex justify-start items-center flex-col py-2 px-4 w-[300px] h-auto border-2 border-btn dark:border-text-dark bg-container dark:bg-container-dark rounded-[5px]">
         <div className=" w-full h-auto px-6 py-2 flex justify-center items-end flex-col">
           <span className=" h-auto w-[70px] text-start text-[18px]">

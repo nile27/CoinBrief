@@ -122,7 +122,7 @@ export default function Chart() {
   };
 
   return (
-    <div>
+    <div className=" ">
       <h1>Bitcoin Price Chart (7 Days)</h1>
       <Line
         data={chartData}
@@ -158,8 +158,7 @@ export default function Chart() {
         div {
           width: 100%;
           max-width: 800px;
-          height: 300px;
-          margin: auto;
+          height: 350px;
         }
       `}</style>
     </div>
