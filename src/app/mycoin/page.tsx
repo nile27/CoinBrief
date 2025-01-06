@@ -12,7 +12,7 @@ const Mycoin = () => {
   let coinBoxArr = [true, false, false];
 
   return (
-    <main className="w-[100vw] h-auto p-4 flex flex-col justify-center items-center gap-10">
+    <main className="w-[100vw] h-auto p-4 flex flex-col justify-center items-center gap-10 ">
       <section className="w-full h-[auto] flex justify-center gap-10 items-center">
         <section className=" w-[370px] h-auto rounded-[12px] flex flex-col gap-4 justify-start items-center py-6 px-4 border-[1px] border-border dark:border-border-dark">
           {/* 코인을 등록해주세요. */}

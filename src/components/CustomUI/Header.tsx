@@ -17,7 +17,7 @@ import BtnStyle from "./BtnStyle";
 
 const Header = () => {
   const navList = ["내 코인", "코인리스트", "뉴스"];
-  const navLink = ["mycoin", "mycoin", "mycoin"];
+  const navLink = ["mycoin", "coinlist", "news"];
   const { theme } = useTheme();
   const { isLogin, logout } = useAuthStore();
 

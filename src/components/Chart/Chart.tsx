@@ -82,7 +82,12 @@ export default function Chart() {
     fetchChartData();
   }, []);
 
-  if (!chartData) return <div>Loading chart...</div>;
+  if (!chartData)
+    return (
+      <div className="w-[800px] h-[400px] flex justify-center items-center">
+        Loading chart...
+      </div>
+    );
 
   const options: ChartOptions<"line"> = {
     responsive: true,
