@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 interface BtnInterface {
-  size: "default" | "XL" | "small" | "medium" | "calc";
+  size: "default" | "XL" | "small" | "medium" | "calc" | "change";
   children: any;
 }
 
@@ -12,7 +12,8 @@ const BtnStyle = ({ size, children }: BtnInterface) => {
       size: {
         default: "w-12 h-12 ",
         XL: `w-full h-[70px] text-[20px] `,
-        small: "w-[80px] h-[40px] text-[14px] ",
+        small: "w-[80px] h-[40px] text-[16px] ",
+        change: "w-[100px] h-[40px]",
         medium: `w-full h-[50px] `,
         calc: `w-full h-[40px] `,
       },

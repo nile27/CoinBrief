@@ -10,9 +10,8 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className=" flex w-[100vw]  min-h-[90vh] items-center justify-between flex-col gap-10">
+    <main className=" flex w-[100vw]  min-h-[90vh] items-center justify-between flex-col gap-10 ">
       {children}
-      <Footer />
     </main>
   );
 }
