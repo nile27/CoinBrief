@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const SignUp = () => {
   return (
-    <section className=" h-full w-auto  flex  justify-center items-center">
+    <section className=" h-full w-auto flex justify-center items-center pt-8 pb-10">
       <div className="w-auto h-auto gap-3 px-10 py-5 flex flex-col justify-center items-center border-border dark:border-border-dark border rounded-[15px]">
         <h1 className={`w-full h-full  text-header font-extrabold text-start`}>
           회원 가입

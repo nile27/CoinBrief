@@ -1,6 +1,9 @@
+"use client";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 const CoinListTable = () => {
+  const navi = useRouter();
   const coins = [
     {
       id: "bitcoin",
@@ -16,6 +19,9 @@ const CoinListTable = () => {
       market_cap: 2014599100836,
     },
   ];
+  const handleOnClick = () => {
+    navi.push("/detailcoin");
+  };
   return (
     <table className="w-full border-collapse border border-border dark:border-border-dark text-sm text-left">
       <thead className=" border-b-2 border-border dark:border-border-dark bg-gray-100 dark:bg-gray-800 text-text dark:text-text-dark">
@@ -34,7 +40,8 @@ const CoinListTable = () => {
         {coins.map((coin, index) => (
           <tr
             key={coin.id}
-            className="border-b-2 border-border dark:border-border-dark hover:bg-gray-300 dark:hover:bg-gray-700"
+            className="border-b-2 border-border cursor-pointer dark:border-border-dark hover:bg-gray-300 dark:hover:bg-gray-700"
+            onClick={handleOnClick}
           >
             <td className=" border-border dark:border-border-dark px-2 py-2 text-center">
               {index + 1}
