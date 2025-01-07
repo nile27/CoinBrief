@@ -1,7 +1,7 @@
 import Footer from "@/components/CustomUI/Footer";
 
 export const metadata = {
-  title: "Login",
+  title: "CoinList",
 };
 
 export default function Layout({
@@ -10,7 +10,7 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className=" flex w-[100vw] h-[90vh] items-center justify-between flex-col gap-10">
+    <main className=" flex w-[100vw]  min-h-[90vh] items-center justify-between flex-col gap-10">
       {children}
       <Footer />
     </main>

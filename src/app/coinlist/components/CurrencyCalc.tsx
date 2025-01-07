@@ -23,8 +23,8 @@ const CurrencyCalc = () => {
       <div className=" w-full h-auto flex flex-col justify-between gap-12">
         <div className="w-full h-[43px] flex justify-around items-center ">
           <span className=" text-smallHeader">KRW</span>
-          <div className=" dark:border-black border-white border-8 rounded-lg w-[200px] h-auto flex">
-            <div className=" bg-black w-auto h-full text-smallHeader pl-1 pr-2">
+          <div className=" dark:border-secondary-dark border-secondary border-8 rounded-lg w-[200px] h-auto flex">
+            <div className=" dark:bg-secondary-dark bg-secondary  w-[26px] h-full text-smallHeader pl-1 pr-2">
               ₩
             </div>
             <input
@@ -37,8 +37,10 @@ const CurrencyCalc = () => {
         </div>
         <div className="w-full h-[43px] flex justify-around items-center ">
           <span className=" text-smallHeader">USD</span>
-          <div className=" dark:border-black border-white border-8 rounded-lg w-[200px] h-auto flex">
-            <div className="  w-auto h-full text-smallHeader pl-1 pr-2">$</div>
+          <div className=" dark:border-secondary-dark border-secondary border-8 rounded-lg w-[200px] h-auto flex">
+            <div className=" dark:bg-secondary-dark bg-secondary w-[26px] h-full text-smallHeader pl-1 pr-2">
+              $
+            </div>
             <div className=" w-full h-auto px-2 bg-transparent outline-none overflow-x-auto "></div>
           </div>
         </div>
