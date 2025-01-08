@@ -1,12 +1,12 @@
 import clsx from "clsx";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
-interface BtnInterface {
+type BtnInterface = React.ComponentProps<"button"> & {
   size: "default" | "XL" | "small" | "medium" | "calc" | "change";
   children: any;
-}
+};
 
-const BtnStyle = ({ size, children }: BtnInterface) => {
+const BtnStyle = ({ size, children, ...restBtnProps }: BtnInterface) => {
   const buttonVariants = cva("", {
     variants: {
       size: {
@@ -24,6 +24,7 @@ const BtnStyle = ({ size, children }: BtnInterface) => {
   });
   return (
     <button
+      {...restBtnProps}
       className={cn(
         buttonVariants({ size }),
         "text-white bg-btn dark:bg-btn-dark  hover:bg-hover dark:hover:bg-hover-dark font-semibold rounded-[10px]"
