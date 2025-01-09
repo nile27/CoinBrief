@@ -1,18 +1,54 @@
 "use client";
 import InputStyle from "@/components/CustomUI/InputStyle";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
+import OTPDiv from "./components/OTPBtn";
+import { errorMessages, passwordRegex } from "./utill/utill";
+
+import { useForm } from "react-hook-form";
 import Link from "next/link";
 
-import { useState } from "react";
-import SignUPOTP from "./components/SignUPOTP";
+interface FormData {
+  name: string;
+  email: string;
+  displayName: string;
+  password: string;
+  confirmPassword: string;
+}
 
 const SignUp = () => {
-  const [isModal, setIsModal] = useState<boolean>(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FormData>({ mode: "onSubmit", reValidateMode: "onSubmit" });
 
-  const handleModal = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    setIsModal(!isModal);
-    console.log(isModal);
+  const onSubmit = async (data: FormData) => {
+    const jsonData = JSON.stringify(data);
+
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "회원가입에 실패했습니다.");
+      }
+
+      const result = await response.json();
+      alert(result.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(`회원가입 실패: ${error.message}`);
+      } else {
+        alert("회원가입 실패: 알 수 없는 오류가 발생했습니다.");
+      }
+    }
   };
 
   return (
@@ -32,42 +68,80 @@ const SignUp = () => {
             로그인
           </Link>
         </div>
-        <form className="flex flex-col gap-5 w-full h-auto  border-[rgba(113,113,113,0.8)] dark:border-[rgba(228,228,235,0.8)] pb-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-5 w-full h-auto  border-[rgba(113,113,113,0.8)] dark:border-[rgba(228,228,235,0.8)] pb-6"
+        >
           <div className="w-full h-auto flex flex-col gap-4 pb-2">
             <label htmlFor="formName" className="hidden"></label>
-            <InputStyle placeholder="이름" />
+            <InputStyle
+              placeholder="이름"
+              {...register("name", { required: errorMessages.nameRequired })}
+            />
+
             <div className=" w-full h-auto flex justify-center items-center gap-2">
               <label htmlFor="formEmail" className="hidden"></label>
-              <InputStyle placeholder="이메일" />
-              <BtnStyle size="small" onClick={handleModal}>
-                본인 인증
-              </BtnStyle>
+              <InputStyle
+                placeholder="이메일"
+                {...register("email", {
+                  required: errorMessages.emailRequired,
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                    message: errorMessages.invalidEmail,
+                  },
+                })}
+              />
+              <OTPDiv />
             </div>
-            {/* <div className=" w-full h-auto flex justify-center items-center gap-2">
-              <label htmlFor="formOTP" className="hidden"></label>
-              <InputStyle placeholder="본인 인증" />
-              <BtnStyle size="small">본인 인증</BtnStyle>
-            </div> */}
+
             <label htmlFor="formNickName" className="hidden"></label>
-            <InputStyle placeholder="닉네임" />
+            <InputStyle
+              placeholder="닉네임"
+              {...register("displayName", {
+                required: errorMessages.nicknameRequired,
+              })}
+            />
+
             <label htmlFor="formPassword" className="hidden"></label>
             <InputStyle
               type="password"
-              placeholder="비밀번호 (8~20 영문 숫자, 특수문자 조합)"
+              placeholder="비밀번호 (8~20 영문 숫자, 특수문자 조합 중 2개 이상)"
+              {...register("password", {
+                required: errorMessages.passwordRequired,
+                minLength: {
+                  value: 8,
+                  message: errorMessages.passwordTooShort,
+                },
+                pattern: {
+                  value: passwordRegex,
+                  message: errorMessages.passwordWrong,
+                },
+              })}
             />
 
-            <InputStyle placeholder="비밀번호 확인" />
-            {true && (
-              <span className=" text-[#DF4646] pb-2 ">
-                비밀번호를 입력해주세요.
-              </span>
+            <InputStyle
+              placeholder="비밀번호 확인"
+              {...register("confirmPassword", {
+                required: errorMessages.passwordRequired,
+                validate: (value) =>
+                  value === watch("password") || errorMessages.passwordMismatch,
+              })}
+            />
+
+            {Object.keys(errors).length > 0 && (
+              <p className="text-red-500 text-sm mt-2">
+                {errors.name?.message ||
+                  errors.email?.message ||
+                  errors.displayName?.message ||
+                  errors.password?.message ||
+                  errors.confirmPassword?.message}
+              </p>
             )}
           </div>
 
           <BtnStyle size="medium">SIGN UP</BtnStyle>
         </form>
       </div>
-      {isModal && <SignUPOTP setIsModal={setIsModal} />}
     </section>
   );
 };
