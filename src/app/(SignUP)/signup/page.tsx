@@ -6,6 +6,8 @@ import { errorMessages, passwordRegex } from "./utill/utill";
 
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   name: string;
@@ -20,11 +22,19 @@ const SignUp = () => {
     register,
     handleSubmit,
     watch,
+
     formState: { errors },
   } = useForm<FormData>({ mode: "onSubmit", reValidateMode: "onSubmit" });
+  const [verify, setVetify] = useState<boolean>(false);
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const navi = useRouter();
 
   const onSubmit = async (data: FormData) => {
     const jsonData = JSON.stringify(data);
+
+    if (!verify) {
+      return;
+    }
 
     try {
       const response = await fetch("/api/register", {
@@ -41,7 +51,7 @@ const SignUp = () => {
       }
 
       const result = await response.json();
-      alert(result.message);
+      navi.push("/signend");
     } catch (error: unknown) {
       if (error instanceof Error) {
         alert(`회원가입 실패: ${error.message}`);
@@ -91,7 +101,12 @@ const SignUp = () => {
                   },
                 })}
               />
-              <OTPDiv />
+
+              <OTPDiv
+                email={watch("email")}
+                setVerify={setVetify}
+                verify={verify}
+              />
             </div>
 
             <label htmlFor="formNickName" className="hidden"></label>
@@ -121,6 +136,7 @@ const SignUp = () => {
 
             <InputStyle
               placeholder="비밀번호 확인"
+              type="password"
               {...register("confirmPassword", {
                 required: errorMessages.passwordRequired,
                 validate: (value) =>
@@ -128,7 +144,13 @@ const SignUp = () => {
               })}
             />
 
-            {Object.keys(errors).length > 0 && (
+            {!verify && Object.keys(errors).length > 0 && isSubmit && (
+              <p className="text-red-500 text-sm mt-2">
+                {errorMessages.verifyRequired}
+              </p>
+            )}
+
+            {Object.keys(errors).length > 0 && verify && isSubmit && (
               <p className="text-red-500 text-sm mt-2">
                 {errors.name?.message ||
                   errors.email?.message ||
@@ -139,7 +161,9 @@ const SignUp = () => {
             )}
           </div>
 
-          <BtnStyle size="medium">SIGN UP</BtnStyle>
+          <BtnStyle size="medium" onClick={() => setIsSubmit(true)}>
+            SIGN UP
+          </BtnStyle>
         </form>
       </div>
     </section>
