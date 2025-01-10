@@ -9,7 +9,7 @@ import { errorMessages } from "./utill/utill";
 
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/store/store";
+import { useAuthStore, useUserStore } from "@/store/store";
 
 interface FormData {
   email: string;
@@ -24,6 +24,7 @@ const Login = () => {
   } = useForm<FormData>({ mode: "onSubmit", reValidateMode: "onSubmit" });
   const navi = useRouter();
   const { login } = useAuthStore();
+  const { setUser } = useUserStore();
 
   const [errMessage, setErrMessage] = useState<string>("");
 
@@ -39,14 +40,14 @@ const Login = () => {
         body: jsonData,
       });
       const data = await response.json();
-      console.log(data);
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "로그인에 실패했습니다.");
       }
       login();
-      navi.push("/");
+      setUser(data.data);
+      navi.push("/mycoin");
     } catch (error: unknown) {
       if (error instanceof Error) {
         setErrMessage(`이메일, 비밀번호가 일치하지 않습니다.`);

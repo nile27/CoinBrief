@@ -15,14 +15,18 @@ import { auth } from "@/firebase/firebase";
 import Link from "next/link";
 import { useAuthStore } from "@/store/store";
 import BtnStyle from "./BtnStyle";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const navList = ["내 코인", "코인리스트", "뉴스"];
   const navLink = ["mycoin", "coinlist", "news"];
+  const navi = useRouter();
 
   const { isLogin, logout } = useAuthStore();
 
   const handleLogout = () => {
+    logout();
+    navi.push("/");
     signOut(auth);
   };
 
@@ -32,9 +36,15 @@ const Header = () => {
         isLogin ? "justify-start" : "justify-between"
       }`}
     >
-      <Link href={"/"}>
-        <LogoD />
-      </Link>
+      {!isLogin ? (
+        <Link href={"/"}>
+          <LogoD />
+        </Link>
+      ) : (
+        <Link href={"/mycoin"}>
+          <LogoD />
+        </Link>
+      )}
 
       {isLogin ? (
         <div className=" w-full h-full flex justify-between items-center pl-[3rem] tablet:justify-end ">
