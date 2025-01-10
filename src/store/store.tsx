@@ -6,6 +6,11 @@ interface AuthState {
   logout: () => void;
 }
 
+interface UserState {
+  email: string;
+  mycoin: string;
+}
+
 export const useAuthStore = create<AuthState>((set) => ({
   isLogin: true,
   login: () => set({ isLogin: true }),

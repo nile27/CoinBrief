@@ -9,7 +9,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useTheme } from "next-themes";
+import { signOut } from "firebase/auth";
+import { auth } from "@/firebase/firebase";
 
 import Link from "next/link";
 import { useAuthStore } from "@/store/store";
@@ -18,8 +19,12 @@ import BtnStyle from "./BtnStyle";
 const Header = () => {
   const navList = ["내 코인", "코인리스트", "뉴스"];
   const navLink = ["mycoin", "coinlist", "news"];
-  const { theme } = useTheme();
+
   const { isLogin, logout } = useAuthStore();
+
+  const handleLogout = () => {
+    signOut(auth);
+  };
 
   return (
     <header
@@ -63,7 +68,9 @@ const Header = () => {
                 <DropdownMenuItem>
                   <Link href={"/"}>마이페이지</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={logout}>로그아웃</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
+                  로그아웃
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <DarkBtn />
