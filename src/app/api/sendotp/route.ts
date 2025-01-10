@@ -8,6 +8,18 @@ export async function POST(request: Request) {
   const body = await request.json();
   const { email } = body;
 
+  const querySnapShot = await db
+    .collection("users")
+    .where("email", "==", email)
+    .get();
+
+  if (!querySnapShot.empty) {
+    return NextResponse.json(
+      { message: "이미 가입된 회원입니다." },
+      { status: 401 }
+    );
+  }
+
   if (!email) {
     return NextResponse.json(
       { message: "이메일을 입력해주세요." },
