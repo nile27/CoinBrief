@@ -18,11 +18,13 @@ export async function POST(req: Request) {
 
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
+      const token = await user.getIdToken();
       const docRef = doc(firestore, "users", user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const userData = docSnap.data();
-        return NextResponse.json(
+
+        const response = NextResponse.json(
           {
             message: "로그인 성공!",
             data: {
@@ -33,6 +35,15 @@ export async function POST(req: Request) {
           },
           { status: 200 }
         );
+
+        // response.cookies.set("authToken", token, {
+        //   httpOnly: true,
+        //   secure: process.env.NODE_ENV === "production",
+        //   maxAge: 60 * 60 * 24,
+        //   path: "/",
+        // });
+
+        return response;
       } else {
         return NextResponse.json(
           { message: "사용자 데이터가 존재하지 않습니다." },

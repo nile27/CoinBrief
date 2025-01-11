@@ -17,7 +17,8 @@ const SignUPOTP = ({
   const [otp, setOtp] = useState("");
   const [verifyMessage, setVerifyMessage] = useState<string>("");
 
-  const verifyOtp = async () => {
+  const verifyOtp = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     try {
       const response = await fetch("/api/verifyotp", {
         method: "POST",
@@ -27,8 +28,7 @@ const SignUPOTP = ({
 
       if (response.ok) {
         setVerify(true);
-        alert("OTP 인증 성공!");
-        setIsModal(false);
+        setVerifyMessage("OTP 인증 성공!");
       } else {
         const errorData = await response.json();
         setVerifyMessage(errorData.message);
@@ -70,7 +70,11 @@ const SignUPOTP = ({
               인증
             </BtnStyle>
           </div>
-          <p className={`text-red text-left w-full h-auto px-2 mb-3  `}>
+          <p
+            className={`${
+              verify ? "text-green" : "text-red"
+            } text-left w-full h-auto px-2 mb-3  `}
+          >
             {verifyMessage}
           </p>
         </div>

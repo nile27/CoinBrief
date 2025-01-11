@@ -40,13 +40,19 @@ const Login = () => {
         body: jsonData,
       });
       const data = await response.json();
+      const user = {
+        email: data.data.email,
+        nickname: data.data.nickname,
+        mycoin: data.data.mycoin,
+      };
+      // document.cookie = `authToken=${data.data.token}; path=/; max-age=86400; secure;`;
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "로그인에 실패했습니다.");
       }
       login();
-      setUser(data.data);
+      setUser(user);
       navi.push("/mycoin");
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -63,15 +69,16 @@ const Login = () => {
         <h1 className="w-full h-full text-header font-extrabold text-start">
           로그인
         </h1>
+
         <div className=" w-full h-auto flex justify-start items-center gap-5">
           <p className=" dark:text-[rgba(228,228,235,0.59)] text-[rgba(113,113,113,0.59)]">
-            CoinBrief의 회원이 아니신가요?
+            비밀번호를 잊어버리셨나요?
           </p>
           <Link
-            href={"/signup"}
+            href={"/pwfind"}
             className=" text-primary dark:text-primary-dark underline"
           >
-            회원가입
+            비밀번호 찾기
           </Link>
         </div>
         <form
@@ -113,6 +120,7 @@ const Login = () => {
           )}
           <BtnStyle size="medium">LOGIN</BtnStyle>
         </form>
+
         <div className=" w-full h-auto mt-1 flex gap-2 justify-center items-center">
           <button className="w-full h-[30px] gap-3 bg-container dark:bg-container-dark rounded-md flex justify-center items-center ">
             <Google />

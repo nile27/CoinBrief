@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 type BtnInterface = React.ComponentProps<"button"> & {

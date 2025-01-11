@@ -13,7 +13,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 
 import Link from "next/link";
-import { useAuthStore } from "@/store/store";
+import { useAuthStore, useUserStore } from "@/store/store";
 import BtnStyle from "./BtnStyle";
 import { useRouter } from "next/navigation";
 
@@ -23,9 +23,11 @@ const Header = () => {
   const navi = useRouter();
 
   const { isLogin, logout } = useAuthStore();
+  const { deleteUser } = useUserStore();
 
   const handleLogout = () => {
     logout();
+    deleteUser();
     navi.push("/");
     signOut(auth);
   };
@@ -113,9 +115,14 @@ const Header = () => {
         </div>
       ) : (
         <div className=" w-auto h-auto pr-[10px]">
-          <Link href={"/login"}>
-            <BtnStyle size="small">LOGIN</BtnStyle>
-          </Link>
+          <div className="w-auto h-auto flex items-center gap-2">
+            <Link href={"/login"}>
+              <BtnStyle size="small">LOGIN</BtnStyle>
+            </Link>
+            <Link href={"/signup"}>
+              <BtnStyle size="small">SignUp</BtnStyle>
+            </Link>
+          </div>
         </div>
       )}
     </header>

@@ -50,7 +50,7 @@ const SignUp = () => {
         throw new Error(errorData.error || "회원가입에 실패했습니다.");
       }
 
-      const result = await response.json();
+      await response.json();
       navi.push("/signend");
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -93,6 +93,7 @@ const SignUp = () => {
               <label htmlFor="formEmail" className="hidden"></label>
               <InputStyle
                 placeholder="이메일"
+                disabled={verify}
                 {...register("email", {
                   required: errorMessages.emailRequired,
                   pattern: {
