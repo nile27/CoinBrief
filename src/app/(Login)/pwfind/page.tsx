@@ -22,6 +22,7 @@ const PwFind = () => {
   } = useForm<FormData>({ mode: "onSubmit", reValidateMode: "onSubmit" });
   const [verify, setVerify] = useState(false);
   const [isInput, setIsInput] = useState<boolean>(false);
+
   const [verifyMessage, setVerifyMessage] = useState("");
   const navi = useRouter();
 
@@ -31,7 +32,7 @@ const PwFind = () => {
       setVerifyMessage("본인 인증을 진행해주세요.");
       return;
     } else {
-      navi.push("/pwchange");
+      navi.push("/pwchange ");
     }
   };
 
@@ -57,6 +58,7 @@ const PwFind = () => {
             <label htmlFor="formName" className="hidden"></label>
             <InputStyle
               placeholder="이름"
+              disabled={verify}
               {...register("name", { required: "이름을 입력해주세요." })}
             />
             <div className=" w-full h-auto flex justify-center items-center  gap-2">
@@ -76,17 +78,19 @@ const PwFind = () => {
                 email={watch("email")}
                 name={watch("name")}
                 isInput={isInput}
+                verify={verify}
                 setIsInput={setIsInput}
                 setVerifyMessage={setVerifyMessage}
               />
             </div>
 
-            {isInput && (
+            {isInput && watch("name") && (
               <PwFindInput
                 email={watch("email")}
                 name={watch("name")}
                 setIsInput={setIsInput}
                 setVerify={setVerify}
+                verify={verify}
                 setVerifyMessage={setVerifyMessage}
               />
             )}

@@ -1,9 +1,12 @@
 "use client";
 
+import { verify } from "crypto";
+
 interface IProps {
   email: string;
   name: string;
   isInput: boolean;
+  verify: boolean;
   setIsInput: React.Dispatch<React.SetStateAction<boolean>>;
   setVerifyMessage: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -12,24 +15,24 @@ const PwFindOtp = ({
   email,
   name,
   setVerifyMessage,
-  isInput,
+  verify,
   setIsInput,
 }: IProps) => {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
   const sendOtp = async () => {
     try {
       const response = await fetch("/api/sendotp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, name }),
       });
 
       if (response.ok) {
-        setVerifyMessage("이메일을 보냈습니다. 이메일을 확인해주세요.");
+        alert("이메일을 보냈습니다. 이메일을 확인해주세요.");
       } else {
         const errorData = await response.json();
-        setVerifyMessage(
-          errorData.message + " 이메일을 잘 입력했는지 확인해주세요."
-        );
+        setVerifyMessage(errorData.message + " 입력한 이메일을 확인해주세요.");
       }
     } catch (error) {
       console.error("OTP 전송 에러:", error);
@@ -39,14 +42,14 @@ const PwFindOtp = ({
 
   const handleModal = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    setIsInput(!isInput);
+    setIsInput(true);
     sendOtp();
   };
   return (
     <>
       <button
         onClick={handleModal}
-        disabled={!email || !name}
+        disabled={!email || !name || !emailRegex.test(email) || verify}
         className={` bg-btn dark:bg-btn-dark  hover:bg-hover dark:hover:bg-hover-dark disabled:bg-container-dark dark:disabled:bg-container-dark
          min-w-[80px] text-[14px] h-[40px]  text-text-dark dark:text-text-dark font-semibold rounded-[10px]`}
       >

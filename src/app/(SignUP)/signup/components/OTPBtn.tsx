@@ -39,11 +39,12 @@ const OTPDiv = ({
     sendOtp();
     console.log(isModal);
   };
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   return (
     <>
       <button
         onClick={handleModal}
-        disabled={!email}
+        disabled={!email || !emailRegex.test(email)}
         className={` bg-btn dark:bg-btn-dark  hover:bg-hover dark:hover:bg-hover-dark disabled:bg-container-dark dark:disabled:bg-container-dark
          min-w-[80px] h-[40px] text-[14px] text-text-dark dark:text-text-dark font-semibold rounded-[10px]`}
       >

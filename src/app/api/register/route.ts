@@ -6,9 +6,9 @@ const db = admin.firestore();
 export async function POST(req: Request) {
   if (req.method === "POST") {
     const body = await req.json();
-    const { email, password, displayName } = body;
+    const { email, password, displayName, name } = body;
 
-    if (!email || !password || !displayName) {
+    if (!email || !password || !displayName || !name) {
       return NextResponse.json(
         { message: "이메일, 비밀번호, 닉네임을 입력해주세요." },
         { status: 400 }
@@ -24,6 +24,7 @@ export async function POST(req: Request) {
       await db.collection("users").doc(user.uid).set({
         email,
         displayName,
+        name,
         mycoin: [],
       });
 

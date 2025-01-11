@@ -6,23 +6,24 @@ const db = admin.firestore();
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { email } = body;
+  const { email, name } = body;
 
   const querySnapShot = await db
     .collection("users")
     .where("email", "==", email)
+    .where("name", "==", name)
     .get();
 
-  if (!querySnapShot.empty) {
+  if (querySnapShot.empty) {
     return NextResponse.json(
-      { message: "이미 가입된 회원입니다." },
+      { message: "등록되지 않은 회원입니다." },
       { status: 401 }
     );
   }
 
-  if (!email) {
+  if (!email || !name) {
     return NextResponse.json(
-      { message: "이메일을 입력해주세요." },
+      { message: "이메일과 이름을 입력해주세요." },
       { status: 400 }
     );
   }
