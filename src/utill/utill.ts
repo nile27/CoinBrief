@@ -1,3 +1,11 @@
+export const encodeBase64 = (data: string): string => {
+  return Buffer.from(data).toString("base64");
+};
+
+export const decodeBase64 = (data: string): string => {
+  return Buffer.from(data, "base64").toString("utf-8");
+};
+
 export const errorMessages = {
   nameRequired: "이름은 필수 입력 항목입니다.",
   emailRequired: "이메일은 필수 입력 항목입니다.",

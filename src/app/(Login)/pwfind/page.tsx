@@ -2,12 +2,13 @@
 import InputStyle from "@/components/CustomUI/InputStyle";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
 import Link from "next/link";
+import PwFindOtp from "./components/PwFindOtp";
+import PwFindInput from "./components/PwFindInput";
+import { encodeBase64 } from "@/utill/utill";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import PwFindOtp from "./components/PwFindOtp";
-import PwFindInput from "./components/PwFindInput";
 
 interface FormData {
   name: string;
@@ -32,7 +33,8 @@ const PwFind = () => {
       setVerifyMessage("본인 인증을 진행해주세요.");
       return;
     } else {
-      navi.push("/pwchange ");
+      const encodeEmail = encodeBase64(watch("email"));
+      navi.push(`/pwchange?email=${encodeEmail} `);
     }
   };
 
