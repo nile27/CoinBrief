@@ -1,7 +1,7 @@
 import React from "react";
-import CoinArticle from "./components/CoinArticle";
-import DetailChart from "./components/DetailChart";
-import DetailNews from "./components/DetailNews";
+import CoinArticle from "../components/CoinArticle";
+import DetailChart from "../components/DetailChart";
+import DetailNews from "../components/DetailNews";
 function DetailCoin() {
   return (
     <section className=" w-full h-full flex flex-col p-10 gap-10">

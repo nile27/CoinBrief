@@ -1,4 +1,3 @@
-import React from "react";
 import CurrencyCalc from "./components/CurrencyCalc";
 import TrendList from "./components/TrendList";
 import CoinListTable from "./components/CoinListTable";
