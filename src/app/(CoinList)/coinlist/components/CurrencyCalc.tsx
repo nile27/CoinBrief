@@ -109,9 +109,6 @@ const CurrencyCalc = () => {
           </div>
         </div>
       </div>
-      {/* <BtnStyle size="calc" onClick={(e) => handleOnClick(e)}>
-        계산하기
-      </BtnStyle> */}
     </section>
   );
 };
