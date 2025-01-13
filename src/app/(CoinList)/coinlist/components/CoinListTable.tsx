@@ -2,31 +2,9 @@ import React from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import InputStyle from "@/components/CustomUI/InputStyle";
+import { CoinList } from "../page";
 
-interface CoinList {
-  id: string;
-  symbol: string;
-  name: string;
-  image: string;
-  current_price: number;
-  price_change_percentage_1h_in_currency: number;
-  price_change_percentage_24h: number;
-  price_change_percentage_7d_in_currency: number;
-  total_volume: number;
-  market_cap: number;
-}
-
-const CoinListTable = async () => {
-  const fetchFunc = async () => {
-    const res = await fetch(
-      "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false&price_change_percentage=1h,24h,7d"
-    );
-    const data = await res.json();
-    return data;
-  };
-  const coins: CoinList[] = await fetchFunc();
-
-  fetchFunc();
+const CoinListTable = async ({ getCoinList }: { getCoinList: CoinList[] }) => {
   return (
     <article className="w-full ">
       <div className="w-[400px] h-[40px] flex justify-start item-center ml-4 px-2 mb-2   bg-container dark:bg-container-dark rounded-[10px] ">
@@ -38,7 +16,7 @@ const CoinListTable = async () => {
       <table className="w-full border-collapse border border-border dark:border-border-dark text-sm text-left">
         <thead className=" border-b-2 border-border dark:border-border-dark bg-gray-100 dark:bg-gray-800 text-text dark:text-text-dark">
           <tr className="">
-            <th className="  px-2 py-2 text-center p-">순서</th>
+            <th className="  px-2 py-2 text-center ">순서</th>
             <th className="   px-4 py-2 text-left">코인</th>
             <th className="  px-4 py-2 text-right">시세</th>
             <th className="  px-4 py-2 text-right">1시간</th>
@@ -49,10 +27,10 @@ const CoinListTable = async () => {
           </tr>
         </thead>
         <tbody>
-          {coins.map((coin: CoinList, index: number) => (
+          {getCoinList.map((coin: CoinList, index: number) => (
             <tr
+              key={coin.id}
               className="border-b-2 border-border  dark:border-border-dark group "
-              // onClick={handleOnClick}
             >
               <td className=" border-border dark:border-border-dark px-2 py-2 text-center">
                 {index + 1}

@@ -1,24 +1,33 @@
 import React from "react";
-import Ellipse from "@/../public/Ellipse.svg";
+import { CoinList } from "../page";
 
-interface TrendInterface {
+interface TopVolumeInterface {
   num: number;
+  item: CoinList;
 }
 
-const TrendList = ({ num }: TrendInterface) => {
+const TrendList = ({ num, item }: TopVolumeInterface) => {
   return (
-    <div className=" w-full h-auto min-h-[65px] flex justify-between items-center px-3">
+    <div
+      key={item.id}
+      className=" w-full h-auto min-h-[65px] flex justify-between items-center px-3"
+    >
       <div className=" w-auto h-auto flex justify-center items-center gap-2">
         <h2 className=" text-[28px] font-bold">{num}</h2>
-        <Ellipse className=" w-[32px] h-[32px]" />
+
+        <img
+          src={item.image}
+          alt={item.name}
+          className="w-6 h-6 rounded-full"
+        />
         <div className=" flex flex-col w-auto h-auto">
-          <span>BTC</span>
-          <span>비트코인</span>
+          <span>{item.name}</span>
+          <span>{item.symbol}</span>
         </div>
       </div>
       <div className="flex flex-col items-end">
         <span className={`${true ? "text-red" : "text-green"}`}>-2.1%</span>
-        <span className={``}>139,960,007원</span>
+        <span>${(1 / item.current_price).toFixed(2)}</span>
       </div>
     </div>
   );
