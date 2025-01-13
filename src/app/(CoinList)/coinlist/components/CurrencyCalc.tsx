@@ -1,21 +1,79 @@
 "use client";
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import Dollar from "@/../public/Dollar.svg";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
 
-const CurrencyCalc = () => {
-  const [inputValue, setInputValue] = useState<string>("");
+interface ExchangeInterface {
+  result: number;
+  cur_unit: string; // 통화 단위 (예: USD)
+  ttb: string; // 매입 환율 (은행이 구매할 때의 환율)
+  tts: string; // 매도 환율 (은행이 판매할 때의 환율)
+  deal_bas_r: string; // 기준 환율 (매입과 매도 환율의 평균)
+  bkpr: string; // 현찰 기준 환율
+  yy_efee_r: string; // 연간 수수료율 (사용되지 않는 경우 0)
+  ten_dd_efee_r: string; // 10일 수수료율 (사용되지 않는 경우 0)
+  kftc_bkpr: string; // KFTC(한국금융결제원) 현찰 기준 환율
+  kftc_deal_bas_r: string; // KFTC 기준 환율
+  cur_nm: string;
+}
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+interface ExchangeFilter {
+  KRW: ExchangeInterface;
+  USD: ExchangeInterface;
+}
+
+const CurrencyCalc = () => {
+  const [usdValue, setUsdValue] = useState<string>("1");
+  const [krwValue, setKrwValue] = useState<string>("");
+  const [exchange, setExchange] = useState<number>(0);
+  const [result, setResult] = useState(0);
+
+  const handleUsdChange = (e: ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/,/g, "");
     if (!isNaN(Number(rawValue))) {
-      setInputValue(Number(rawValue).toLocaleString());
+      const format = Number(rawValue).toLocaleString();
+      setUsdValue(format);
+      const exchangeValue = (Number(rawValue) * exchange).toLocaleString();
+      setKrwValue(exchangeValue);
+    } else {
+      setUsdValue("");
+      setKrwValue("");
     }
   };
 
+  const handleKRWChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/,/g, "");
+    if (!isNaN(Number(rawValue))) {
+      const format = Number(rawValue).toLocaleString();
+      setKrwValue(format);
+      const exchangeValue = (Number(rawValue) / exchange).toLocaleString();
+      setUsdValue(exchangeValue);
+    } else {
+      setUsdValue("");
+      setKrwValue("");
+    }
+  };
+
+  useEffect(() => {
+    const exChangeFetch = async () => {
+      try {
+        const res = await fetch(`/api/exchange`);
+
+        const data = await res.json();
+
+        setExchange(Number(data.data.KRW.replace(",", "")));
+
+        setKrwValue(data.data.KRW);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    exChangeFetch();
+  }, []);
+
   return (
-    <section className=" bg-container dark:bg-container-dark w-[350px] py-3 px-5 min-h-[280px] flex flex-col justify-between items-start gap-3 border-2 border-border dark:border-border-dark rounded-[10px]">
-      <div className=" w-full h-auto flex  gap-5 items-center ">
+    <section className=" bg-container dark:bg-container-dark w-[350px] py-3 px-5 min-h-[280px] flex flex-col justify-start items-start gap-3 border-2 border-border dark:border-border-dark rounded-[10px]">
+      <div className=" w-full h-auto flex  gap-5 items-center pb-10">
         <Dollar />
         <h1 className=" text-smallHeader font-extrabold ">환율 계산기</h1>
       </div>
@@ -30,8 +88,8 @@ const CurrencyCalc = () => {
             <input
               type="text"
               className=" w-full h-auto px-2 bg-transparent outline-none overflow-x-auto "
-              value={inputValue}
-              onChange={handleInputChange}
+              value={krwValue}
+              onChange={handleKRWChange}
             />
           </div>
         </div>
@@ -41,11 +99,19 @@ const CurrencyCalc = () => {
             <div className=" dark:bg-secondary-dark bg-secondary w-[26px] h-full text-smallHeader pl-1 pr-2">
               $
             </div>
-            <div className=" w-full h-auto px-2 bg-transparent outline-none overflow-x-auto "></div>
+
+            <input
+              type="text"
+              className=" w-full h-auto px-2 bg-transparent outline-none overflow-x-auto "
+              value={usdValue}
+              onChange={handleUsdChange}
+            />
           </div>
         </div>
       </div>
-      <BtnStyle size="calc"> 계산하기</BtnStyle>
+      {/* <BtnStyle size="calc" onClick={(e) => handleOnClick(e)}>
+        계산하기
+      </BtnStyle> */}
     </section>
   );
 };

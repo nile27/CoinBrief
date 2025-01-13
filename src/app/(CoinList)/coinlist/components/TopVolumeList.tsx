@@ -6,7 +6,14 @@ interface TopVolumeInterface {
   item: CoinList;
 }
 
-const TrendList = ({ num, item }: TopVolumeInterface) => {
+const TopVolumeList = ({ num, item }: TopVolumeInterface) => {
+  const totalVolume = item.total_volume
+    .toFixed(2)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const hourCurrency = Number(
+    item.price_change_percentage_1h_in_currency.toFixed(2)
+  );
   return (
     <div
       key={item.id}
@@ -26,11 +33,13 @@ const TrendList = ({ num, item }: TopVolumeInterface) => {
         </div>
       </div>
       <div className="flex flex-col items-end">
-        <span className={`${true ? "text-red" : "text-green"}`}>-2.1%</span>
-        <span>${(1 / item.current_price).toFixed(2)}</span>
+        <span className={`${hourCurrency < 0 ? "text-red" : "text-green"}`}>
+          {hourCurrency === 0 ? "0.00" : hourCurrency}%
+        </span>
+        <span>${totalVolume}</span>
       </div>
     </div>
   );
 };
 
-export default TrendList;
+export default TopVolumeList;

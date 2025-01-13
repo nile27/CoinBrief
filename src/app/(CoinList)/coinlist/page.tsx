@@ -1,5 +1,5 @@
 import CurrencyCalc from "./components/CurrencyCalc";
-import TrendList from "./components/TrendList";
+import TopVolumeList from "./components/TopVolumeList";
 import CoinListTable from "./components/CoinListTable";
 
 export interface CoinList {
@@ -38,10 +38,11 @@ const CoinList = async () => {
 
           <div className=" w-full h-auto flex flex-col gap-3">
             {topVolumeCoin.map((item: CoinList, key: number) => (
-              <TrendList key={item.id} num={key + 1} item={item} />
+              <TopVolumeList key={item.id} num={key + 1} item={item} />
             ))}
           </div>
         </section>
+
         <CurrencyCalc />
       </section>
       <section className=" w-full h-auto px-5">
