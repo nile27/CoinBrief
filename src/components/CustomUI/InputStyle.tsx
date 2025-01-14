@@ -6,7 +6,7 @@ type InputInterface = React.ComponentProps<"input"> & {
 };
 
 const InputStyle = React.forwardRef<HTMLInputElement, InputInterface>(
-  ({ placeholder, ...restInputProps }, ref) => {
+  function InputStyle({ placeholder, ...restInputProps }, ref) {
     return (
       <input
         {...restInputProps}

@@ -1,18 +1,11 @@
 import React from "react";
 import Link from "next/link";
-import { Search } from "lucide-react";
-import InputStyle from "@/components/CustomUI/InputStyle";
+
 import { CoinList } from "../page";
 
 const CoinListTable = async ({ getCoinList }: { getCoinList: CoinList[] }) => {
   return (
     <article className="w-full ">
-      <div className="w-[400px] h-[40px] flex justify-start item-center ml-4 px-2 mb-2   bg-container dark:bg-container-dark rounded-[10px] ">
-        <button className="w-[35px] h-[auto] rounded-lg bg-transparent hover:opacity-[0.7]">
-          <Search className="w-[30px] h-[24px] text-text dark:text-text-dark" />
-        </button>
-        <InputStyle placeholder="코인 이름, 심볼로 검색해주세요." />
-      </div>
       <table className="w-full border-collapse border border-border dark:border-border-dark text-sm text-left">
         <thead className=" border-b-2 border-border dark:border-border-dark bg-gray-100 dark:bg-gray-800 text-text dark:text-text-dark">
           <tr className="">

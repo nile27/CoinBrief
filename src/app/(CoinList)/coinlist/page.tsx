@@ -1,6 +1,7 @@
 import CurrencyCalc from "./components/CurrencyCalc";
 import TopVolumeList from "./components/TopVolumeList";
 import CoinListTable from "./components/CoinListTable";
+import SearchCoin from "./components/SearchCoin";
 
 export interface CoinList {
   id: string;
@@ -46,6 +47,7 @@ const CoinList = async () => {
         <CurrencyCalc />
       </section>
       <section className=" w-full h-auto px-5">
+        <SearchCoin coinList={getCoinList} />
         <CoinListTable getCoinList={getCoinList} />
       </section>
     </section>

@@ -8,7 +8,7 @@ const DetailNews = () => {
       </p>
       <div className=" bg-slate-400 w-[300px] h-[200px] rounded-[10px]"></div>
       <h1 className="font-semibold text-smallHeader dark:text-text-dark text-text px-1 ">
-        "산유국 되나" 尹 한 마디에 한국 석유 또 '上'…석유주 훨훨
+        {`"산유국 되나" 尹 한 마디에 한국 석유 또 '上'…석유주 훨훨`}
       </h1>
     </div>
   );
