@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { CoinList } from "../page";
+import { CoinList } from "../[page]/page";
 
 const CoinListTable = async ({ getCoinList }: { getCoinList: CoinList[] }) => {
   return (
@@ -26,7 +26,7 @@ const CoinListTable = async ({ getCoinList }: { getCoinList: CoinList[] }) => {
               className="border-b-2 border-border  dark:border-border-dark group "
             >
               <td className=" border-border dark:border-border-dark px-2 py-2 text-center">
-                {index + 1}
+                {coin.market_cap_rank}
               </td>
 
               <td className=" border-border dark:border-border-dark px-3 py-2 flex justify-start items-center dark:group-hover:bg-primary-dark group-hover:bg-primary-dark group-hover:text-text-dark">

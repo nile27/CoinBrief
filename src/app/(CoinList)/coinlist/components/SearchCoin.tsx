@@ -1,6 +1,6 @@
 "use client";
 import InputStyle from "@/components/CustomUI/InputStyle";
-import { CoinList } from "../page";
+import { CoinList } from "../[page]/page";
 
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";

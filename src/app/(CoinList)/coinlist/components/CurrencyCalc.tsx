@@ -26,7 +26,6 @@ const CurrencyCalc = () => {
   const [usdValue, setUsdValue] = useState<string>("1");
   const [krwValue, setKrwValue] = useState<string>("");
   const [exchange, setExchange] = useState<number>(0);
-  const [result, setResult] = useState(0);
 
   const handleUsdChange = (e: ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/,/g, "");

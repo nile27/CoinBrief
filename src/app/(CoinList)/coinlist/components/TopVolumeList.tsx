@@ -1,18 +1,27 @@
 import React from "react";
-import { CoinList } from "../page";
 
 interface TopVolumeInterface {
   num: number;
-  item: CoinList;
+  item: TrendingInterface;
+}
+interface TrendingInterface {
+  id: string;
+  name: string;
+  symbol: string;
+  thumb: string;
+  data: {
+    price: number;
+    price_change_percentage_24h: { usd: string; krw: string };
+  };
 }
 
 const TopVolumeList = ({ num, item }: TopVolumeInterface) => {
-  const totalVolume = item.total_volume
-    .toFixed(2)
+  const totalPrice = item.data.price
+    .toFixed(3)
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const hourCurrency = Number(
-    item.price_change_percentage_1h_in_currency.toFixed(2)
+  const hourCurrency: number = Number(
+    parseInt(item.data.price_change_percentage_24h.usd).toFixed(2)
   );
   return (
     <div
@@ -23,7 +32,7 @@ const TopVolumeList = ({ num, item }: TopVolumeInterface) => {
         <h2 className=" text-[28px] font-bold">{num}</h2>
 
         <img
-          src={item.image}
+          src={item.thumb}
           alt={item.name}
           className="w-6 h-6 rounded-full"
         />
@@ -36,7 +45,7 @@ const TopVolumeList = ({ num, item }: TopVolumeInterface) => {
         <span className={`${hourCurrency < 0 ? "text-red" : "text-green"}`}>
           {hourCurrency === 0 ? "0.00" : hourCurrency}%
         </span>
-        <span>${totalVolume}</span>
+        <span>${totalPrice}</span>
       </div>
     </div>
   );
