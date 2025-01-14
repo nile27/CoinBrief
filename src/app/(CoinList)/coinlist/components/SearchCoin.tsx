@@ -4,6 +4,7 @@ import { CoinList } from "../page";
 
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
+import Image from "next/image";
 
 const SearchCoin = ({ coinList }: { coinList: CoinList[] }) => {
   const [search, setSearch] = useState("");
@@ -43,8 +44,24 @@ const SearchCoin = ({ coinList }: { coinList: CoinList[] }) => {
       >
         {filterValue.map((item: CoinList, key: number) => {
           return (
-            <li key={key} className={`flex justify-start items-center w-full `}>
-              {item.name + " " + item.symbol}
+            <li
+              key={key}
+              className={`flex justify-start items-center w-full gap-3 `}
+            >
+              <img
+                src={item.image}
+                alt="코인 로고"
+                className="w-[20px] h-[20px]"
+              />
+              {/* <Image
+                width={20}
+                height={20}
+                src={item.image}
+                alt="코인 이미지"
+                priority
+              /> */}
+              <span>{item.name}</span>
+              <span>{item.symbol}</span>
             </li>
           );
         })}
