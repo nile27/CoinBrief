@@ -19,6 +19,12 @@ interface UserState {
   deleteUser: () => void;
 }
 
+interface ICurrency {
+  currency: string;
+  krw: () => void;
+  usd: () => void;
+}
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
@@ -60,3 +66,8 @@ export const useUserStore = create<UserState>()(
     }
   )
 );
+export const useCurrency = create<ICurrency>((set) => ({
+  currency: "$",
+  krw: () => set({ currency: "₩" }),
+  usd: () => set({ currency: "$" }),
+}));

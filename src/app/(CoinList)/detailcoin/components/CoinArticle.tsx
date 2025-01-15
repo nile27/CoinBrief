@@ -5,10 +5,11 @@ import BtnStyle from "@/components/CustomUI/BtnStyle";
 
 import { formatNumber, formatDate } from "../../coinlist/utill/utill";
 import { useEffect, useState } from "react";
+import { useCurrency } from "@/store/store";
 
 const CoinArticle = ({ coinData }: { coinData: any }) => {
+  const { krw, usd, currency } = useCurrency();
   const [changeDallor, setChangeDallor] = useState("usd");
-  const [currency, setCurrency] = useState("$");
   const [coinDetailData, setCoinDetailData] = useState({
     current_price: 0,
     price_change_1h: 0,
@@ -41,11 +42,11 @@ const CoinArticle = ({ coinData }: { coinData: any }) => {
     };
 
     setCoinDetailData(newDetailData);
-    setCurrency(changeDallor === "usd" ? "$" : "₩");
+    changeDallor === "usd" ? usd() : krw();
   }, [changeDallor]);
 
   return (
-    <article className="w-[390px] h-auto flex flex-col gap-4 basis-1/3 ">
+    <article className="w-[400px] h-auto flex flex-col gap-4  ">
       <div className=" w-full h-auto flex justify-between items-center">
         <div className=" w-auto h-auto flex justify-start items-center gap-4">
           <img
@@ -69,7 +70,7 @@ const CoinArticle = ({ coinData }: { coinData: any }) => {
               : setChangeDallor("usd");
           }}
         >
-          통화 변경({currency === "$" ? "₩" : "$"})
+          통화 변경({currency})
         </BtnStyle>
       </div>
       <div className=" w-full h-auto flex justify-between items-center">

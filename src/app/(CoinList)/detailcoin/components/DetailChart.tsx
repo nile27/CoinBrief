@@ -11,9 +11,9 @@ import {
   Legend,
   Filler,
   ChartOptions,
-  ChartData,
 } from "chart.js";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
+import { useCurrency } from "@/store/store";
 
 ChartJS.register(
   LineElement,
@@ -41,14 +41,17 @@ interface ChartDataType {
   datasets: ChartDataset[];
 }
 
-export default function DetailChart() {
+export default function DetailChart({ coinName }: { coinName: string }) {
   const [chartData, setChartData] = useState<ChartDataType | null>(null);
+  const { currency } = useCurrency();
 
   useEffect(() => {
     const fetchChartData = async () => {
       try {
         const res = await fetch(
-          "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7"
+          `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${
+            currency === "$" ? "usd" : "krw"
+          }&days=7`
         );
         const data = await res.json();
 
@@ -64,7 +67,7 @@ export default function DetailChart() {
           labels: labels,
           datasets: [
             {
-              label: "Bitcoin Price (USD)",
+              label: `${coinName} (${currency})`,
               data: prices,
               borderColor: "rgba(255, 99, 132, 1)",
               backgroundColor: "rgba(255, 99, 132, 0.2)",
@@ -81,7 +84,7 @@ export default function DetailChart() {
     };
 
     fetchChartData();
-  }, []);
+  }, [currency]);
 
   if (!chartData)
     return (
@@ -103,10 +106,17 @@ export default function DetailChart() {
         callbacks: {
           label: function (context) {
             const value = context.raw as number;
-            return `Price: ${value.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-            })}`;
+            const localeValue =
+              currency === "$"
+                ? `Price: ${value.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}`
+                : `Price: ${value.toLocaleString("ko", {
+                    style: "currency",
+                    currency: "KRW",
+                  })}`;
+            return localeValue;
           },
         },
       },
@@ -120,7 +130,7 @@ export default function DetailChart() {
       y: {
         ticks: {
           callback: function (value) {
-            return `$${value.toLocaleString()}`;
+            return `${currency}${value.toLocaleString()}`;
           },
         },
       },
@@ -128,8 +138,8 @@ export default function DetailChart() {
   };
 
   return (
-    <article className="w-[80%] h-auto flex flex-col justify-center items-center ">
-      <div className="w-[80%] h-auto mb-2 flex justify-between px-2">
+    <article className="w-full max-w-[800px] h-auto flex flex-col justify-center items-center ">
+      <div className="w-full h-auto mb-2 flex justify-between px-2">
         <div className="w-[200px] rounded-md h-auto flex justify-center items-center gap-2 bg-container dark:bg-container-dark">
           <BtnStyle size="auto" children={"시세"} />
           <BtnStyle size="auto" children={"시가 총액"} />
