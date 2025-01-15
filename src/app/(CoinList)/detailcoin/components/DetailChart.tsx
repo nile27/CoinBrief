@@ -43,6 +43,9 @@ interface ChartDataType {
 
 export default function DetailChart({ coinName }: { coinName: string }) {
   const [chartData, setChartData] = useState<ChartDataType | null>(null);
+  const [changeData, setChangeData] = useState<boolean>(false);
+  const [changeDate, setChangeDate] = useState<"1" | "7" | "31">("1");
+
   const { currency } = useCurrency();
 
   useEffect(() => {
@@ -51,7 +54,7 @@ export default function DetailChart({ coinName }: { coinName: string }) {
         const res = await fetch(
           `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${
             currency === "$" ? "usd" : "krw"
-          }&days=7`
+          }&days=${changeDate}`
         );
         const data = await res.json();
 
@@ -61,14 +64,25 @@ export default function DetailChart({ coinName }: { coinName: string }) {
             day: "numeric",
           })
         );
+        const totalVolumnlabels = data.total_volumes.map(
+          (item: [number, number]) =>
+            new Date(item[0]).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+            })
+        );
+
         const prices = data.prices.map((item: [number, number]) => item[1]);
+        const totalVolumes = data.total_volumes.map(
+          (item: [number, number]) => item[1]
+        );
 
         setChartData({
-          labels: labels,
+          labels: changeData ? totalVolumnlabels : labels,
           datasets: [
             {
               label: `${coinName} (${currency})`,
-              data: prices,
+              data: changeData ? totalVolumes : prices,
               borderColor: "rgba(255, 99, 132, 1)",
               backgroundColor: "rgba(255, 99, 132, 0.2)",
               fill: true,
@@ -84,7 +98,7 @@ export default function DetailChart({ coinName }: { coinName: string }) {
     };
 
     fetchChartData();
-  }, [currency]);
+  }, [currency, changeData, changeDate]);
 
   if (!chartData)
     return (
@@ -140,14 +154,44 @@ export default function DetailChart({ coinName }: { coinName: string }) {
   return (
     <article className="w-full max-w-[800px] h-auto flex flex-col justify-center items-center ">
       <div className="w-full h-auto mb-2 flex justify-between px-2">
-        <div className="w-[200px] rounded-md h-auto flex justify-center items-center gap-2 bg-container dark:bg-container-dark">
-          <BtnStyle size="auto" children={"시세"} />
-          <BtnStyle size="auto" children={"시가 총액"} />
+        <div className="w-[200px] rounded-md h-auto flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
+          <BtnStyle
+            size="auto"
+            children={"시세"}
+            color="focus"
+            onClick={() => setChangeData(false)}
+            disabled={!changeData}
+          />
+          <BtnStyle
+            size="auto"
+            color="focus"
+            children={"시가 총액"}
+            onClick={() => setChangeData(true)}
+            disabled={changeData}
+          />
         </div>
-        <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-container dark:bg-container-dark">
-          <BtnStyle size="auto" children={"24시간"} />
-          <BtnStyle size="auto" children={"7일"} />
-          <BtnStyle size="auto" children={"1개월"} />
+        <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
+          <BtnStyle
+            size="auto"
+            children={"24시간"}
+            color="focus"
+            disabled={changeDate === "1"}
+            onClick={() => setChangeDate("1")}
+          />
+          <BtnStyle
+            size="auto"
+            children={"7일"}
+            color="focus"
+            disabled={changeDate === "7"}
+            onClick={() => setChangeDate("7")}
+          />
+          <BtnStyle
+            size="auto"
+            children={"1개월"}
+            color="focus"
+            disabled={changeDate === "31"}
+            onClick={() => setChangeDate("31")}
+          />
         </div>
       </div>
       <div className="">

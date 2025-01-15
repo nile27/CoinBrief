@@ -2,10 +2,16 @@ import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 type BtnInterface = React.ComponentProps<"button"> & {
   size: "default" | "XL" | "small" | "medium" | "calc" | "change" | "auto";
+  color?: "default" | "focus";
   children: any;
 };
 
-const BtnStyle = ({ size, children, ...restBtnProps }: BtnInterface) => {
+const BtnStyle = ({
+  size,
+  color = "default",
+  children,
+  ...restBtnProps
+}: BtnInterface) => {
   const buttonVariants = cva("", {
     variants: {
       size: {
@@ -17,6 +23,12 @@ const BtnStyle = ({ size, children, ...restBtnProps }: BtnInterface) => {
         calc: `w-full h-[40px] `,
         auto: `px-3 py-2 w-auto h-auto text-[14px]`,
       },
+      color: {
+        default:
+          "disabled:bg-[#f1f5f9] disabled:dark:text-text-dark dark:disabled:bg-container-dark disabled:text-text bg-btn dark:bg-btn-dark  hover:bg-hover dark:hover:bg-hover-dark",
+        focus:
+          "bg-[#f1f5f9] dark:text-text-dark dark:bg-container-dark disabled:text-text  disabled:bg-gray-200 dark:disabled:bg-gray-700  hover:bg-gray-200 dark:hover:bg-gray-700",
+      },
     },
     defaultVariants: {
       size: "default",
@@ -26,8 +38,8 @@ const BtnStyle = ({ size, children, ...restBtnProps }: BtnInterface) => {
     <button
       {...restBtnProps}
       className={cn(
-        buttonVariants({ size }),
-        "text-white bg-btn dark:bg-btn-dark  hover:bg-hover dark:hover:bg-hover-dark font-semibold rounded-[10px]"
+        buttonVariants({ size, color }),
+        " font-semibold rounded-[10px]"
       )}
     >
       {children}
