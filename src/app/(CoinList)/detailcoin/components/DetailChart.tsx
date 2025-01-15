@@ -13,6 +13,7 @@ import {
   ChartOptions,
   ChartData,
 } from "chart.js";
+import BtnStyle from "@/components/CustomUI/BtnStyle";
 
 ChartJS.register(
   LineElement,
@@ -127,51 +128,64 @@ export default function DetailChart() {
   };
 
   return (
-    <div className="  ">
-      <h1>Bitcoin Price Chart (7 Days)</h1>
-      <Line
-        data={chartData}
-        options={options}
-        plugins={[
-          {
-            id: "verticalLine",
-            afterDraw: (chart) => {
-              if (
-                Array.isArray(chart.tooltip?.active) &&
-                chart.tooltip?.active?.length
-              ) {
-                const ctx = chart.ctx;
-                const activePoint = chart.tooltip.active[0];
-                const x = activePoint.element.x;
-                const topY = chart.scales.y.top;
-                const bottomY = chart.scales.y.bottom;
+    <article className="w-[80%] h-auto flex flex-col justify-center items-center ">
+      <div className="w-[80%] h-auto mb-2 flex justify-between px-2">
+        <div className="w-[200px] rounded-md h-auto flex justify-center items-center gap-2 bg-container dark:bg-container-dark">
+          <BtnStyle size="auto" children={"시세"} />
+          <BtnStyle size="auto" children={"시가 총액"} />
+        </div>
+        <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-container dark:bg-container-dark">
+          <BtnStyle size="auto" children={"24시간"} />
+          <BtnStyle size="auto" children={"7일"} />
+          <BtnStyle size="auto" children={"1개월"} />
+        </div>
+      </div>
+      <div className="">
+        <Line
+          data={chartData}
+          options={options}
+          plugins={[
+            {
+              id: "verticalLine",
+              afterDraw: (chart) => {
+                if (
+                  Array.isArray(chart.tooltip?.active) &&
+                  chart.tooltip?.active?.length
+                ) {
+                  const ctx = chart.ctx;
+                  const activePoint = chart.tooltip.active[0];
+                  const x = activePoint.element.x;
+                  const topY = chart.scales.y.top;
+                  const bottomY = chart.scales.y.bottom;
 
-                ctx.save();
-                ctx.beginPath();
-                ctx.moveTo(x, topY);
-                ctx.lineTo(x, bottomY);
-                ctx.lineWidth = 1.5;
-                ctx.strokeStyle = "#8E7CC3";
-                ctx.stroke();
-                ctx.restore();
-              }
+                  ctx.save();
+                  ctx.beginPath();
+                  ctx.moveTo(x, topY);
+                  ctx.lineTo(x, bottomY);
+                  ctx.lineWidth = 1.5;
+                  ctx.strokeStyle = "#8E7CC3";
+                  ctx.stroke();
+                  ctx.restore();
+                }
+              },
             },
-          },
-        ]}
-      />
-      <style jsx>{`
-        div {
-          width: 100%;
-          min-width: 350px;
-          min-height: 300px;
-          max-width: 800px;
-          height: 490px;
-        }
-        canvas {
-          width: 100%;
-          min-width: 350px;
-        }
-      `}</style>
-    </div>
+          ]}
+        />
+
+        <style jsx>{`
+          div {
+            width: 100%;
+            min-width: 350px;
+            min-height: 300px;
+            max-width: 800px;
+            height: 490px;
+          }
+          canvas {
+            width: 100%;
+            min-width: 350px;
+          }
+        `}</style>
+      </div>
+    </article>
   );
 }

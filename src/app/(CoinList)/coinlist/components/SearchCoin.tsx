@@ -4,30 +4,27 @@ import { CoinList } from "../[page]/page";
 
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
-import Image from "next/image";
 
 const SearchCoin = ({ coinList }: { coinList: CoinList[] }) => {
   const [search, setSearch] = useState("");
   const [filterValue, setFilterValue] = useState<CoinList[]>([]);
 
   useEffect(() => {
-    const handleSearch = () => {
-      const filterArr: CoinList[] = [...coinList].filter((coin: CoinList) => {
-        if (
-          coin.name.includes(search.toLowerCase()) ||
-          coin.symbol.includes(search.toLowerCase())
-        )
-          return (
-            coin.name.includes(search.toLowerCase()) ||
-            coin.symbol.includes(search.toLowerCase())
-          );
+    const handleSearch = async () => {
+      if (!search) return;
+      const jsonData = JSON.stringify({ query: search });
+      const res = await fetch("/api/search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonData,
       });
-
-      setFilterValue(filterArr);
+      const data = await res.json();
+      console.log(data);
     };
     handleSearch();
   }, [search]);
-
   return (
     <div className="w-[400px] h-[40px] flex justify-start item-center ml-1 px-2 mb-1 rounded-t-md bg-container dark:bg-container-dark relative">
       <button className="w-[35px] h-[auto] rounded-lg bg-transparent hover:opacity-[0.6] ">

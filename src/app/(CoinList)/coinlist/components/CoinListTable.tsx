@@ -32,7 +32,7 @@ const CoinListTable = async ({ getCoinList }: { getCoinList: CoinList[] }) => {
               <td className=" border-border dark:border-border-dark px-3 py-2 flex justify-start items-center dark:group-hover:bg-primary-dark group-hover:bg-primary-dark group-hover:text-text-dark">
                 <Link
                   key={coin.id}
-                  href={`/detailcoin/${coin.symbol.toUpperCase()}`}
+                  href={`/detailcoin/${coin.id}`}
                   className="w-full flex justify-start items-center gap-2"
                 >
                   <img

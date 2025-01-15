@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 type BtnInterface = React.ComponentProps<"button"> & {
-  size: "default" | "XL" | "small" | "medium" | "calc" | "change";
+  size: "default" | "XL" | "small" | "medium" | "calc" | "change" | "auto";
   children: any;
 };
 
@@ -15,6 +15,7 @@ const BtnStyle = ({ size, children, ...restBtnProps }: BtnInterface) => {
         change: "w-[100px] h-[40px]",
         medium: `w-full h-[50px] `,
         calc: `w-full h-[40px] `,
+        auto: `px-3 py-2 w-auto h-auto text-[14px]`,
       },
     },
     defaultVariants: {
