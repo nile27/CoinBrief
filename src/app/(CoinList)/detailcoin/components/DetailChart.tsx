@@ -51,7 +51,6 @@ export default function DetailChart({ coinName }: { coinName: string }) {
 
   useEffect(() => {
     const fetchChartData = async () => {
-      setIsLoading(true);
       try {
         const res = await fetch(
           `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${
@@ -96,8 +95,6 @@ export default function DetailChart({ coinName }: { coinName: string }) {
         });
       } catch (error) {
         console.error("Error fetching chart data:", error);
-      } finally {
-        setIsLoading(false);
       }
     };
 

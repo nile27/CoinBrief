@@ -1,13 +1,15 @@
 import DetailNews from "./DetailNews";
-const DetailNewsList = async () => {
+const DetailNewsList = async ({ coinName }: { coinName: string }) => {
   const newsFetch = await fetch(
-    `https://newsapi.org/v2/everything?q=BNB&pageSize=10&apiKey=${process.env.NEWS_API_KEY}`
+    `https://newsapi.org/v2/everything?q=${coinName}&pageSize=10&language=ko&apiKey=${process.env.NEWS_API_KEY}`
   );
+
   const newsData = await newsFetch.json();
-  console.log(newsData.articles);
+
+  const sliceNews = newsData.articles.slice(0, 4);
   return (
     <ul className=" w-full h-auto gap-2 flex justify-start items-center overflow-y-auto px-8 py-5 border-border dark:border-border-dark border rounded-lg ">
-      {newsData.articles.map((item: any) => (
+      {sliceNews.map((item: any) => (
         <DetailNews
           key={item.title}
           url={item.url}
