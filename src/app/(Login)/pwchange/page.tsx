@@ -6,6 +6,7 @@ import { decodeBase64, errorMessages, passwordRegex } from "@/utill/utill";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 interface FormData {
   password: string;
   confirmPassword: string;
@@ -22,6 +23,7 @@ const PwChange = () => {
   const encodedEmail = searchParams.get("email");
   const email = encodedEmail ? decodeBase64(encodedEmail) : null;
   const [errMessages, setErrMessages] = useState("");
+  const navi = useRouter();
 
   const onSubmit = async (data: FormData) => {
     const password = data.password || "";
@@ -35,6 +37,7 @@ const PwChange = () => {
 
       if (response.ok) {
         alert("비밀번호가 성공적으로 변경되었습니다.");
+        navi.push("/login");
       } else {
         const errorData = await response.json();
         setErrMessages(errorData.message || "비밀번호 변경에 실패했습니다.");

@@ -56,6 +56,7 @@ const Login = () => {
       navi.push("/mycoin");
     } catch (error: unknown) {
       if (error instanceof Error) {
+        console.log(error);
         setErrMessage(`이메일, 비밀번호가 일치하지 않습니다.`);
       } else {
         setErrMessage("로그인 실패: 알 수 없는 오류가 발생했습니다.");

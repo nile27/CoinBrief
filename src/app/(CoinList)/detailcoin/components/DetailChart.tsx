@@ -43,6 +43,7 @@ interface ChartDataType {
 
 export default function DetailChart({ coinName }: { coinName: string }) {
   const [chartData, setChartData] = useState<ChartDataType | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [changeData, setChangeData] = useState<boolean>(false);
   const [changeDate, setChangeDate] = useState<"1" | "7" | "31">("1");
 
@@ -50,6 +51,7 @@ export default function DetailChart({ coinName }: { coinName: string }) {
 
   useEffect(() => {
     const fetchChartData = async () => {
+      setIsLoading(true);
       try {
         const res = await fetch(
           `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${
@@ -94,15 +96,17 @@ export default function DetailChart({ coinName }: { coinName: string }) {
         });
       } catch (error) {
         console.error("Error fetching chart data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchChartData();
   }, [currency, changeData, changeDate]);
 
-  if (!chartData)
+  if (!chartData || isLoading)
     return (
-      <div className="w-full h-[full] flex justify-center items-center">
+      <div className="max-w-[800px] w-full h-[full] flex justify-center items-center">
         Loading chart...
       </div>
     );

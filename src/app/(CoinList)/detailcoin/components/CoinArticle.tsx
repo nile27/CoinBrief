@@ -23,24 +23,27 @@ const CoinArticle = ({ coinData }: { coinData: any }) => {
 
   useEffect(() => {
     const newDetailData = {
-      current_price: coinData.market_data.current_price[changeDallor],
-      price_change_1h:
+      current_price: Number(coinData.market_data.current_price[changeDallor]),
+      price_change_1h: Number(
         coinData.market_data.price_change_percentage_1h_in_currency[
           changeDallor
-        ],
-      price_change_24h:
+        ]
+      ),
+      price_change_24h: Number(
         coinData.market_data.price_change_percentage_24h_in_currency[
           changeDallor
-        ],
-      price_change_7d:
+        ]
+      ),
+      price_change_7d: Number(
         coinData.market_data.price_change_percentage_7d_in_currency[
           changeDallor
-        ],
-      total_volume: coinData.market_data.total_volume[changeDallor],
-      high_24h: coinData.market_data.high_24h[changeDallor],
-      low_24h: coinData.market_data.low_24h[changeDallor],
+        ]
+      ),
+      total_volume: Number(coinData.market_data.total_volume[changeDallor]),
+      high_24h: Number(coinData.market_data.high_24h[changeDallor]),
+      low_24h: Number(coinData.market_data.low_24h[changeDallor]),
     };
-
+    console.log(coinData);
     setCoinDetailData(newDetailData);
     changeDallor === "usd" ? usd() : krw();
   }, [changeDallor]);
@@ -193,11 +196,15 @@ const CoinArticle = ({ coinData }: { coinData: any }) => {
           </tr>
           <tr className=" pb-1 w-full h-auto border-b border-border dark:border-border-dark flex justify-between items-center">
             <td>총 공급량</td>
-            <td>{formatNumber(coinData.market_data.total_supply)}</td>
+            <td>{formatNumber(coinData.market_data.total_supply || 0)}</td>
           </tr>
           <tr className=" pb-1 w-full h-auto border-b border-border dark:border-border-dark flex justify-between items-center">
             <td>최대 공급량</td>
-            <td>{formatNumber(coinData.market_data.max_supply)}</td>
+            <td>
+              {coinData.market_data.max_supply
+                ? formatNumber(coinData.market_data.max_supply || 0)
+                : "-"}
+            </td>
           </tr>
         </tbody>
       </table>

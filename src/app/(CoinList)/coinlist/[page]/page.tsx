@@ -58,11 +58,9 @@ const CoinList = async ({ params }: { params: { page: string } }) => {
 
           <div className=" w-full h-auto flex flex-col gap-3">
             {topVolumeCoin.map((item: any, key: number) => (
-              <TopVolumeList
-                key={item.item.id}
-                num={key + 1}
-                item={item.item}
-              />
+              <Link key={item.item.id} href={`/detailcoin/${item.item.id}`}>
+                <TopVolumeList num={key + 1} item={item.item} />
+              </Link>
             ))}
           </div>
         </section>
