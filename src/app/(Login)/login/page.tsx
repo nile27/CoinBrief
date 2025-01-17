@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import InputStyle from "@/components/CustomUI/InputStyle";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
@@ -10,6 +10,7 @@ import { errorMessages } from "./utill/utill";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useAuthStore, useUserStore } from "@/store/store";
+import { googleLogin } from "./utill/googleLogin";
 
 interface FormData {
   email: string;
@@ -25,8 +26,20 @@ const Login = () => {
   const navi = useRouter();
   const { login } = useAuthStore();
   const { setUser } = useUserStore();
-
   const [errMessage, setErrMessage] = useState<string>("");
+
+  const handleGoogleLogin = async () => {
+    try {
+      const userData = await googleLogin();
+      if (userData) {
+        setUser(userData);
+        login();
+        navi.push("/mycoin");
+      }
+    } catch (error) {
+      setErrMessage("잘못된 접근입니다.");
+    }
+  };
 
   const onSubmit = async (data: FormData) => {
     const jsonData = JSON.stringify(data);
@@ -41,8 +54,9 @@ const Login = () => {
       });
       const data = await response.json();
       const user = {
+        name: data.data.name,
         email: data.data.email,
-        nickname: data.data.nickname,
+        displayName: data.data.nickname,
         mycoin: data.data.mycoin,
       };
       // document.cookie = `authToken=${data.data.token}; path=/; max-age=86400; secure;`;
@@ -123,7 +137,10 @@ const Login = () => {
         </form>
 
         <div className=" w-full h-auto mt-1 flex gap-2 justify-center items-center">
-          <button className="w-full h-[30px] gap-3 bg-container dark:bg-container-dark rounded-md flex justify-center items-center ">
+          <button
+            onClick={handleGoogleLogin}
+            className="w-full h-[30px] gap-3 bg-container dark:bg-container-dark rounded-md flex justify-center items-center "
+          >
             <Google />
             Google
           </button>

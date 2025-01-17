@@ -7,10 +7,11 @@ interface AuthState {
   logout: () => void;
 }
 
-interface Iuser {
+export interface Iuser {
+  name: string;
   email: string;
   mycoin: string[];
-  nickname: string;
+  displayName: string;
 }
 
 interface UserState {
@@ -43,9 +44,10 @@ export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
       user: {
+        name: "",
         email: "",
         mycoin: [],
-        nickname: "",
+        displayName: "",
       },
       setUser: (user) =>
         set(() => ({
@@ -54,9 +56,10 @@ export const useUserStore = create<UserState>()(
       deleteUser: () =>
         set(() => ({
           user: {
+            name: "",
             email: "",
             mycoin: [],
-            nickname: "",
+            displayName: "",
           },
         })),
     }),

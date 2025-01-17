@@ -28,6 +28,7 @@ export async function POST(req: Request) {
           {
             message: "로그인 성공!",
             data: {
+              name: userData.name,
               email: user.email,
               nickname: userData.displayName,
               mycoin: userData.mycoin,
