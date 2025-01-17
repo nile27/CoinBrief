@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import InputStyle from "@/components/CustomUI/InputStyle";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
@@ -10,7 +10,7 @@ import { errorMessages } from "./utill/utill";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useAuthStore, useUserStore } from "@/store/store";
-import { googleLogin } from "./utill/googleLogin";
+import { googleLogin, kakaoLogin } from "./utill/AuthLogin";
 
 interface FormData {
   email: string;
@@ -144,7 +144,10 @@ const Login = () => {
             <Google />
             Google
           </button>
-          <button className="w-full h-[30px] gap-3 bg-container dark:bg-container-dark rounded-md flex justify-center items-center ">
+          <button
+            onClick={kakaoLogin}
+            className="w-full h-[30px] gap-3 bg-container dark:bg-container-dark rounded-md flex justify-center items-center "
+          >
             <Kakao />
             Kakao
           </button>

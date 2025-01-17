@@ -79,6 +79,15 @@ const config: Config = {
         textBoxHalf: { max: "1170px" },
       },
     },
+    keyframes: {
+      blur: {
+        "0%": { filter: "blur(0)" },
+        "25%": { filter: "blur(2px)" },
+        "50%": { filter: "blur(5px)" },
+        "75%": { filter: "blur(2px)" },
+        "100%": { filter: "blur(0)" },
+      },
+    },
   },
   plugins: [require("tailwindcss-animate")],
 };
