@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       const metaTag = dom.window.document.querySelector(
         'meta[property="og:image"]'
       ) as HTMLMetaElement;
-      return metaTag ? metaTag.content : null; // 이미지 URL 반환
+      return metaTag ? metaTag.content : null;
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error("Error fetching article image:", error.message);
@@ -43,10 +43,10 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const query = body.query || "암호화폐";
+    const query = "도지 코인"; //body.query || "암호화폐";
     const encodedQuery = encodeURIComponent(query || "암호화폐");
-    console.log(encodedQuery);
-    const url = `https://openapi.naver.com/v1/search/news.json?query=테더&display=4&sort=sim`;
+
+    const url = `https://openapi.naver.com/v1/search/news.json?query=${"도지코인"}&display=4&sort=sim`;
 
     const response = await fetch(url, {
       headers: {

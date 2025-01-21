@@ -8,6 +8,8 @@
 
 /src/app/test
 /src/app/test2
+/src/app/test3
+/src/app/api/news
 
 # testing
 /coverage

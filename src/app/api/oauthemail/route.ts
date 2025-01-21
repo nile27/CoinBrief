@@ -1,4 +1,4 @@
-import admin from "@/firebase/firebaseAdmin"; // Firebase Admin 초기화
+import admin from "@/firebase/firebaseAdmin";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
