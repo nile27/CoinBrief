@@ -54,6 +54,7 @@ const Login = () => {
       });
       const data = await response.json();
       const user = {
+        id: data.data.id,
         name: data.data.name,
         email: data.data.email,
         displayName: data.data.nickname,

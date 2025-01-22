@@ -4,13 +4,13 @@ import Ellipse from "@/../public/Ellipse.svg";
 import GreenArrow from "@/../public/GreenArrow.svg";
 import RedArrow from "@/../public/RedArrow.svg";
 import BoxRealTime from "@/app/mycoin/components/BoxRealTime";
-const MyCoinBox = ({ bool }: { bool: boolean }) => {
+const MyCoinBox = ({ symbol }: { symbol: string }) => {
   const [realRate, setRate] = useState("");
 
   return (
     <div
       className={` relative max-w-[280px] w-[280px] h-[220px] flex items-center  duration-150  ${
-        bool ? "scale-110" : " hover:scale-105"
+        true ? "scale-110" : " hover:scale-105"
       }`}
     >
       <Ellipse className="absolute z-10 top-0 left-10 w-[70px] h-[70px]" />
@@ -37,7 +37,7 @@ const MyCoinBox = ({ bool }: { bool: boolean }) => {
             </span>
           </div>
         </div>
-        <BoxRealTime setRate={setRate} realRate={realRate} />
+        <BoxRealTime setRate={setRate} realRate={realRate} symbol={symbol} />
       </div>
     </div>
   );

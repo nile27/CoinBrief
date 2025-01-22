@@ -1,28 +1,27 @@
 "use client";
-import RedArrow from "@/../public/RedArrow.svg";
-import GreenArrow from "@/../public/GreenArrow.svg";
-
 import { useEffect, useState } from "react";
-
 interface IProps {
   realRate: string;
   setRate: React.Dispatch<React.SetStateAction<string>>;
+  symbol: string;
 }
 
 export default function BoxRealTime(props: IProps) {
-  const { realRate, setRate } = props;
+  const { realRate, setRate, symbol } = props;
+
   const [realKrw, setRealKrw] = useState<number | null>(null);
   const [realDallor, setRealDallor] = useState<string>();
   const [exchange, setExchange] = useState<number>(0);
 
   useEffect(() => {
+    console.log(symbol);
     const socket = new WebSocket("wss://pubwss.bithumb.com/pub/ws");
 
     socket.onopen = () => {
       socket.send(
         JSON.stringify({
           type: "ticker",
-          symbols: ["BTC_KRW"],
+          symbols: [`${symbol}_KRW`],
           tickTypes: ["1M"],
         })
       );
