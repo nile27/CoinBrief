@@ -1,12 +1,11 @@
 import React from "react";
 import Chart from "@/components/Chart/Chart";
 import MyCoinBox from "@/components/Mycoin/MyCoinBox";
-
 import { CirclePlus, CircleX } from "lucide-react";
 import DetailCoin from "./components/DetailCoin";
 
 const Mycoin = () => {
-  let coinBoxArr = [true, false, false];
+  let coinBoxArr = [true, false, false, false];
 
   return (
     <main className="w-[100vw] h-auto p-4 flex flex-col justify-center items-center gap-10 ">
@@ -28,8 +27,7 @@ const Mycoin = () => {
             </button>
           </div>
         </div>
-        <div className="w-full h-[370px] border-border dark:border-border-dark border-[2px] rounded-[12px] pl-10  flex gap-10 justify-start items-center overflow-x-auto">
-          {/* 내 코인을 등록해주세요. */}
+        <div className="w-full h-[330px] border-border dark:border-border-dark border-[2px] rounded-[12px] pl-10  flex gap-10 justify-center items-center overflow-x-auto">
           {coinBoxArr.map((items: boolean, idx) => {
             return <MyCoinBox key={idx} bool={items} />;
           })}

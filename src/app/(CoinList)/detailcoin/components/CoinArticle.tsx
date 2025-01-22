@@ -52,11 +52,13 @@ const CoinArticle = ({ coinData }: { coinData: any }) => {
     <article className="w-[400px] h-auto flex flex-col gap-4  ">
       <div className=" w-full h-auto flex justify-between items-center">
         <div className=" w-auto h-auto flex justify-start items-center gap-4">
-          <img
-            src={coinData.image.small}
-            alt="코인 로고"
-            className=" w-[32px] h-[32px]"
-          />
+          {coinData.image.small && (
+            <img
+              src={coinData.image.small}
+              alt="코인 로고"
+              className=" w-[32px] h-[32px]"
+            />
+          )}
           <span className=" font-semibold text-smallHeader">
             {coinData.symbol.toUpperCase()}
           </span>

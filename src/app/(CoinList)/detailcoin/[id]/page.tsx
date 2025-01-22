@@ -15,7 +15,7 @@ async function DetailCoin({ params }: { params: { id: string } }) {
       <section className="w-full h-auto gap-10 flex justify-between px-8 py-5 border-border dark:border-border-dark border rounded-lg">
         <CoinArticle coinData={jsonData} />
 
-        <DetailChart coinName={coinSymbol} />
+        <DetailChart coinName={jsonData.symbol} />
       </section>
       <DetailNewsList coinName={coinSymbol} />
     </section>

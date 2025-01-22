@@ -4,11 +4,17 @@ import GreenArrow from "@/../public/GreenArrow.svg";
 
 import { useEffect, useState } from "react";
 
-export default function RealTimePrice() {
+interface IProps {
+  realRate: string;
+  setRate: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export default function BoxRealTime(props: IProps) {
+  const { realRate, setRate } = props;
   const [realKrw, setRealKrw] = useState<number | null>(null);
   const [realDallor, setRealDallor] = useState<string>();
-  const [realRate, setRate] = useState("");
   const [exchange, setExchange] = useState<number>(0);
+
   useEffect(() => {
     const socket = new WebSocket("wss://pubwss.bithumb.com/pub/ws");
 
@@ -16,7 +22,7 @@ export default function RealTimePrice() {
       socket.send(
         JSON.stringify({
           type: "ticker",
-          symbols: ["XRP_KRW"],
+          symbols: ["BTC_KRW"],
           tickTypes: ["1M"],
         })
       );
@@ -68,50 +74,21 @@ export default function RealTimePrice() {
     <div className=" w-full h-auto flex flex-col ">
       <div className=" w-full h-auto flex justify-between items-center gap-5 ">
         <div className=" w-full h-auto flex justify-start items-center gap-5">
-          <span className="w-[52px] h-auto font-semibold text-[24px] ">
+          <span className="w-[52px] h-auto font-semibold text-[20px] ">
             USD
           </span>
-          <span className="w-auto h-auto text-[24px]">
+          <span className="w-auto h-auto text-[20px]">
             {realDallor ? `$${realDallor.toLocaleString()}` : "Loading..."}
-          </span>
-        </div>
-        <div className=" w-auto h-auto flex gap-2 items-center pr-1">
-          {Number(realRate) >= 0 ? (
-            <GreenArrow className="text-green" />
-          ) : (
-            <RedArrow className="text-red" />
-          )}
-          <span
-            className={`w-auto h-auto ${
-              Number(realRate) >= 0 ? "text-green" : "text-red"
-            }`}
-          >
-            {realRate}%
           </span>
         </div>
       </div>
       <div className=" w-full h-auto flex justify-between items-center gap-5 ">
         <div className=" w-full h-auto flex justify-start items-center gap-5">
-          <span className="w-[52px] h-auto font-semibold text-[23px]   ">
+          <span className="w-[52px] h-auto font-semibold text-[19px]   ">
             KRW
           </span>
-          <span className="w-auto h-auto text-[24px]">
+          <span className="w-auto h-auto text-[20px]">
             {realKrw ? `₩${realKrw.toLocaleString()}` : "Loading..."}
-          </span>
-        </div>
-        <div className=" w-auto h-auto flex gap-2 items-center pr-1">
-          {Number(realRate) >= 0 ? (
-            <GreenArrow className=" text-green " />
-          ) : (
-            <RedArrow className="text-red  " />
-          )}
-
-          <span
-            className={`w-auto h-auto ${
-              Number(realRate) >= 0 ? "text-green" : "text-red"
-            }`}
-          >
-            {realRate}%
           </span>
         </div>
       </div>
