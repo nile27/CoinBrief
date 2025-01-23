@@ -42,7 +42,6 @@ export const coinDataFetch = async (coinId: string) => {
 
     const data = await response.json();
 
-    console.log(data);
     return data;
   } catch (error) {
     console.error("코인파프리카 검색 에러:", error);

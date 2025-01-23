@@ -2,67 +2,21 @@
 import RedArrow from "@/../public/RedArrow.svg";
 import GreenArrow from "@/../public/GreenArrow.svg";
 
+import { useCoinStore } from "@/store/store";
 import { useEffect, useState } from "react";
 
 export default function RealTimePrice() {
-  const [realKrw, setRealKrw] = useState<number | null>(null);
-  const [realDallor, setRealDallor] = useState<string>();
-  const [realRate, setRate] = useState("");
-  const [exchange, setExchange] = useState<number>(0);
+  const { realTimeData, exchange } = useCoinStore();
+  const [dallor, setDallor] = useState("");
+
   useEffect(() => {
-    const socket = new WebSocket("wss://pubwss.bithumb.com/pub/ws");
-
-    socket.onopen = () => {
-      socket.send(
-        JSON.stringify({
-          type: "ticker",
-          symbols: ["XRP_KRW"],
-          tickTypes: ["1M"],
-        })
-      );
-    };
-
-    socket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.type === "ticker" && data.content) {
-          const price = parseFloat(data.content.closePrice);
-          console.log(data);
-          setRealKrw(price);
-          setRate(data.content.chgRate);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    socket.onerror = (error) => {
-      console.error("웹소켓 에러", error);
-    };
-
-    socket.onclose = () => {
-      console.log("웹소켓 종료");
-    };
-
-    const exChangeFetch = async () => {
-      try {
-        const res = await fetch(`/api/exchange`);
-
-        const data = await res.json();
-        setExchange(Number(data.data.KRW.replace(/,/g, "")));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    exChangeFetch();
-    return () => {
-      socket.close();
-    };
-  }, []);
-  useEffect(() => {
-    if (realKrw)
-      setRealDallor(Number((realKrw / exchange).toFixed(2)).toLocaleString());
-  }, [realKrw]);
+    if (realTimeData.realKrw) {
+      const dollar = Number(
+        (realTimeData.realKrw / exchange).toFixed(2)
+      ).toLocaleString();
+      setDallor(dollar);
+    }
+  }, [realTimeData.realKrw]);
 
   return (
     <div className=" w-full h-auto flex flex-col ">
@@ -72,21 +26,21 @@ export default function RealTimePrice() {
             USD
           </span>
           <span className="w-auto h-auto text-[24px]">
-            {realDallor ? `$${realDallor.toLocaleString()}` : "Loading..."}
+            {dallor ? `$${dallor.toLocaleString()}` : "Loading..."}
           </span>
         </div>
         <div className=" w-auto h-auto flex gap-2 items-center pr-1">
-          {Number(realRate) >= 0 ? (
+          {Number(realTimeData.realRate) >= 0 ? (
             <GreenArrow className="text-green" />
           ) : (
             <RedArrow className="text-red" />
           )}
           <span
             className={`w-auto h-auto ${
-              Number(realRate) >= 0 ? "text-green" : "text-red"
+              Number(realTimeData.realRate) >= 0 ? "text-green" : "text-red"
             }`}
           >
-            {realRate}%
+            {realTimeData.realRate}%
           </span>
         </div>
       </div>
@@ -96,11 +50,13 @@ export default function RealTimePrice() {
             KRW
           </span>
           <span className="w-auto h-auto text-[24px]">
-            {realKrw ? `₩${realKrw.toLocaleString()}` : "Loading..."}
+            {realTimeData.realKrw
+              ? `₩${realTimeData.realKrw.toLocaleString()}`
+              : "Loading..."}
           </span>
         </div>
         <div className=" w-auto h-auto flex gap-2 items-center pr-1">
-          {Number(realRate) >= 0 ? (
+          {Number(realTimeData.realRate) >= 0 ? (
             <GreenArrow className=" text-green " />
           ) : (
             <RedArrow className="text-red  " />
@@ -108,10 +64,10 @@ export default function RealTimePrice() {
 
           <span
             className={`w-auto h-auto ${
-              Number(realRate) >= 0 ? "text-green" : "text-red"
+              Number(realTimeData.realRate) >= 0 ? "text-green" : "text-red"
             }`}
           >
-            {realRate}%
+            {realTimeData.realRate}%
           </span>
         </div>
       </div>

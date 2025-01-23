@@ -3,12 +3,13 @@ import Chart from "@/components/Chart/Chart";
 
 import CoinBoxList from "./components/CoinBoxList";
 import AddCoinBox from "./components/AddCoinBox";
+import DetailCoin from "./components/DetailCoin";
 
 const Mycoin = () => {
   return (
     <main className="w-[100vw] h-auto p-4 flex flex-col justify-center items-center gap-10 ">
       <section className="w-full h-[auto] flex justify-center gap-10 items-center">
-        {/* <DetailCoin /> */}
+        <DetailCoin />
         <Chart />
       </section>
       <section className="w-full h-auto flex flex-col gap-3 justify-center items-center">

@@ -1,20 +1,22 @@
 "use client";
 import { useEffect, useState } from "react";
+import { RealTimeData, useCoinStore } from "@/store/store";
 interface IProps {
-  realRate: string;
+  rate: string;
   setRate: React.Dispatch<React.SetStateAction<string>>;
   symbol: string;
+  index: number;
 }
 
 export default function BoxRealTime(props: IProps) {
-  const { realRate, setRate, symbol } = props;
+  const { setRate, symbol, index, rate } = props;
 
-  const [realKrw, setRealKrw] = useState<number | null>(null);
+  const { setRealTimeData, selectedCoin, setExchange, exchange } =
+    useCoinStore();
+  const [realKrw, setRealKrw] = useState<number>(0);
   const [realDallor, setRealDallor] = useState<string>();
-  const [exchange, setExchange] = useState<number>(0);
 
   useEffect(() => {
-    console.log(symbol);
     const socket = new WebSocket("wss://pubwss.bithumb.com/pub/ws");
 
     socket.onopen = () => {
@@ -32,7 +34,7 @@ export default function BoxRealTime(props: IProps) {
         const data = JSON.parse(event.data);
         if (data.type === "ticker" && data.content) {
           const price = parseFloat(data.content.closePrice);
-          console.log(data);
+          const rate = parseFloat(data.content.chgRate);
           setRealKrw(price);
           setRate(data.content.chgRate);
         }
@@ -64,9 +66,22 @@ export default function BoxRealTime(props: IProps) {
       socket.close();
     };
   }, []);
+
   useEffect(() => {
-    if (realKrw)
-      setRealDallor(Number((realKrw / exchange).toFixed(2)).toLocaleString());
+    if (selectedCoin === index) {
+      console.log("출력되는 index:", selectedCoin);
+      setRealTimeData({
+        realKrw: realKrw,
+        realRate: rate,
+      });
+    }
+  }, [selectedCoin, rate]);
+
+  useEffect(() => {
+    if (realKrw) {
+      const dollar = Number((realKrw / exchange).toFixed(2)).toLocaleString();
+      setRealDallor(dollar);
+    }
   }, [realKrw]);
 
   return (

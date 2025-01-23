@@ -43,6 +43,32 @@ interface SearchState {
   data: SearchDate[];
   fetchCoins: () => Promise<void>;
 }
+export interface RealTimeData {
+  realKrw: number;
+  realRate: string;
+}
+
+interface CoinState {
+  selectedCoin: number;
+  realTimeData: RealTimeData;
+  exchange: number;
+  coinId: string;
+  setCoinId: (coin: string) => void;
+  setSelectedCoin: (coin: number) => void;
+  setRealTimeData: (data: RealTimeData) => void;
+  setExchange: (exchange: number) => void;
+}
+
+export const useCoinStore = create<CoinState>((set) => ({
+  selectedCoin: 0,
+  realTimeData: { realKrw: 0, realRate: "" },
+  exchange: 0,
+  coinId: "",
+  setCoinId: (coin) => set({ coinId: coin }),
+  setSelectedCoin: (coin) => set({ selectedCoin: coin }),
+  setRealTimeData: (data) => set({ realTimeData: data }),
+  setExchange: (exchange) => set({ exchange: exchange }),
+}));
 
 export const useAuthStore = create<AuthState>()(
   persist(
