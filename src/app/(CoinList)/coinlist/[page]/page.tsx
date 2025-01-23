@@ -1,86 +1,72 @@
-import CurrencyCalc from "../components/CurrencyCalc";
-import TopVolumeList from "../components/TopVolumeList";
 import CoinListTable from "../components/CoinListTable";
-import SearchCoin from "../components/SearchCoin";
 import Link from "next/link";
 
 export interface CoinList {
   id: string;
   symbol: string;
   name: string;
-  image: string;
-  current_price: number;
-  price_change_percentage_1h_in_currency: number;
-  price_change_percentage_24h: number;
-  price_change_percentage_7d_in_currency: number;
-  total_volume: number;
+  quotes: {
+    USD: {
+      price: number;
+      percent_change_1h: number;
+      percent_change_24h: number;
+      percent_change_7d: number;
+      market_cap: number;
+      volume_24h: number;
+    };
+  };
+
   market_cap: number;
-  market_cap_rank: number;
+  rank: number;
 }
 
 const CoinList = async ({ params }: { params: { page: string } }) => {
   const page = parseInt(params.page);
-  const getCoinListFetch = async () => {
-    const res = await fetch(
-      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=${page}&sparkline=false&price_change_percentage=1h,24h,7d`
-    );
-    const data = await res.json();
+  const itemsPerPage = 50;
 
+  const getCoinListFetch = async () => {
+    const res = await fetch("https://api.coinpaprika.com/v1/tickers");
+    const data = await res.json();
     return data;
   };
 
-  const getVolumnListFetch = async () => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        "x-cg-demo-api-key": `${process.env.COINGAKO_API_KEY}`,
-      },
-    };
-    const res = await fetch(
-      "https://api.coingecko.com/api/v3/search/trending",
-      options
-    );
-    const data = await res.json();
+  const getCoinList = await getCoinListFetch();
 
-    return data.coins.slice(0, 3);
-  };
-  const getCoinList: CoinList[] = await getCoinListFetch();
-  const topVolumeCoin: [] = await getVolumnListFetch();
+  const paginatedData = getCoinList.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(getCoinList.length / itemsPerPage);
 
   return (
-    <section className=" flex flex-col w-full h-full gap-10">
-      <section className=" flex justify-center items-center w-full h-auto px-5 pt-5 gap-20">
-        <section className=" bg-container dark:bg-container-dark w-[350px] min-h-[280px] py-3 h-auto flex flex-col justify-center items-start gap-3 border-2 border-border dark:border-border-dark rounded-[10px]">
-          <h1 className=" text-smallHeader font-extrabold px-5">
-            🔥 트렌드 TOP 3
-          </h1>
-
-          <div className=" w-full h-auto flex flex-col gap-3">
-            {topVolumeCoin.map((item: any, key: number) => (
-              <Link key={item.item.id} href={`/detailcoin/${item.item.id}`}>
-                <TopVolumeList num={key + 1} item={item.item} />
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <CurrencyCalc />
-      </section>
-      <section className=" w-full h-auto px-5">
-        <SearchCoin coinList={getCoinList} />
-        <CoinListTable getCoinList={getCoinList} />
+    <section className="flex flex-col w-full h-full gap-10">
+      <section className="w-full h-auto px-5">
+        <CoinListTable getCoinList={paginatedData} />
         <div className="w-full h-auto flex justify-center items-center gap-5 mt-5">
-          {page != 1 ? (
-            <Link href={`/coinlist/${page - 1}`}>
-              <button>이전 페이지</button>
-            </Link>
-          ) : null}
-          <div> {page}</div>
+          {totalPages >= 6 && <>...</>}
+          {Array.from({ length: Math.min(totalPages, 6) }, (_, i) => {
+            const pageStart = Math.max(1, page - 3); // 현재 페이지 기준 시작 범위
+            const pageEnd = Math.min(totalPages, pageStart + 5); // 범위 끝 계산
 
-          <Link href={`/coinlist/${page + 1}`}>
-            <button>다음 페이지</button>
-          </Link>
+            const pageNum = pageStart + i; // 동적으로 페이지 번호 계산
+            if (pageNum > totalPages) return null; // 범위 초과 시 생략
+
+            return (
+              <Link key={pageNum} href={`/coinlist/${pageNum}`}>
+                <button
+                  className={`px-4 py-2 ${
+                    pageNum === page
+                      ? "bg-primary text-white"
+                      : "bg-gray-200 dark:bg-gray-700"
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              </Link>
+            );
+          })}
+          .....
         </div>
       </section>
     </section>

@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 
 import { CoinList } from "../[page]/page";
+import CoinImg from "./CoinImg";
 
 const CoinListTable = async ({ getCoinList }: { getCoinList: CoinList[] }) => {
   return (
@@ -20,13 +21,13 @@ const CoinListTable = async ({ getCoinList }: { getCoinList: CoinList[] }) => {
           </tr>
         </thead>
         <tbody>
-          {getCoinList.map((coin: CoinList, index: number) => (
+          {getCoinList.map((coin: CoinList) => (
             <tr
               key={coin.id}
               className="border-b-2 border-border  dark:border-border-dark group "
             >
               <td className=" border-border dark:border-border-dark px-2 py-2 text-center">
-                {coin.market_cap_rank}
+                {coin.rank}
               </td>
 
               <td className=" border-border dark:border-border-dark px-3 py-2 flex justify-start items-center dark:group-hover:bg-primary-dark group-hover:bg-primary-dark group-hover:text-text-dark">
@@ -35,11 +36,7 @@ const CoinListTable = async ({ getCoinList }: { getCoinList: CoinList[] }) => {
                   href={`/detailcoin/${coin.id}`}
                   className="w-full flex justify-start items-center gap-2"
                 >
-                  <img
-                    src={coin.image}
-                    alt={coin.name}
-                    className="w-6 h-6 rounded-full"
-                  />
+                  <CoinImg name={coin.name} id={coin.id} />
 
                   <span className="cursor-pointer">{coin.name}</span>
                   <span className="cursor-pointer">
@@ -49,40 +46,40 @@ const CoinListTable = async ({ getCoinList }: { getCoinList: CoinList[] }) => {
               </td>
 
               <td className=" border-border dark:border-border-dark px-4 py-2 text-right">
-                ${coin.current_price.toLocaleString()}
+                ${coin.quotes.USD.price.toLocaleString()}
               </td>
               <td
                 className={` border-border dark:border-border-dark px-4 py-2 text-right ${
-                  coin.price_change_percentage_1h_in_currency > 0
+                  coin.quotes.USD.percent_change_1h > 0
                     ? "text-green-500"
                     : "text-red-500"
                 }`}
               >
-                {coin.price_change_percentage_1h_in_currency?.toFixed(2)}%
+                {coin.quotes.USD.percent_change_1h?.toFixed(2)}%
               </td>
               <td
                 className={` border-border dark:border-border-dark px-4 py-2 text-right ${
-                  coin.price_change_percentage_24h > 0
+                  coin.quotes.USD.percent_change_24h > 0
                     ? "text-green-500"
                     : "text-red-500"
                 }`}
               >
-                {coin.price_change_percentage_24h?.toFixed(2)}%
+                {coin.quotes.USD.percent_change_24h?.toFixed(2)}%
               </td>
               <td
                 className={` border-border dark:border-border-dark px-4 py-2 text-right ${
-                  coin.price_change_percentage_7d_in_currency > 0
+                  coin.quotes.USD.percent_change_7d > 0
                     ? "text-green-500"
                     : "text-red-500"
                 }`}
               >
-                {coin.price_change_percentage_7d_in_currency?.toFixed(2)}%
+                {coin.quotes.USD.percent_change_7d?.toFixed(2)}%
               </td>
               <td className=" border-border dark:border-border-dark px-4 py-2 text-right">
-                ${coin.total_volume.toLocaleString()}
+                ${coin.quotes.USD.volume_24h.toLocaleString()}
               </td>
               <td className=" border-border dark:border-border-dark px-4 py-2 text-right">
-                ${coin.market_cap.toLocaleString()}
+                ${coin.quotes.USD.volume_24h.toLocaleString()}
               </td>
             </tr>
           ))}
