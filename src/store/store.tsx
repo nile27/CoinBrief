@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-
-interface Coin {
+import { collection, getDocs } from "firebase/firestore";
+import { firestore } from "@/firebase/firebase";
+export interface Coin {
   id: string;
   symbol: string;
   name: string;
@@ -34,6 +35,15 @@ interface ICurrency {
   usd: () => void;
 }
 
+interface SearchDate {
+  id: string;
+  symbol: string;
+}
+interface SearchState {
+  data: SearchDate[];
+  fetchCoins: () => Promise<void>;
+}
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
@@ -43,6 +53,36 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: "login-storage",
+      storage: createJSONStorage(() => sessionStorage),
+    }
+  )
+);
+
+export const useSearchData = create<SearchState>()(
+  persist(
+    (set) => ({
+      data: [],
+      fetchCoins: async () => {
+        try {
+          const coinsCollection = collection(firestore, "coinSymbol");
+          const snapshot = await getDocs(coinsCollection);
+
+          const coins = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          })) as SearchDate[];
+
+          set({ data: coins });
+        } catch (error) {
+          console.error(
+            "Firebase에서 CoinSymbol 데이터를 가져오는 데 실패했습니다.",
+            error
+          );
+        }
+      },
+    }),
+    {
+      name: "search-storage",
       storage: createJSONStorage(() => sessionStorage),
     }
   )
@@ -90,18 +130,16 @@ export const useUserStore = create<UserState>()(
             },
           }));
         } catch (error) {
-          console.error("Error adding coin:", error);
+          console.error("추가 코인 에러:", error);
         }
       },
       deleteCoin: async (idx: number) => {
         const { id, mycoin } = useUserStore.getState().user;
 
-        // 삭제할 코인 정보 가져오기
         const coinToDelete = mycoin[idx];
         if (!coinToDelete) return;
 
         try {
-          // Firebase에 삭제 요청
           const res = await fetch("/api/deletecoin", {
             method: "POST",
             headers: {
@@ -114,7 +152,7 @@ export const useUserStore = create<UserState>()(
           });
 
           if (!res.ok) {
-            throw new Error("Failed to delete coin from Firebase");
+            throw new Error("코인 삭제에 실패하였습니다.");
           }
 
           set((state) => ({

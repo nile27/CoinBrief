@@ -1,9 +1,8 @@
 import React from "react";
 import Chart from "@/components/Chart/Chart";
 
-import DetailCoin from "./components/DetailCoin";
 import CoinBoxList from "./components/CoinBoxList";
-import AddCoin from "./components/AddCoinBox";
+import AddCoinBox from "./components/AddCoinBox";
 
 const Mycoin = () => {
   return (
@@ -16,7 +15,7 @@ const Mycoin = () => {
         <div className=" w-full h-[40px] flex justify-between items-center  px-10">
           <h1 className=" text-[24px] font-semibold w-full">내 코인 목록</h1>
 
-          <AddCoin />
+          <AddCoinBox />
         </div>
         <CoinBoxList />
       </section>

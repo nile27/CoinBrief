@@ -1,10 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Ellipse from "@/../public/Ellipse.svg";
 import GreenArrow from "@/../public/GreenArrow.svg";
 import RedArrow from "@/../public/RedArrow.svg";
 import BoxRealTime from "@/app/mycoin/components/BoxRealTime";
-const MyCoinBox = ({ symbol }: { symbol: string }) => {
+
+import { Coin } from "@/store/store";
+
+const MyCoinBox = ({ id, symbol, name }: Coin) => {
   const [realRate, setRate] = useState("");
 
   return (
@@ -13,14 +16,21 @@ const MyCoinBox = ({ symbol }: { symbol: string }) => {
         true ? "scale-110" : " hover:scale-105"
       }`}
     >
-      <Ellipse className="absolute z-10 top-0 left-10 w-[70px] h-[70px]" />
+      <div className=" bg-container rounded-full border border-border dark p-2 flex justify-center items-center  dark:bg-container-dark absolute z-10 top-0 left-10 w-[70px] h-[70px]">
+        <img
+          src={`https://coinpaprika.com/coin/${id}/logo.png`}
+          alt={name}
+          className="w-full h-full"
+        />
+      </div>
+
       <div className=" flex justify-start items-center flex-col py-2 px-4 w-[280px] h-auto border-2 border-btn dark:border-text-dark bg-container dark:bg-container-dark rounded-[5px]">
         <div className=" w-full h-auto px-6 py-2 flex justify-center items-end flex-col">
           <span className=" h-auto w-[70px] text-start text-[18px] font-bold">
-            비트 코인
+            {name}
           </span>
           <span className="h-auto w-[70px] text-start text-[18px] font-bold">
-            BTC
+            {symbol}
           </span>
           <div className=" w-auto h-auto flex gap-1 items-center justify-start">
             {Number(realRate) >= 0 ? (
