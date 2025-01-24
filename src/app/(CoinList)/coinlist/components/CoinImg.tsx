@@ -1,7 +1,7 @@
 "use client";
 
 const CoinImg = ({ id, name }: { id: string; name: string }) => {
-  const imgSrc = `https://coinpaprika.com/coin/${id}/logo.png`;
+  const imgSrc = `https://static.coinpaprika.com/coin/${id}/logo.png`;
 
   const addDefaultImg = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.onerror = null;

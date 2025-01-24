@@ -78,7 +78,7 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem>
-                  <Link href={"/"}>마이페이지</Link>
+                  <Link href={"/mypage"}>마이페이지</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
                   로그아웃
@@ -103,9 +103,11 @@ const Header = () => {
                 >
                   {navList.map((items: string, key: number) => {
                     return (
-                      <DropdownMenuItem key={key} className=" text-lg">
-                        {items}
-                      </DropdownMenuItem>
+                      <Link key={key} href={navLink[key]}>
+                        <DropdownMenuItem className="  bg-container dark:bg-container-dark">
+                          {items}
+                        </DropdownMenuItem>
+                      </Link>
                     );
                   })}
                 </DropdownMenuContent>

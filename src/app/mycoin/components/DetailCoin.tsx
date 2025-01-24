@@ -6,12 +6,19 @@ import BtnStyle from "@/components/CustomUI/BtnStyle";
 
 import RealTimePrice from "./RealTimePrice";
 import { useCoinStore, useUserStore } from "@/store/store";
-import { coinDataFetch } from "../utill/utill";
 
 const DetailCoin = () => {
   const { coinId, selectedCoin, setCoinId } = useCoinStore();
   const { mycoin } = useUserStore.getState().user;
   const [coinData, setCoinData] = useState<any>({});
+
+  if (mycoin.length === 0) {
+    return (
+      <section className=" text-smallHeader font-bold w-[400px] h-[460px] rounded-[12px] flex flex-col gap-4 justify-center items-center py-6 px-4 border-[1px] border-border dark:border-border-dark">
+        <div>코인을 등록해주세요..</div>
+      </section>
+    );
+  }
 
   useEffect(() => {
     setCoinId(mycoin[selectedCoin].id);

@@ -53,6 +53,7 @@ interface CoinState {
   realTimeData: RealTimeData;
   exchange: number;
   coinId: string;
+
   setCoinId: (coin: string) => void;
   setSelectedCoin: (coin: number) => void;
   setRealTimeData: (data: RealTimeData) => void;
@@ -64,6 +65,7 @@ export const useCoinStore = create<CoinState>((set) => ({
   realTimeData: { realKrw: 0, realRate: "" },
   exchange: 0,
   coinId: "",
+
   setCoinId: (coin) => set({ coinId: coin }),
   setSelectedCoin: (coin) => set({ selectedCoin: coin }),
   setRealTimeData: (data) => set({ realTimeData: data }),

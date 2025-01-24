@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["d3t32hsnjxo7q6.cloudfront.net"],
+    domains: ["d3t32hsnjxo7q6.cloudfront.net", "coinpaprika.com"],
   },
   webpack(config) {
     config.module.rules.push({

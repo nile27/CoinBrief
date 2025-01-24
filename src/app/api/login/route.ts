@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      const token = await user.getIdToken();
+
       const docRef = doc(firestore, "users", user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
@@ -37,13 +37,6 @@ export async function POST(req: Request) {
           },
           { status: 200 }
         );
-
-        // response.cookies.set("authToken", token, {
-        //   httpOnly: true,
-        //   secure: process.env.NODE_ENV === "production",
-        //   maxAge: 60 * 60 * 24,
-        //   path: "/",
-        // });
 
         return response;
       } else {
