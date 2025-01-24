@@ -18,8 +18,8 @@ import BtnStyle from "./BtnStyle";
 import { useRouter } from "next/navigation";
 
 const Header = () => {
-  const navList = ["내 코인", "코인리스트", "뉴스"];
-  const navLink = ["/mycoin", "/coinlist/1", "/news"];
+  const navList = ["내 코인", "코인리스트"];
+  const navLink = ["/mycoin", "/coinlist/1"];
   const navi = useRouter();
 
   const { isLogin, logout } = useAuthStore();
