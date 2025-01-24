@@ -60,9 +60,17 @@ const KakaoCallback = () => {
 
         const auth = getAuth();
         const userCredential = await signInWithCustomToken(auth, customToken);
+        const userData = {
+          id: userCredential.user.uid,
+          displayName: user.displayName,
+          name: user.name,
+          mycoin: user.mycoin,
+          email: user.email,
+        };
 
         console.log("로그인 성공:", userCredential.user);
-        setUser(user);
+
+        setUser(userData);
         login();
         navi.push("/mycoin");
       } catch (error) {

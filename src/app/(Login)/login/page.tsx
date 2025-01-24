@@ -60,7 +60,6 @@ const Login = () => {
         displayName: data.data.nickname,
         mycoin: data.data.mycoin,
       };
-      // document.cookie = `authToken=${data.data.token}; path=/; max-age=86400; secure;`;
 
       if (!response.ok) {
         const errorData = await response.json();

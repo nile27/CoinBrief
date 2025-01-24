@@ -29,9 +29,13 @@ export const googleLogin = async (): Promise<Iuser | null> => {
     const querySnapshot = await getDocs(signedUser);
 
     if (!querySnapshot.empty) {
-      const signedUserData = querySnapshot.docs[0].data() as Iuser;
-
-      return signedUserData;
+      const signedUserDoc = querySnapshot.docs[0];
+      const signedUserData = signedUserDoc.data() as Iuser;
+      const uid = signedUserDoc.id;
+      return {
+        ...signedUserData,
+        id: uid, // 문서 ID를 추가
+      };
     }
 
     const userRef = doc(firestore, "users", user.uid);
@@ -42,6 +46,7 @@ export const googleLogin = async (): Promise<Iuser | null> => {
     }
 
     const newUser: Iuser = {
+      id: user.uid,
       name: user.displayName || "",
       email: user.email,
       displayName: user.displayName || "",
@@ -50,7 +55,15 @@ export const googleLogin = async (): Promise<Iuser | null> => {
 
     await setDoc(userRef, newUser);
 
-    return newUser;
+    const userData: Iuser = {
+      id: user.uid,
+      name: user.displayName || "",
+      email: user.email,
+      displayName: user.displayName || "",
+      mycoin: [],
+    };
+
+    return userData;
   } catch (error) {
     console.error("잘못된 회원 가입입니다.", error);
     return null;
