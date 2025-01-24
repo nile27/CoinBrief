@@ -1,15 +1,15 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
-import { getAuth, signInWithRedirect, GoogleAuthProvider } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBH_ce6eVGsBYVWdogCpnY6mWCFOJrP7oY",
-  authDomain: "coinbrief-a5e9e.firebaseapp.com",
-  projectId: "coinbrief-a5e9e",
-  storageBucket: "coinbrief-a5e9e.firebasestorage.app",
-  messagingSenderId: "669995721578",
-  appId: "1:669995721578:web:2fd9cd1f47b06f9c38fb13",
-  measurementId: "G-3X36691X4N",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);

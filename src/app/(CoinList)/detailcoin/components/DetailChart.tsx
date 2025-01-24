@@ -1,4 +1,5 @@
 "use client";
+import BtnStyle from "@/components/CustomUI/BtnStyle";
 import { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import {
@@ -12,8 +13,8 @@ import {
   Filler,
   ChartOptions,
 } from "chart.js";
-import BtnStyle from "@/components/CustomUI/BtnStyle";
-import { useCurrency } from "@/store/store";
+
+import { useCurrency, useCoinStore } from "@/store/store";
 
 ChartJS.register(
   LineElement,
@@ -44,48 +45,83 @@ interface ChartDataType {
 export default function DetailChart({ coinName }: { coinName: string }) {
   const [chartData, setChartData] = useState<ChartDataType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [changeData, setChangeData] = useState<boolean>(false);
-  const [changeDate, setChangeDate] = useState<"1" | "7" | "31">("1");
-
+  const [error, setError] = useState<string | null>(null);
+  const [changeDate, setChangeDate] = useState<"1d" | "1w" | "1M">("1d");
+  const [showVolume, setShowVolume] = useState<boolean>(false);
   const { currency } = useCurrency();
-
+  const { exchange } = useCoinStore();
   useEffect(() => {
     const fetchChartData = async () => {
       try {
+        setIsLoading(true);
+        setError(null);
+
+        const symbol =
+          coinName.toUpperCase() + (currency === "$" ? "USDT" : "BUSD");
+
         const res = await fetch(
-          `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${
-            currency === "$" ? "usd" : "krw"
-          }&days=${changeDate}`
+          `/api/klines?symbol=${symbol}&interval=${changeDate}&limit=50`
         );
+        if (!res.ok) {
+          throw new Error("Failed to fetch chart data.");
+        }
+
         const data = await res.json();
 
-        const labels = data.prices.map((item: [number, number]) =>
+        const labels = data.map((item: any) =>
           new Date(item[0]).toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
           })
         );
-        const totalVolumnlabels = data.total_volumes.map(
-          (item: [number, number]) =>
-            new Date(item[0]).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-            })
+
+        const prices = data.map((item: any) =>
+          currency === "₩"
+            ? parseFloat(item[4]) * exchange
+            : parseFloat(item[4])
         );
 
-        const prices = data.prices.map((item: [number, number]) => item[1]);
-        const totalVolumes = data.total_volumes.map(
-          (item: [number, number]) => item[1]
+        const volumes = data.map((item: any) =>
+          currency === "₩"
+            ? parseFloat(item[5]) * exchange
+            : parseFloat(item[5])
         );
 
         setChartData({
-          labels: changeData ? totalVolumnlabels : labels,
+          labels,
           datasets: [
             {
-              label: `${coinName} (${currency})`,
-              data: changeData ? totalVolumes : prices,
-              borderColor: "rgba(255, 99, 132, 1)",
-              backgroundColor: "rgba(255, 99, 132, 0.2)",
+              label: showVolume
+                ? `${coinName} Volume (${currency})`
+                : `${coinName} Price (${currency})`,
+              data: showVolume ? volumes : prices,
+              borderColor: showVolume
+                ? "rgba(255, 99, 132, 1)"
+                : "rgba(75, 192, 192, 1)",
+              backgroundColor: showVolume
+                ? "rgba(255, 99, 132, 0.2)"
+                : "rgba(75, 192, 192, 0.2)",
+              fill: true,
+              tension: 0.3,
+              pointRadius: 0,
+              pointHoverRadius: 0,
+            },
+          ],
+        });
+        console.log({
+          labels,
+          datasets: [
+            {
+              label: showVolume
+                ? `${coinName} Volume (${currency})`
+                : `${coinName} Price (${currency})`,
+              data: showVolume ? volumes : prices,
+              borderColor: showVolume
+                ? "rgba(255, 99, 132, 1)"
+                : "rgba(75, 192, 192, 1)",
+              backgroundColor: showVolume
+                ? "rgba(255, 99, 132, 0.2)"
+                : "rgba(75, 192, 192, 0.2)",
               fill: true,
               tension: 0.3,
               pointRadius: 0,
@@ -95,16 +131,26 @@ export default function DetailChart({ coinName }: { coinName: string }) {
         });
       } catch (error) {
         console.error("Error fetching chart data:", error);
+        setError("Failed to load chart data. Please try again later.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchChartData();
-  }, [currency, changeData, changeDate]);
+  }, [currency, changeDate, coinName, showVolume]);
 
-  if (!chartData || isLoading)
+  if (isLoading)
     return (
       <div className="max-w-[800px] w-full h-[full] flex justify-center items-center">
         Loading chart...
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="max-w-[800px] w-full h-[full] flex justify-center items-center text-red-500">
+        {error}
       </div>
     );
 
@@ -121,17 +167,9 @@ export default function DetailChart({ coinName }: { coinName: string }) {
         callbacks: {
           label: function (context) {
             const value = context.raw as number;
-            const localeValue =
-              currency === "$"
-                ? `Price: ${value.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })}`
-                : `Price: ${value.toLocaleString("ko", {
-                    style: "currency",
-                    currency: "KRW",
-                  })}`;
-            return localeValue;
+            return showVolume
+              ? `${value.toLocaleString()} `
+              : `${currency}${value.toLocaleString()}`;
           },
         },
       },
@@ -145,30 +183,55 @@ export default function DetailChart({ coinName }: { coinName: string }) {
       y: {
         ticks: {
           callback: function (value) {
-            return `${currency}${value.toLocaleString()}`;
+            return showVolume
+              ? `${value.toLocaleString()}`
+              : `${currency}${value.toLocaleString()}`;
           },
         },
       },
     },
   };
 
+  const plugins = [
+    {
+      id: "verticalLine",
+      afterDraw: (chart: { tooltip?: any; scales?: any; ctx?: any }) => {
+        if (chart.tooltip._active && chart.tooltip._active.length) {
+          const activePoint = chart.tooltip._active[0];
+          const { ctx } = chart;
+          const { x } = activePoint.element;
+          const topY = chart.scales.y.top;
+          const bottomY = chart.scales.y.bottom;
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(x, topY);
+          ctx.lineTo(x, bottomY);
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = "#A593E0";
+          ctx.stroke();
+          ctx.restore();
+        }
+      },
+    },
+  ];
   return (
-    <article className="w-full max-w-[800px] h-auto flex flex-col justify-center items-center ">
+    <article className="w-full max-w-[800px] h-auto flex flex-col justify-center items-center  ">
       <div className="w-full h-auto mb-2 flex justify-between px-2">
-        <div className="w-[200px] rounded-md h-auto flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
+        <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
           <BtnStyle
             size="auto"
-            children={"시세"}
+            children={"Price"}
             color="focus"
-            onClick={() => setChangeData(false)}
-            disabled={!changeData}
+            disabled={!showVolume}
+            onClick={() => setShowVolume(false)}
           />
           <BtnStyle
             size="auto"
+            children={"Volume"}
             color="focus"
-            children={"시가 총액"}
-            onClick={() => setChangeData(true)}
-            disabled={changeData}
+            disabled={showVolume}
+            onClick={() => setShowVolume(true)}
           />
         </div>
         <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
@@ -176,70 +239,29 @@ export default function DetailChart({ coinName }: { coinName: string }) {
             size="auto"
             children={"24시간"}
             color="focus"
-            disabled={changeDate === "1"}
-            onClick={() => setChangeDate("1")}
+            disabled={changeDate === "1d"}
+            onClick={() => setChangeDate("1d")}
           />
           <BtnStyle
             size="auto"
             children={"7일"}
             color="focus"
-            disabled={changeDate === "7"}
-            onClick={() => setChangeDate("7")}
+            disabled={changeDate === "1w"}
+            onClick={() => setChangeDate("1w")}
           />
           <BtnStyle
             size="auto"
             children={"1개월"}
             color="focus"
-            disabled={changeDate === "31"}
-            onClick={() => setChangeDate("31")}
+            disabled={changeDate === "1M"}
+            onClick={() => setChangeDate("1M")}
           />
         </div>
       </div>
-      <div className="">
-        <Line
-          data={chartData}
-          options={options}
-          plugins={[
-            {
-              id: "verticalLine",
-              afterDraw: (chart) => {
-                if (
-                  Array.isArray(chart.tooltip?.active) &&
-                  chart.tooltip?.active?.length
-                ) {
-                  const ctx = chart.ctx;
-                  const activePoint = chart.tooltip.active[0];
-                  const x = activePoint.element.x;
-                  const topY = chart.scales.y.top;
-                  const bottomY = chart.scales.y.bottom;
-
-                  ctx.save();
-                  ctx.beginPath();
-                  ctx.moveTo(x, topY);
-                  ctx.lineTo(x, bottomY);
-                  ctx.lineWidth = 1.5;
-                  ctx.strokeStyle = "#8E7CC3";
-                  ctx.stroke();
-                  ctx.restore();
-                }
-              },
-            },
-          ]}
-        />
-
-        <style jsx>{`
-          div {
-            width: 100%;
-            min-width: 350px;
-            min-height: 300px;
-            max-width: 800px;
-            height: 490px;
-          }
-          canvas {
-            width: 100%;
-            min-width: 350px;
-          }
-        `}</style>
+      <div className="w-[800px] h-[350px] flex justify-center items-center">
+        {chartData && (
+          <Line data={chartData} options={options} plugins={plugins} />
+        )}
       </div>
     </article>
   );

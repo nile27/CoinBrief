@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import GreenArrow from "@/../public/GreenArrow.svg";
 import RedArrow from "@/../public/RedArrow.svg";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
-
 import RealTimePrice from "./RealTimePrice";
+
 import { useCoinStore, useUserStore } from "@/store/store";
+import Link from "next/link";
 
 const DetailCoin = () => {
   const { coinId, selectedCoin, setCoinId } = useCoinStore();
@@ -127,7 +128,9 @@ const DetailCoin = () => {
           </span>
         </div>
       </div>
-      <BtnStyle size="medium">자세히 보기</BtnStyle>
+      <Link href={`detailcoin/${coinData.id}`} className="w-full h-auto">
+        <BtnStyle size="medium">자세히 보기</BtnStyle>
+      </Link>
     </section>
   );
 };
