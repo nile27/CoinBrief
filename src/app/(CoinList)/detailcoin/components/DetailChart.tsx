@@ -221,41 +221,47 @@ export default function DetailChart({ coinName }: { coinName: string }) {
         <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
           <BtnStyle
             size="auto"
-            children={"Price"}
             color="focus"
             disabled={!showVolume}
             onClick={() => setShowVolume(false)}
-          />
+          >
+            Price
+          </BtnStyle>
           <BtnStyle
             size="auto"
-            children={"Volume"}
             color="focus"
             disabled={showVolume}
             onClick={() => setShowVolume(true)}
-          />
+          >
+            Volume
+          </BtnStyle>
         </div>
         <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
           <BtnStyle
             size="auto"
-            children={"24시간"}
             color="focus"
             disabled={changeDate === "1d"}
             onClick={() => setChangeDate("1d")}
-          />
+          >
+            24시간
+          </BtnStyle>
+
           <BtnStyle
             size="auto"
-            children={"7일"}
             color="focus"
             disabled={changeDate === "1w"}
             onClick={() => setChangeDate("1w")}
-          />
+          >
+            7일
+          </BtnStyle>
           <BtnStyle
             size="auto"
-            children={"1개월"}
             color="focus"
             disabled={changeDate === "1M"}
             onClick={() => setChangeDate("1M")}
-          />
+          >
+            1개월
+          </BtnStyle>
         </div>
       </div>
       <div className="w-[800px] h-[350px] flex justify-center items-center">

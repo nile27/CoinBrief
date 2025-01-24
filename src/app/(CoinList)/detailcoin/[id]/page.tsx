@@ -17,7 +17,6 @@ async function DetailCoin({ params }: { params: { id: string } }) {
 
         <DetailChart coinName={jsonData.symbol} />
       </section>
-      <DetailNewsList coinName={coinId} />
     </section>
   );
 }

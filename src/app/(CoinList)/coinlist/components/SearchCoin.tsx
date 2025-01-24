@@ -45,11 +45,11 @@ const SearchCoin = ({ coinList }: { coinList: CoinList[] }) => {
               key={key}
               className={`flex justify-start items-center w-full gap-3 `}
             >
-              <img
+              {/* <img
                 src={item.image}
                 alt="코인 로고"
                 className="w-[20px] h-[20px]"
-              />
+              /> */}
               {/* <Image
                 width={20}
                 height={20}

@@ -73,7 +73,7 @@ const DeleteModal = ({
           </button>
         </div>
         <p className="text-center text-gray-600 dark:text-gray-300">
-          아래 입력란에 <strong>"회원탈퇴"</strong>를 입력하세요.
+          아래 입력란에 <strong>회원탈퇴</strong>를 입력하세요.
         </p>
         <InputStyle
           type="text"

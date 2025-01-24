@@ -53,27 +53,6 @@ export default function DetailChart() {
   const [showVolume, setShowVolume] = useState<boolean>(false);
   const { currency } = useCurrency();
 
-  if (mycoin.length === 0) {
-    return (
-      <section className=" w-[800px] h-[300px] rounded-[12px] flex flex-col gap-4 justify-center items-center py-6 px-4 border-[1px] border-border dark:border-border-dark">
-        <div className="w-full h-auto mb-2 flex justify-between px-2">
-          <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
-            <BtnStyle size="auto" children={"Price"} color="focus" disabled />
-            <BtnStyle size="auto" children={"Volume"} color="focus" disabled />
-          </div>
-          <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
-            <BtnStyle size="auto" children={"24시간"} color="focus" disabled />
-            <BtnStyle size="auto" children={"7일"} color="focus" disabled />
-            <BtnStyle size="auto" children={"1개월"} color="focus" disabled />
-          </div>
-        </div>
-        <div className="w-full h-full flex justify-center items-center  text-smallHeader font-bold">
-          코인을 등록해주세요.
-        </div>
-      </section>
-    );
-  }
-
   useEffect(() => {
     const mySymbol = mycoin[selectedCoin]?.symbol || "";
     setCoinSymbol(mySymbol);
@@ -143,6 +122,37 @@ export default function DetailChart() {
       </div>
     );
 
+  if (mycoin.length === 0) {
+    return (
+      <section className=" w-[800px] h-[300px] rounded-[12px] flex flex-col gap-4 justify-center items-center py-6 px-4 border-[1px] border-border dark:border-border-dark">
+        <div className="w-full h-auto mb-2 flex justify-between px-2">
+          <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
+            <BtnStyle size="auto" color="focus" disabled>
+              Price
+            </BtnStyle>
+            <BtnStyle size="auto" color="focus" disabled>
+              Volume
+            </BtnStyle>
+          </div>
+          <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
+            <BtnStyle size="auto" color="focus" disabled>
+              24시간
+            </BtnStyle>
+            <BtnStyle size="auto" color="focus" disabled>
+              7일
+            </BtnStyle>
+            <BtnStyle size="auto" color="focus" disabled>
+              1개월
+            </BtnStyle>
+          </div>
+        </div>
+        <div className="w-full h-full flex justify-center items-center  text-smallHeader font-bold">
+          코인을 등록해주세요.
+        </div>
+      </section>
+    );
+  }
+
   const options: ChartOptions<"line"> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -187,41 +197,46 @@ export default function DetailChart() {
         <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
           <BtnStyle
             size="auto"
-            children={"Price"}
             color="focus"
             disabled={!showVolume}
             onClick={() => setShowVolume(false)}
-          />
+          >
+            Price
+          </BtnStyle>
           <BtnStyle
             size="auto"
-            children={"Volume"}
             color="focus"
             disabled={showVolume}
             onClick={() => setShowVolume(true)}
-          />
+          >
+            Volume
+          </BtnStyle>
         </div>
         <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
           <BtnStyle
             size="auto"
-            children={"24시간"}
             color="focus"
             disabled={changeDate === "1d"}
             onClick={() => setChangeDate("1d")}
-          />
+          >
+            24시간
+          </BtnStyle>
           <BtnStyle
             size="auto"
-            children={"7일"}
             color="focus"
             disabled={changeDate === "1w"}
             onClick={() => setChangeDate("1w")}
-          />
+          >
+            7일
+          </BtnStyle>
           <BtnStyle
             size="auto"
-            children={"1개월"}
             color="focus"
             disabled={changeDate === "1M"}
             onClick={() => setChangeDate("1M")}
-          />
+          >
+            1개월
+          </BtnStyle>
         </div>
       </div>
       <div className="w-full min-h-[400px] ">

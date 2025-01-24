@@ -13,14 +13,6 @@ const DetailCoin = () => {
   const { mycoin } = useUserStore.getState().user;
   const [coinData, setCoinData] = useState<any>({});
 
-  if (mycoin.length === 0) {
-    return (
-      <section className=" text-smallHeader font-bold w-[400px] h-[460px] rounded-[12px] flex flex-col gap-4 justify-center items-center py-6 px-4 border-[1px] border-border dark:border-border-dark">
-        <div>코인을 등록해주세요..</div>
-      </section>
-    );
-  }
-
   useEffect(() => {
     setCoinId(mycoin[selectedCoin].id);
 
@@ -47,6 +39,13 @@ const DetailCoin = () => {
     };
     coinDataFetch();
   }, [selectedCoin]);
+  if (mycoin.length === 0) {
+    return (
+      <section className=" text-smallHeader font-bold w-[400px] h-[460px] rounded-[12px] flex flex-col gap-4 justify-center items-center py-6 px-4 border-[1px] border-border dark:border-border-dark">
+        <div>코인을 등록해주세요..</div>
+      </section>
+    );
+  }
 
   return (
     <section className=" w-[370px] h-auto rounded-[12px] flex flex-col gap-4 justify-start items-center py-6 px-4 border-[1px] border-border dark:border-border-dark">
