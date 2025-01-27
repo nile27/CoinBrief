@@ -1,6 +1,8 @@
+import CurrencyCalc from "../components/CurrencyCalc";
 import CoinListTable from "../components/CoinListTable";
-import Link from "next/link";
 import { getCoinData } from "../utill/utill";
+
+import Link from "next/link";
 
 const CoinList = async ({ params }: { params: { page: string } }) => {
   const page = Number(params.page);
@@ -16,6 +18,9 @@ const CoinList = async ({ params }: { params: { page: string } }) => {
 
   return (
     <section className="flex flex-col w-full h-full gap-10">
+      <section className=" flex justify-center gap-10 mt-7">
+        <CurrencyCalc />
+      </section>
       <section className="w-full h-auto px-5">
         <CoinListTable getCoinList={paginatedCoins} />
       </section>
