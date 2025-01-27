@@ -1,22 +1,26 @@
 "use client";
+import { useState, useEffect } from "react";
 
-const CoinImg = ({ id, name }: { id: string; name: string }) => {
-  const imgSrc = `https://static.coinpaprika.com/coin/${id}/logo.png`;
+const CoinImg = ({ name, symbol }: { name: string; symbol: string }) => {
+  const [src, setSrc] = useState("/Group.png");
 
-  const addDefaultImg = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.onerror = null;
-    e.currentTarget.src = "/CoinBrief.svg";
+  useEffect(() => {
+    setSrc(`https://static.upbit.com/logos/${symbol.toUpperCase()}.png`);
+  }, [symbol]);
+
+  const addDefaultImg = () => {
+    setSrc("/Group.png");
   };
 
   return (
-    <>
+    <div className="w-[30px] h-[30px] tablet:hidden rounded-full  dark:bg-container flex justify-center items-center">
       <img
-        src={imgSrc}
-        alt={name}
+        src={src}
+        alt={`${name} Logo`}
+        className="w-[22px] h-[22px]  "
         onError={addDefaultImg}
-        className="w-6 h-6 rounded-full"
       />
-    </>
+    </div>
   );
 };
 

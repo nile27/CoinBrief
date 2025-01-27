@@ -1,92 +1,88 @@
 import React from "react";
+import { ProcessedCoin, formatKRW } from "../utill/utill";
+import CoinImg from "./CoinImg";
 import Link from "next/link";
 
-import { CoinList } from "../[page]/page";
-import CoinImg from "./CoinImg";
-
-const CoinListTable = async ({ getCoinList }: { getCoinList: CoinList[] }) => {
+const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
   return (
-    <article className="w-full ">
-      <table className="w-full border-collapse border border-border dark:border-border-dark text-sm text-left">
-        <thead className=" border-b-2 border-border dark:border-border-dark bg-gray-100 dark:bg-gray-800 text-text dark:text-text-dark">
-          <tr className="">
-            <th className="  px-2 py-2 text-center ">순서</th>
-            <th className="   px-4 py-2 text-left">코인</th>
-            <th className="  px-4 py-2 text-right">시세</th>
-            <th className="  px-4 py-2 text-right">1시간</th>
-            <th className="  px-4 py-2 text-right">24시간</th>
-            <th className="  px-4 py-2 text-right">7일</th>
-            <th className="   px-4 py-2 text-right">거래량</th>
-            <th className="  px-4 py-2 text-right">시가총액</th>
-          </tr>
-        </thead>
-        <tbody>
-          {getCoinList.map((coin: CoinList) => (
-            <tr
-              key={coin.id}
-              className="border-b-2 border-border  dark:border-border-dark group "
+    <div className="w-full px-10 text-sm text-right">
+      <div className="flex items-center bg-gray-100 dark:bg-gray-800 border-b-2 border-border dark:border-border-dark text-text dark:text-text-dark py-2 px-4">
+        <div className="w-[20%] text-left">코인</div>
+        <div className=" w-[25%] mr-[5%] flex tablet:justify-center mobile:flex-col  ">
+          <span className="text-right w-[50%] tablet:w-auto tablet:text-center ">
+            현재 가격
+          </span>
+          <span className="hidden  onlyTablet:block  ">/</span>
+          <span className="text-right w-[50%] tablet:w-auto tablet:text-center">
+            변화량(24H)
+          </span>
+        </div>
+
+        <div className="  w-[25%] mr-[5%] flex tablet:justify-center mobile:flex-col   ">
+          <span className="text-right w-[50%] tablet:w-auto tablet:text-center ">
+            최고가
+          </span>
+          <span className="hidden  onlyTablet:block  ">/</span>
+          <span className="text-right w-[50%] tablet:w-auto tablet:text-center ">
+            최저가
+          </span>
+        </div>
+
+        <div className=" w-[20%]  text-right ">거래량</div>
+      </div>
+
+      <ul className=" divide-border dark:divide-border-dark">
+        {getCoinList.map((coin, index) => (
+          <li
+            key={index}
+            className="flex w-full items-center h-[80px] hover:bg-hover hover:dark:bg-hover-dark cursor-pointer px-4"
+          >
+            <Link
+              href={`/test3/${coin.symbol}`}
+              className="flex items-center w-full"
             >
-              <td className=" border-border dark:border-border-dark px-2 py-2 text-center">
-                {coin.rank}
-              </td>
+              <div className="w-[20%] flex items-center gap-4">
+                <CoinImg name={coin.korean_name} symbol={coin.symbol} />
+                <div className="flex flex-col">
+                  <span className="text-left">{coin.korean_name}</span>
+                  <span className="text-left">{coin.symbol}</span>
+                </div>
+              </div>
+              <div className=" w-[25%] mr-[5%] justify-start flex tablet:justify-center tablet:flex-col  ">
+                <span className="text-right w-[50%] tablet:w-auto tablet:text-center">
+                  ₩{formatKRW(parseFloat(coin.closing_price))}
+                </span>
 
-              <td className=" border-border dark:border-border-dark px-3 py-2 flex justify-start items-center dark:group-hover:bg-primary-dark group-hover:bg-primary-dark group-hover:text-text-dark">
-                <Link
-                  key={coin.id}
-                  href={`/detailcoin/${coin.id}`}
-                  className="w-full flex justify-start items-center gap-2"
+                <span
+                  className={`text-right w-[50%] tablet:w-auto tablet:text-center ${
+                    parseFloat(coin.fluctate_rate_24H) < 0
+                      ? "text-red"
+                      : "text-green"
+                  }`}
                 >
-                  <CoinImg name={coin.name} id={coin.id} />
+                  {parseFloat(coin.fluctate_rate_24H).toFixed(2)}%
+                </span>
+              </div>
 
-                  <span className="cursor-pointer">{coin.name}</span>
-                  <span className="cursor-pointer">
-                    {coin.symbol.toUpperCase()}
-                  </span>
-                </Link>
-              </td>
+              <div className=" mr-[5%] w-[25%] flex justify-start tablet:justify-center tablet:flex-col">
+                <span className="text-right w-[50%] tablet:w-auto tablet:text-center">
+                  ₩{formatKRW(parseFloat(coin.max_price))}
+                </span>
 
-              <td className=" border-border dark:border-border-dark px-4 py-2 text-right">
-                ${coin.quotes.USD.price.toLocaleString()}
-              </td>
-              <td
-                className={` border-border dark:border-border-dark px-4 py-2 text-right ${
-                  coin.quotes.USD.percent_change_1h > 0
-                    ? "text-green-500"
-                    : "text-red-500"
-                }`}
-              >
-                {coin.quotes.USD.percent_change_1h?.toFixed(2)}%
-              </td>
-              <td
-                className={` border-border dark:border-border-dark px-4 py-2 text-right ${
-                  coin.quotes.USD.percent_change_24h > 0
-                    ? "text-green-500"
-                    : "text-red-500"
-                }`}
-              >
-                {coin.quotes.USD.percent_change_24h?.toFixed(2)}%
-              </td>
-              <td
-                className={` border-border dark:border-border-dark px-4 py-2 text-right ${
-                  coin.quotes.USD.percent_change_7d > 0
-                    ? "text-green-500"
-                    : "text-red-500"
-                }`}
-              >
-                {coin.quotes.USD.percent_change_7d?.toFixed(2)}%
-              </td>
-              <td className=" border-border dark:border-border-dark px-4 py-2 text-right">
-                ${coin.quotes.USD.volume_24h.toLocaleString()}
-              </td>
-              <td className=" border-border dark:border-border-dark px-4 py-2 text-right">
-                ${coin.quotes.USD.volume_24h.toLocaleString()}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </article>
+                <span className="text-right w-[50%] tablet:w-auto tablet:text-center">
+                  ₩{formatKRW(parseFloat(coin.min_price))}
+                </span>
+              </div>
+
+              <div className="w-[20%] text-right">
+                ₩{formatKRW(parseFloat(coin.acc_trade_value_24H))}
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
-export default CoinListTable;
+export default CoinList;
