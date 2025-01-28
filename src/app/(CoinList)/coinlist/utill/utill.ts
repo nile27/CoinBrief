@@ -14,25 +14,21 @@ export interface ProcessedCoin {
   acc_trade_value_24H: string;
 }
 
-let cachedData: ProcessedCoin[] | null = null;
-
 export const getCoinData = async (): Promise<ProcessedCoin[]> => {
-  if (cachedData) {
-    return cachedData;
-  }
-
   const nameResponse = await fetch(
-    "https://api.bithumb.com/v1/market/all?isDetails=false"
+    "https://api.bithumb.com/v1/market/all?isDetails=false",
+    { headers: { "Cache-Control": "no-cache" } }
   );
   const nameData = await nameResponse.json();
 
   const priceResponse = await fetch(
-    "https://api.bithumb.com/public/ticker/ALL_KRW"
+    "https://api.bithumb.com/public/ticker/ALL_KRW",
+    { headers: { "Cache-Control": "no-cache" } }
   );
   const priceData = await priceResponse.json();
 
   const processedData: ProcessedCoin[] = [];
-
+  console.log(priceData.data.BTC);
   for (const details of nameData) {
     const market = details.market;
     if (market.startsWith("KRW-")) {
@@ -53,17 +49,5 @@ export const getCoinData = async (): Promise<ProcessedCoin[]> => {
     }
   }
 
-  cachedData = processedData;
   return processedData;
 };
-
-export function formatKRW(value: number): string {
-  if (value >= 1e12) {
-    return `${(value / 1e12).toFixed(2)}조`;
-  } else if (value >= 1e8) {
-    return `${(value / 1e8).toFixed(2)}억`;
-  } else if (value >= 1e4) {
-    return `${(value / 1e4).toFixed(2)}만`;
-  }
-  return `${value.toLocaleString()}`;
-}

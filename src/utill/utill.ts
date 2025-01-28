@@ -21,3 +21,32 @@ export const errorMessages = {
 
 export const passwordRegex =
   /^(?=.*[A-Za-z])(?=.*\d|.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/;
+
+export function formatKRW(value: number): string {
+  if (value >= 1e12) {
+    return `${(value / 1e12).toFixed(2)}조`;
+  } else if (value >= 1e8) {
+    return `${(value / 1e8).toFixed(2)}억`;
+  }
+  return `${value.toLocaleString()}`;
+}
+
+export function formatCurrency(value: number, currency: "₩" | "$"): string {
+  if (currency === "₩") {
+    if (value >= 1e12) {
+      return `${(value / 1e12).toFixed(2)}조`;
+    } else if (value >= 1e8) {
+      return `${(value / 1e8).toFixed(2)}억`;
+    }
+    return `${value.toLocaleString()}`;
+  } else if (currency === "$") {
+    if (value >= 1e9) {
+      return `${(value / 1e9).toFixed(2)}B`;
+    } else if (value >= 1e6) {
+      return `${(value / 1e6).toFixed(2)}M`;
+    }
+    return `${value.toLocaleString()}`;
+  }
+
+  return value.toString();
+}

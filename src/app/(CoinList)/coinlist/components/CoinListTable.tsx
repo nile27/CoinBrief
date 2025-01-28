@@ -1,6 +1,7 @@
 import React from "react";
-import { ProcessedCoin, formatKRW } from "../utill/utill";
-import CoinImg from "./CoinImg";
+import { ProcessedCoin } from "../utill/utill";
+import { formatKRW } from "@/utill/utill";
+import CoinImg from "../../../../components/CustomUI/CoinImg";
 import Link from "next/link";
 
 const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
@@ -13,8 +14,8 @@ const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
             현재 가격
           </span>
           <span className="hidden  onlyTablet:block  ">/</span>
-          <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-medium font-bold">
-            변화량(24H)
+          <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-[15px] font-bold">
+            변화량 (open_1D)
           </span>
         </div>
 
@@ -29,7 +30,7 @@ const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
         </div>
 
         <div className=" w-[20%]  text-right text-medium font-bold ">
-          거래량
+          거래량(24H)
         </div>
       </div>
 
@@ -40,7 +41,9 @@ const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
             className="flex w-full items-center h-[80px] hover:bg-container hover:dark:bg-container-dark cursor-pointer px-4"
           >
             <Link
-              href={`/test3/${coin.symbol}`}
+              href={`/detailcoin/${coin.symbol}/${encodeURIComponent(
+                coin.korean_name
+              )}`}
               className="flex items-center w-full"
             >
               <div className="w-[20%] flex items-center gap-4">
@@ -79,7 +82,7 @@ const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
               </div>
 
               <div className="w-[20%] text-right text-medium">
-                ₩{formatKRW(parseFloat(coin.acc_trade_value_24H))}
+                {formatKRW(parseFloat(coin.acc_trade_value_24H))}
               </div>
             </Link>
           </li>
