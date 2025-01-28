@@ -3,15 +3,11 @@ import { useEffect, useState } from "react";
 import { useCoinStore, useCurrency } from "@/store/store";
 import { DetailCoinData } from "../[id]/[name]/page";
 import { formatCurrency } from "@/utill/utill";
-import GreenArrow from "@/../public/GreenArrow.svg";
-import RedArrow from "@/../public/RedArrow.svg";
-import CoinImg from "@/components/CustomUI/CoinImg";
-import BtnStyle from "@/components/CustomUI/BtnStyle";
 
 const CoinArticle = ({ coinData }: { coinData: DetailCoinData }) => {
   const { exchange } = useCoinStore();
   const lastUpdated = new Date(Number(coinData.timestamp)).toLocaleString();
-  const { krw, usd, currency } = useCurrency();
+  const { currency } = useCurrency();
   const [currencyData, setCurrencyData] = useState({
     signed_change_price: 0,
     high_price: 0,
@@ -33,6 +29,30 @@ const CoinArticle = ({ coinData }: { coinData: DetailCoinData }) => {
       highest_52_week_price: coinData.highest_52_week_price,
     });
   }, []);
+
+  useEffect(() => {
+    if (currency === "$") {
+      setCurrencyData({
+        signed_change_price: coinData.signed_change_price / exchange,
+        high_price: coinData.high_price / exchange,
+        low_price: coinData.low_price / exchange,
+        acc_trade_price_24h: coinData.acc_trade_price_24h / exchange,
+        prev_closing_price: coinData.prev_closing_price / exchange,
+        lowest_52_week_price: coinData.lowest_52_week_price / exchange,
+        highest_52_week_price: coinData.highest_52_week_price / exchange,
+      });
+    } else {
+      setCurrencyData({
+        signed_change_price: coinData.signed_change_price,
+        high_price: coinData.high_price,
+        low_price: coinData.low_price,
+        acc_trade_price_24h: coinData.acc_trade_price_24h,
+        prev_closing_price: coinData.prev_closing_price,
+        lowest_52_week_price: coinData.lowest_52_week_price,
+        highest_52_week_price: coinData.highest_52_week_price,
+      });
+    }
+  }, [currency]);
 
   return (
     <article className="min-w-[350px] tablet:w-full tablet:min-w-[0px] h-auto flex flex-col  border-[1px] rounded-lg  dark:border-border-dark border-border">
@@ -66,7 +86,11 @@ const CoinArticle = ({ coinData }: { coinData: DetailCoinData }) => {
             24시간 거래량
           </span>
           <span className="text-right mobile:text-left">
-            {Number(coinData.acc_trade_volume_24h).toLocaleString()}
+            {formatCurrency(
+              Number(coinData.acc_trade_volume_24h.toFixed(0)),
+              currency as "₩" | "$"
+            )}
+            BTC
           </span>
         </div>
         <div className="flex justify-between py-2 dark:border-b-border-dark border-b-border border-b-2 px-2 ">

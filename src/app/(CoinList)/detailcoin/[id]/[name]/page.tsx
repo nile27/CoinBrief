@@ -40,7 +40,7 @@ async function DetailCoin({
 
   const coinDataResponse = await fetch(
     `https://api.bithumb.com/v1/ticker?markets=KRW-${id.toUpperCase()}`,
-    { headers: { "Cache-Control": "no-cache" } }
+    { cache: "no-store" }
   );
   const coinDataJson: DetailCoinData[] = await coinDataResponse.json();
 

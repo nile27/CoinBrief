@@ -28,7 +28,7 @@ export const getCoinData = async (): Promise<ProcessedCoin[]> => {
   const priceData = await priceResponse.json();
 
   const processedData: ProcessedCoin[] = [];
-  console.log(priceData.data.BTC);
+
   for (const details of nameData) {
     const market = details.market;
     if (market.startsWith("KRW-")) {

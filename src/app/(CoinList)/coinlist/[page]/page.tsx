@@ -1,6 +1,7 @@
 import CurrencyCalc from "../components/CurrencyCalc";
 import CoinListTable from "../components/CoinListTable";
 import { getCoinData } from "../utill/utill";
+import SearchCoin from "../components/SearchCoin";
 
 import Link from "next/link";
 
@@ -17,11 +18,14 @@ const CoinList = async ({ params }: { params: { page: string } }) => {
   );
 
   return (
-    <section className="flex flex-col w-full h-full gap-10">
+    <section className="flex flex-col w-full h-full gap-1">
       <section className=" flex justify-center gap-10 mt-7">
         <CurrencyCalc />
       </section>
-      <section className="w-full h-auto px-5">
+      <section className="w-full h-auto px-16 flex justify-end">
+        <SearchCoin allCoins={allCoins} />
+      </section>
+      <section className="w-full h-auto px-5 ">
         <CoinListTable getCoinList={paginatedCoins} />
       </section>
 
