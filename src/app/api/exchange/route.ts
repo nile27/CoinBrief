@@ -15,6 +15,9 @@ interface ExchangeInterface {
 }
 
 export async function GET() {
+  function stringToNumber(value: string): number {
+    return Number(value.replace(/,/g, ""));
+  }
   try {
     const response = await fetch(
       `https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${process.env.EXCHANGE_API_KEY}&data=AP01`
@@ -29,8 +32,8 @@ export async function GET() {
       {
         message: "환율 정보:",
         data: {
-          USD: exchange[0].kftc_deal_bas_r,
-          KRW: exchange[1].kftc_deal_bas_r,
+          USD: stringToNumber(exchange[0].kftc_deal_bas_r),
+          KRW: stringToNumber(exchange[1].kftc_deal_bas_r),
         },
       },
       { status: 200 }
