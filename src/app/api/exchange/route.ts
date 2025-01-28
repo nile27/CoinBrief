@@ -27,7 +27,7 @@ export async function GET() {
 
     return NextResponse.json(
       {
-        message: "실시간 연결이 성공하였습니다.",
+        message: "환율 정보:",
         data: {
           USD: exchange[0].kftc_deal_bas_r,
           KRW: exchange[1].kftc_deal_bas_r,
@@ -38,7 +38,7 @@ export async function GET() {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { message: "실시간 연결이 실패하였습니다." },
+      { message: "환율 정보를 가져오는데 실패하였습니다." },
       { status: 500 }
     );
   }

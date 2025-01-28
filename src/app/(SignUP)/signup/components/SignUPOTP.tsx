@@ -41,7 +41,7 @@ const SignUPOTP = ({
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    console.log(email, "email:");
+
     return () => {
       document.body.style.overflow = "";
     };
