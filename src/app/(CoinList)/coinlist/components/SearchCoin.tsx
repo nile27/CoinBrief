@@ -4,17 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import CoinImg from "@/components/CustomUI/CoinImg";
 import { Search } from "lucide-react";
+import { ProcessedCoin } from "../utill/utill";
 
 interface Coin {
   korean_name: string;
   symbol: string;
 }
 
-interface SearchInputProps {
-  allCoins: Coin[];
-}
-
-const SearchInput: React.FC<SearchInputProps> = ({ allCoins }) => {
+const SearchInput = ({ allCoins }: { allCoins: ProcessedCoin[] }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCoins, setFilteredCoins] = useState<Coin[]>([]);
   const router = useRouter();
@@ -27,8 +24,8 @@ const SearchInput: React.FC<SearchInputProps> = ({ allCoins }) => {
     setSearchTerm(value);
 
     if (value.trim().length >= 2) {
-      const results = allCoins.filter(
-        (coin) =>
+      const results: Coin[] = allCoins.filter(
+        (coin: ProcessedCoin) =>
           coin.korean_name.includes(value) ||
           coin.symbol.toLowerCase().includes(value.toLowerCase())
       );

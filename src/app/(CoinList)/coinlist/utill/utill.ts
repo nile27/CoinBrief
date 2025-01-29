@@ -4,50 +4,74 @@ export interface CoinDetails {
   english_name: string;
 }
 
-export interface ProcessedCoin {
+export interface TickerData {
+  market: string;
+  trade_date: string;
+  trade_time: string;
+  trade_date_kst: string;
+  trade_time_kst: string;
+  trade_timestamp: number;
+
+  opening_price: number;
+  high_price: number;
+  low_price: number;
+  trade_price: number;
+  prev_closing_price: number;
+
+  change: "RISE" | "FALL" | "EVEN";
+  change_price: number;
+  change_rate: number;
+  signed_change_price: number;
+  signed_change_rate: number;
+
+  trade_volume: number;
+  acc_trade_price: number;
+  acc_trade_price_24h: number;
+  acc_trade_volume: number;
+  acc_trade_volume_24h: number;
+
+  highest_52_week_price: number;
+  highest_52_week_date: string;
+  lowest_52_week_price: number;
+  lowest_52_week_date: string;
+
+  timestamp: number;
+}
+
+export interface ProcessedCoin extends TickerData, CoinDetails {
   symbol: string;
-  korean_name: string;
-  closing_price: string;
-  fluctate_rate_24H: string;
-  max_price: string;
-  min_price: string;
-  acc_trade_value_24H: string;
 }
 
 export const getCoinData = async (): Promise<ProcessedCoin[]> => {
   const nameResponse = await fetch(
-    "https://api.bithumb.com/v1/market/all?isDetails=false",
-    { headers: { "Cache-Control": "no-cache" } }
+    "https://api.upbit.com/v1/market/all?isDetails=false",
+    {
+      headers: { "Cache-Control": "no-cache" },
+    }
   );
-  const nameData = await nameResponse.json();
+  const nameData: CoinDetails[] = await nameResponse.json();
 
   const priceResponse = await fetch(
-    "https://api.bithumb.com/public/ticker/ALL_KRW",
+    `https://api.upbit.com/v1/ticker/all?quoteCurrencies=KRW`,
     { headers: { "Cache-Control": "no-cache" } }
   );
-  const priceData = await priceResponse.json();
+  const priceData: TickerData[] = await priceResponse.json();
 
-  const processedData: ProcessedCoin[] = [];
+  const marketInfoMap = new Map(
+    nameData.map((market) => [market.market, market])
+  );
 
-  for (const details of nameData) {
-    const market = details.market;
-    if (market.startsWith("KRW-")) {
-      const symbol = market.substring(4);
-      const priceInfo = priceData.data[symbol];
+  const processedCoin = priceData.map((price) => {
+    const marketInfo = marketInfoMap.get(price.market);
+    const symbol = price.market.replace("KRW-", "");
 
-      if (priceInfo) {
-        processedData.push({
-          symbol,
-          korean_name: details.korean_name,
-          closing_price: priceInfo.closing_price,
-          fluctate_rate_24H: priceInfo.fluctate_rate_24H,
-          max_price: priceInfo.max_price,
-          min_price: priceInfo.min_price,
-          acc_trade_value_24H: priceInfo.acc_trade_value_24H,
-        });
-      }
-    }
-  }
+    return {
+      ...price,
+      symbol,
+      korean_name: marketInfo ? marketInfo.korean_name : "알 수 없음",
+      english_name: marketInfo ? marketInfo.english_name : "Unknown",
+    };
+  });
 
-  return processedData;
+  return processedCoin;
 };

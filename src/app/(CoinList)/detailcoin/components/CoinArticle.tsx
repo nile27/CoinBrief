@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useCoinStore, useCurrency } from "@/store/store";
-import { DetailCoinData } from "../[id]/[name]/page";
+import { TickerData } from "../../coinlist/utill/utill";
 import { formatCurrency } from "@/utill/utill";
 
-const CoinArticle = ({ coinData }: { coinData: DetailCoinData }) => {
+const CoinArticle = ({ coinData }: { coinData: TickerData }) => {
   const { exchange } = useCoinStore();
   const lastUpdated = new Date(Number(coinData.timestamp)).toLocaleString();
   const { currency } = useCurrency();

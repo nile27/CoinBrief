@@ -35,7 +35,7 @@ export default function KlineChart({ symbol }: { symbol: string }) {
     const fetchKlines = async () => {
       try {
         const response = await fetch(
-          `https://api.bithumb.com/v1/candles/${changeDate}?market=KRW-${symbol}&count=30`
+          `https://api.upbit.com/v1/candles/${changeDate}?market=KRW-${symbol}&count=30`
         );
         const data = await response.json();
 
