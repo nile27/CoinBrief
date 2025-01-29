@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import CoinImg from "@/components/CustomUI/CoinImg";
 import { Search } from "lucide-react";
-import { ProcessedCoin } from "../utill/utill";
+import { ProcessedCoin } from "@/type/type";
 
 interface Coin {
   korean_name: string;

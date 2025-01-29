@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useCoinStore, useCurrency } from "@/store/store";
-import { TickerData } from "../../coinlist/utill/utill";
+import { TickerData } from "@/type/type";
 import { formatCurrency } from "@/utill/utill";
 
 const CoinArticle = ({ coinData }: { coinData: TickerData }) => {

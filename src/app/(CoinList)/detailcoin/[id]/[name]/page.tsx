@@ -1,7 +1,7 @@
 import CoinArticle from "../../components/CoinArticle";
 import DetailChart from "../../components/DetailChart";
 import CoinName from "../../components/CoinName";
-import { TickerData } from "@/app/(CoinList)/coinlist/utill/utill";
+import { TickerData } from "@/type/type";
 
 async function DetailCoin({
   params,

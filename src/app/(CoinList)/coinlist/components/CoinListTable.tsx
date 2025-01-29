@@ -1,5 +1,5 @@
 import React from "react";
-import { ProcessedCoin } from "../utill/utill";
+import { ProcessedCoin } from "@/type/type";
 import { formatKRW } from "@/utill/utill";
 import CoinImg from "../../../../components/CustomUI/CoinImg";
 import Link from "next/link";
@@ -15,7 +15,7 @@ const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
           </span>
           <span className="hidden  onlyTablet:block  ">/</span>
           <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-[15px] font-bold">
-            변화량 (open_1D)
+            변화량(24H)
           </span>
         </div>
 
@@ -62,10 +62,10 @@ const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
 
                 <span
                   className={`text-right w-[50%] tablet:w-auto tablet:text-center text-medium ${
-                    coin.change_rate < 0 ? "text-red" : "text-green"
+                    coin.signed_change_rate < 0 ? "text-red" : "text-green"
                   }`}
                 >
-                  {coin.change_rate.toFixed(2)}%
+                  {coin.signed_change_rate.toFixed(2)}%
                 </span>
               </div>
 
