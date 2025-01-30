@@ -21,7 +21,7 @@ const CoinList = async ({ params }: { params: { page: string } }) => {
 
   return (
     <section className="flex flex-col w-full h-full gap-1">
-      <section className=" flex justify-center gap-10 mt-7 mb-5">
+      <section className=" flex w-full px-5 justify-center gap-5 mt-7 mb-5 tablet:flex-col items-center ">
         <TopVolume coins={allCoins} />
         <TopLosers coins={allCoins} />
         <CurrencyCalc />

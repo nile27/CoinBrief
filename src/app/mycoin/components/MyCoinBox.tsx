@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
-import Ellipse from "@/../public/Ellipse.svg";
+import { useState } from "react";
+
 import GreenArrow from "@/../public/GreenArrow.svg";
 import RedArrow from "@/../public/RedArrow.svg";
 import BoxRealTime from "@/app/mycoin/components/BoxRealTime";

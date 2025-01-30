@@ -20,7 +20,7 @@ export async function GET() {
   }
   try {
     const response = await fetch(
-      `https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${process.env.EXCHANGE_API_KEY}&data=AP01`
+      `${process.env.EXCHANGE_API_URL}?authkey=${process.env.EXCHANGE_API_KEY}&data=AP01`
     );
     const data = await response.json();
     const exchange = data.filter(

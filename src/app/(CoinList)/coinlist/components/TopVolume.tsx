@@ -1,6 +1,7 @@
 import CoinImg from "@/components/CustomUI/CoinImg";
 import { ProcessedCoin } from "@/type/type";
 import { formatKRW } from "@/utill/utill";
+import Link from "next/link";
 const TopCoinList = ({ coins }: { coins: ProcessedCoin[] }) => {
   const sortedCoins = [...coins]
     .sort(
@@ -14,23 +15,30 @@ const TopCoinList = ({ coins }: { coins: ProcessedCoin[] }) => {
       </h2>
       <ul className="space-y-1 w-full h-full flex flex-col justify-start items-center gap-3">
         {sortedCoins.map((coin, index) => (
-          <li
+          <Link
             key={coin.symbol}
-            className="flex w-full items-center gap-4 last:border-none"
+            href={`/detailcoin/${coin.symbol}/${encodeURIComponent(
+              coin.korean_name
+            )}`}
+            className="w-full h-auto"
           >
-            <span className="text-xl font-bold ">{index + 1}</span>
+            <li className="flex w-full items-center gap-4 last:border-none">
+              <span className="text-xl font-bold ">{index + 1}</span>
 
-            <CoinImg name={coin.korean_name} symbol={coin.symbol} />
+              <CoinImg name={coin.korean_name} symbol={coin.symbol} />
 
-            <div className="flex flex-col flex-1">
-              <span className="text-base font-medium">{coin.korean_name}</span>
-              <span className="text-sm text-gray-500">{coin.symbol}</span>
-            </div>
+              <div className="flex flex-col flex-1">
+                <span className="text-base font-medium">
+                  {coin.korean_name}
+                </span>
+                <span className="text-sm text-gray-500">{coin.symbol}</span>
+              </div>
 
-            <span className="text-sm font-semibold">
-              ₩{formatKRW(Number(coin.acc_trade_volume_24h)).toLocaleString()}
-            </span>
-          </li>
+              <span className="text-sm font-semibold">
+                ₩{formatKRW(Number(coin.acc_trade_volume_24h)).toLocaleString()}
+              </span>
+            </li>
+          </Link>
         ))}
       </ul>
     </section>

@@ -21,25 +21,31 @@ const KakaoCallback = () => {
       }
 
       try {
-        const tokenRes = await fetch("https://kauth.kakao.com/oauth/token", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({
-            grant_type: "authorization_code",
-            client_id: process.env.NEXT_PUBLIC_KAKAO_API_KEY || "",
-            redirect_uri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL || "",
-            code,
-          }),
-        });
+        const tokenRes = await fetch(
+          `${process.env.NEXT_PUBLIC_KAKAO_TOKEN_URL}/token`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+              grant_type: "authorization_code",
+              client_id: process.env.NEXT_PUBLIC_KAKAO_API_KEY || "",
+              redirect_uri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL || "",
+              code,
+            }),
+          }
+        );
 
         if (!tokenRes.ok) throw new Error("토큰 정보를 받을 수 없습니다.");
         const tokenData = await tokenRes.json();
         const accessToken = tokenData.access_token;
 
-        const userInfoRes = await fetch("https://kapi.kakao.com/v2/user/me", {
-          method: "GET",
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const userInfoRes = await fetch(
+          `${process.env.NEXT_PUBLIC_KAKAO_KAPI_URL}`,
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
 
         if (!userInfoRes.ok) throw new Error("유저 정보를 받을 수 없습니다.");
 

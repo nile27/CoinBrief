@@ -3,15 +3,34 @@ import React, { useEffect, useState } from "react";
 import GreenArrow from "@/../public/GreenArrow.svg";
 import RedArrow from "@/../public/RedArrow.svg";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
-import RealTimePrice from "./RealTimePrice";
 
 import { useCoinStore, useUserStore } from "@/store/store";
 import Link from "next/link";
 
 const DetailCoin = () => {
-  const { coinId, selectedCoin, setCoinId } = useCoinStore();
+  const { coinId, selectedCoin, setCoinId, setExchange } = useCoinStore();
   const { mycoin } = useUserStore.getState().user;
   const [coinData, setCoinData] = useState<any>({});
+
+  useEffect(() => {
+    const exchangeFetch = async () => {
+      try {
+        const response = await fetch(`/api/exchange`);
+
+        if (!response.ok) {
+          throw new Error("환율 정보를 찾을 수 없습니다.");
+        }
+
+        const data = await response.json();
+
+        setExchange(Number(data.data.KRW));
+        console.log(data);
+      } catch (error) {
+        console.error("환율 에러:", error);
+      }
+    };
+    exchangeFetch();
+  }, []);
 
   useEffect(() => {
     setCoinId(mycoin[selectedCoin].id);
@@ -37,15 +56,9 @@ const DetailCoin = () => {
         console.error("코인파프리카 검색 에러:", error);
       }
     };
+
     coinDataFetch();
   }, [selectedCoin]);
-  if (mycoin.length === 0) {
-    return (
-      <section className=" text-smallHeader font-bold w-[400px] h-[460px] rounded-[12px] flex flex-col gap-4 justify-center items-center py-6 px-4 border-[1px] border-border dark:border-border-dark">
-        <div>코인을 등록해주세요..</div>
-      </section>
-    );
-  }
 
   return (
     <section className=" w-[370px] h-auto rounded-[12px] flex flex-col gap-4 justify-start items-center py-6 px-4 border-[1px] border-border dark:border-border-dark">
@@ -58,7 +71,6 @@ const DetailCoin = () => {
         <span className=" text-smallHeader font-bold">{coinData.symbol}</span>
         <span className=" text-smallHeader font-bold">{coinData.name}</span>
       </div>
-      <RealTimePrice />
 
       <div className="w-full h-auto flex flex-col gap-3">
         <div className=" w-full h-auto flex justify-between items-center ">

@@ -27,6 +27,14 @@ const AddModal = ({
     setResults(filteredResults);
   }, [search]);
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   const handleSelectCoin = async (coin: Coin) => {
     try {
       setIsModal(false);

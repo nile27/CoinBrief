@@ -75,7 +75,7 @@ export const useCoinStore = create<CoinState>((set) => ({
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      isLogin: true,
+      isLogin: false,
       login: () => set({ isLogin: true }),
       logout: () => set({ isLogin: false }),
     }),

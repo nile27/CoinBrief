@@ -11,8 +11,7 @@ interface IProps {
 export default function BoxRealTime(props: IProps) {
   const { setRate, symbol, index, rate } = props;
 
-  const { setRealTimeData, selectedCoin, setExchange, exchange } =
-    useCoinStore();
+  const { setRealTimeData, selectedCoin, exchange } = useCoinStore();
   const [realKrw, setRealKrw] = useState<number>(0);
   const [realDallor, setRealDallor] = useState<string>();
 
@@ -34,7 +33,7 @@ export default function BoxRealTime(props: IProps) {
         const data = JSON.parse(event.data);
         if (data.type === "ticker" && data.content) {
           const price = parseFloat(data.content.closePrice);
-          const rate = parseFloat(data.content.chgRate);
+
           setRealKrw(price);
           setRate(data.content.chgRate);
         }
@@ -51,17 +50,6 @@ export default function BoxRealTime(props: IProps) {
       console.log("웹소켓 종료");
     };
 
-    const exChangeFetch = async () => {
-      try {
-        const res = await fetch(`/api/exchange`);
-
-        const data = await res.json();
-        setExchange(Number(data.data.KRW.replace(/,/g, "")));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    exChangeFetch();
     return () => {
       socket.close();
     };
@@ -69,7 +57,6 @@ export default function BoxRealTime(props: IProps) {
 
   useEffect(() => {
     if (selectedCoin === index) {
-      console.log("출력되는 index:", selectedCoin);
       setRealTimeData({
         realKrw: realKrw,
         realRate: rate,
