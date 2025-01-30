@@ -1,7 +1,9 @@
 import CurrencyCalc from "../components/CurrencyCalc";
+import TopVolume from "../components/TopVolume";
 import CoinListTable from "../components/CoinListTable";
 import { getCoinData } from "../utill/utill";
 import SearchCoin from "../components/SearchCoin";
+import TopLosers from "../components/TopLosers";
 
 import Link from "next/link";
 
@@ -19,10 +21,12 @@ const CoinList = async ({ params }: { params: { page: string } }) => {
 
   return (
     <section className="flex flex-col w-full h-full gap-1">
-      <section className=" flex justify-center gap-10 mt-7">
+      <section className=" flex justify-center gap-10 mt-7 mb-5">
+        <TopVolume coins={allCoins} />
+        <TopLosers coins={allCoins} />
         <CurrencyCalc />
       </section>
-      <section className="w-full h-auto px-16 flex justify-end">
+      <section className="w-full h-auto px-20 flex justify-start">
         <SearchCoin allCoins={allCoins} />
       </section>
       <section className="w-full h-auto px-5 ">

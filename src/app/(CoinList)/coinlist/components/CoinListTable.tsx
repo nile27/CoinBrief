@@ -1,5 +1,5 @@
 import React from "react";
-import { ProcessedCoin } from "../utill/utill";
+import { ProcessedCoin } from "@/type/type";
 import { formatKRW } from "@/utill/utill";
 import CoinImg from "../../../../components/CustomUI/CoinImg";
 import Link from "next/link";
@@ -15,7 +15,7 @@ const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
           </span>
           <span className="hidden  onlyTablet:block  ">/</span>
           <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-[15px] font-bold">
-            변화량 (open_1D)
+            변화량(24H)
           </span>
         </div>
 
@@ -57,32 +57,30 @@ const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
               </div>
               <div className=" w-[25%] mr-[5%] justify-start flex tablet:justify-center tablet:flex-col  ">
                 <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-medium ">
-                  ₩{formatKRW(parseFloat(coin.closing_price))}
+                  ₩{formatKRW(coin.trade_price)}
                 </span>
 
                 <span
                   className={`text-right w-[50%] tablet:w-auto tablet:text-center text-medium ${
-                    parseFloat(coin.fluctate_rate_24H) < 0
-                      ? "text-red"
-                      : "text-green"
+                    coin.signed_change_rate < 0 ? "text-red" : "text-green"
                   }`}
                 >
-                  {parseFloat(coin.fluctate_rate_24H).toFixed(2)}%
+                  {coin.signed_change_rate.toFixed(2)}%
                 </span>
               </div>
 
               <div className=" mr-[5%] w-[25%] flex justify-start tablet:justify-center tablet:flex-col">
                 <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-medium">
-                  ₩{formatKRW(parseFloat(coin.max_price))}
+                  ₩{formatKRW(coin.high_price)}
                 </span>
 
                 <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-medium">
-                  ₩{formatKRW(parseFloat(coin.min_price))}
+                  ₩{formatKRW(coin.low_price)}
                 </span>
               </div>
 
               <div className="w-[20%] text-right text-medium">
-                {formatKRW(parseFloat(coin.acc_trade_value_24H))}
+                {formatKRW(coin.acc_trade_price_24h)}
               </div>
             </Link>
           </li>
