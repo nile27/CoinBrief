@@ -15,6 +15,9 @@ interface ExchangeInterface {
 }
 
 export async function GET() {
+  function stringToNumber(value: string): number {
+    return Number(value.replace(/,/g, ""));
+  }
   try {
     const response = await fetch(
       `https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${process.env.EXCHANGE_API_KEY}&data=AP01`
@@ -27,10 +30,10 @@ export async function GET() {
 
     return NextResponse.json(
       {
-        message: "실시간 연결이 성공하였습니다.",
+        message: "환율 정보:",
         data: {
-          USD: exchange[0].kftc_deal_bas_r,
-          KRW: exchange[1].kftc_deal_bas_r,
+          USD: stringToNumber(exchange[0].kftc_deal_bas_r),
+          KRW: stringToNumber(exchange[1].kftc_deal_bas_r),
         },
       },
       { status: 200 }
@@ -38,7 +41,7 @@ export async function GET() {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { message: "실시간 연결이 실패하였습니다." },
+      { message: "환율 정보를 가져오는데 실패하였습니다." },
       { status: 500 }
     );
   }

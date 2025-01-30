@@ -1,57 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUserStore } from "@/store/store";
-import { doc, getDoc } from "firebase/firestore";
-import { firestore } from "@/firebase/firebase";
+
 import DeleteModal from "./components/DeleteModal";
 
-interface UserData {
-  displayName: string;
-  name: string;
-  email: string;
-  mycoin: [];
-}
-
 const Mypage = () => {
-  const { id } = useUserStore.getState().user;
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const { user } = useUserStore.getState();
+
   const [isModal, setIsModal] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (!id) return;
-
-      try {
-        const docRef = doc(firestore, "users", id);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          setUserData(docSnap.data() as UserData);
-          console.log(docSnap.data());
-        } else {
-          console.log("유저 데이터를 찾을 수 없습니다.");
-        }
-      } catch (error) {
-        console.error("유저 데이터 가져오기 실패:", error);
-      }
-    };
-
-    fetchUserData();
-  }, [id]);
-
-  if (!userData) {
-    return (
-      <section className=" w-full h-full flex flex-col ">
-        <h1 className="mt-15 lt-15 text-header font-bold text-primary dark:text-primary-dark">
-          My Page
-        </h1>
-        <div className=" w-full h-full flex justify-center items-center ">
-          <div>Loading...</div>;
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section className=" w-full h-full flex flex-col ">
@@ -68,7 +25,7 @@ const Mypage = () => {
                 이름
               </span>
               <span className="w-full h-auto text-md rounded-md border border-border dark:border-border-dark bg-container px-2 py-1 dark:bg-container-dark">
-                {userData.name}
+                {user.name}
               </span>
             </div>
             <div className="flex justify-start items-start flex-col gap-2">
@@ -76,7 +33,7 @@ const Mypage = () => {
                 E-MAIL
               </span>
               <span className="w-full h-auto text-md rounded-md border border-border dark:border-border-dark bg-container px-2 py-1 dark:bg-container-dark">
-                {userData.email}
+                {user.email}
               </span>
             </div>
             <div className="flex justify-start items-start flex-col gap-2">
@@ -84,7 +41,7 @@ const Mypage = () => {
                 닉네임
               </span>
               <span className="w-full h-auto text-md rounded-md border border-border dark:border-border-dark bg-container px-2 py-1 dark:bg-container-dark">
-                {userData.displayName}
+                {user.displayName}
               </span>
             </div>
           </div>
@@ -96,7 +53,7 @@ const Mypage = () => {
           </button>
         </div>
       </div>
-      {isModal && <DeleteModal id={id} setIsModal={setIsModal} />}
+      {isModal && <DeleteModal id={user.id} setIsModal={setIsModal} />}
     </section>
   );
 };

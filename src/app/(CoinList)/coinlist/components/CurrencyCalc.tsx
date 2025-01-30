@@ -2,6 +2,7 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
 import Dollar from "@/../public/Dollar.svg";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
+import { useCoinStore } from "@/store/store";
 
 interface ExchangeInterface {
   result: number;
@@ -25,7 +26,8 @@ interface ExchangeFilter {
 const CurrencyCalc = () => {
   const [usdValue, setUsdValue] = useState<string>("1");
   const [krwValue, setKrwValue] = useState<string>("");
-  const [exchange, setExchange] = useState<number>(0);
+
+  const { exchange } = useCoinStore.getState();
 
   const handleUsdChange = (e: ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/,/g, "");
@@ -52,23 +54,6 @@ const CurrencyCalc = () => {
       setKrwValue("");
     }
   };
-
-  useEffect(() => {
-    const exChangeFetch = async () => {
-      try {
-        const res = await fetch(`/api/exchange`);
-
-        const data = await res.json();
-
-        setExchange(Number(data.data.KRW.replace(",", "")));
-
-        setKrwValue(data.data.KRW);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    exChangeFetch();
-  }, []);
 
   return (
     <section className=" bg-container dark:bg-container-dark w-[350px] py-3 px-5 min-h-[280px] flex flex-col justify-start items-start gap-3 border-2 border-border dark:border-border-dark rounded-[10px]">

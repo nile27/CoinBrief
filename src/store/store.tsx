@@ -63,7 +63,7 @@ interface CoinState {
 export const useCoinStore = create<CoinState>((set) => ({
   selectedCoin: 0,
   realTimeData: { realKrw: 0, realRate: "" },
-  exchange: 0,
+  exchange: 1400,
   coinId: "",
 
   setCoinId: (coin) => set({ coinId: coin }),
@@ -212,7 +212,7 @@ export const useUserStore = create<UserState>()(
   )
 );
 export const useCurrency = create<ICurrency>((set) => ({
-  currency: "$",
+  currency: "₩",
   krw: () => set({ currency: "₩" }),
   usd: () => set({ currency: "$" }),
 }));

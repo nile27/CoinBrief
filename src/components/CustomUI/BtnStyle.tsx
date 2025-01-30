@@ -39,7 +39,7 @@ const BtnStyle = ({
       {...restBtnProps}
       className={cn(
         buttonVariants({ size, color }),
-        " font-semibold rounded-[10px]"
+        " font-semibold rounded-[10px] whitespace-nowrap"
       )}
     >
       {children}

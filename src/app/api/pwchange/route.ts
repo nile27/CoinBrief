@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const body = await req.json();
   const { email, password } = body;
-  console.log(body);
+
   if (!email || !password) {
     return NextResponse.json(
       { message: "이메일과 이름을 입력해주세요." },
