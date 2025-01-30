@@ -10,7 +10,7 @@ const Mycoin = () => {
     <main className="w-[100vw] h-auto p-4 flex flex-col justify-center items-center gap-10 ">
       <section className="w-full h-[auto] flex justify-center gap-10 items-center">
         <DetailCoin />
-        <MyCoinChart />
+        {/* <MyCoinChart /> */}
       </section>
       <section className="w-full h-auto flex flex-col gap-3 justify-center items-center">
         <div className=" w-full h-[40px] flex justify-between items-center  px-10">

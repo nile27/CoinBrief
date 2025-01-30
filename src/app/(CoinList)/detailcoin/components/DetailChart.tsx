@@ -35,7 +35,7 @@ export default function KlineChart({ symbol }: { symbol: string }) {
     const fetchKlines = async () => {
       try {
         const response = await fetch(
-          `https://api.upbit.com/v1/candles/${changeDate}?market=KRW-${symbol}&count=30`
+          `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/candles/${changeDate}?market=KRW-${symbol}&count=30`
         );
         const data = await response.json();
 

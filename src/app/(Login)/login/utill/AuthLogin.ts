@@ -34,7 +34,7 @@ export const googleLogin = async (): Promise<Iuser | null> => {
       const uid = signedUserDoc.id;
       return {
         ...signedUserData,
-        id: uid, // 문서 ID를 추가
+        id: uid,
       };
     }
 
@@ -71,6 +71,6 @@ export const googleLogin = async (): Promise<Iuser | null> => {
 };
 
 export const kakaoLogin = () => {
-  const url = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL}&response_type=code`;
+  const url = `${process.env.NEXT_PUBLIC_KAKAO_TOKEN_URL}/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL}&response_type=code`;
   window.location.href = url;
 };

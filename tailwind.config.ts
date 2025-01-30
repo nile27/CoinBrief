@@ -73,9 +73,9 @@ const config: Config = {
         small: "12px",
       },
       screens: {
-        mobile: { max: "600px" },
-        tablet: { max: "800px" },
-        tablet900: { max: "900px" },
+        mobile: { max: "690px" },
+        tablet: { max: "840px" },
+        onlyTablet: { max: "840px", min: "690px" },
         textBoxHalf: { max: "1170px" },
       },
     },

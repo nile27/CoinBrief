@@ -1,7 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["d3t32hsnjxo7q6.cloudfront.net", "coinpaprika.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "bin.bnbstatic.com",
+        pathname: "/static/assets/logos/**",
+      },
+    ],
+    domains: [
+      "bin.bnbstatic.com",
+      "d3t32hsnjxo7q6.cloudfront.net",
+      "coinpaprika.com",
+      "static.upbit.com",
+    ],
   },
   webpack(config) {
     config.module.rules.push({

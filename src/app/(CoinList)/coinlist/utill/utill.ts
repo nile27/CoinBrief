@@ -2,7 +2,7 @@ import { ProcessedCoin, CoinDetails, TickerData } from "@/type/type";
 
 export const getCoinData = async (): Promise<ProcessedCoin[]> => {
   const nameResponse = await fetch(
-    "https://api.upbit.com/v1/market/all?isDetails=false",
+    `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/market/all?isDetails=false`,
     {
       headers: { "Cache-Control": "no-cache" },
     }
@@ -10,7 +10,7 @@ export const getCoinData = async (): Promise<ProcessedCoin[]> => {
   const nameData: CoinDetails[] = await nameResponse.json();
 
   const priceResponse = await fetch(
-    `https://api.upbit.com/v1/ticker/all?quoteCurrencies=KRW`,
+    `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/ticker/all?quoteCurrencies=KRW`,
     { headers: { "Cache-Control": "no-cache" } }
   );
   const priceData: TickerData[] = await priceResponse.json();

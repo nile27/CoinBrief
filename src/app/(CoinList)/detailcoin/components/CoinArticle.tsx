@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useCoinStore, useCurrency } from "@/store/store";
 import { TickerData } from "@/type/type";
-import { formatCurrency } from "@/utill/utill";
+import { formatCurrency, formatKRW } from "@/utill/utill";
 
 const CoinArticle = ({ coinData }: { coinData: TickerData }) => {
   const { exchange } = useCoinStore();
@@ -86,11 +86,8 @@ const CoinArticle = ({ coinData }: { coinData: TickerData }) => {
             24시간 거래량
           </span>
           <span className="text-right mobile:text-left">
-            {formatCurrency(
-              Number(coinData.acc_trade_volume_24h.toFixed(0)),
-              currency as "₩" | "$"
-            )}
-            BTC
+            {"BTC "}
+            {formatKRW(Number(coinData.acc_trade_volume_24h.toFixed(0)))}
           </span>
         </div>
         <div className="flex justify-between py-2 dark:border-b-border-dark border-b-border border-b-2 px-2 ">

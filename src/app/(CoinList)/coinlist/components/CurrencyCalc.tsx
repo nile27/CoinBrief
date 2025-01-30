@@ -51,7 +51,7 @@ const CurrencyCalc = () => {
   };
 
   return (
-    <section className=" bg-container dark:bg-container-dark w-[200px] max-h-[300px] py-3 px-5 flex flex-col justify-start items-start gap-3 border-2 border-border dark:border-border-dark rounded-[10px]">
+    <section className=" tablet:hidden bg-container dark:bg-container-dark w-[200px] max-h-[300px] py-3 px-5 flex flex-col justify-start items-start gap-3 border-2 border-border dark:border-border-dark rounded-[10px]">
       <div className=" w-full h-auto flex  gap-5 items-center ">
         <Dollar />
         <h1 className=" text-smallHeader font-extrabold ">환율 계산기</h1>

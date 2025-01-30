@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { CircleX } from "lucide-react";
 import { useUserStore } from "@/store/store";
 
@@ -13,6 +13,14 @@ const DeleteModal = ({
   const handleDeleteCoin = async (idx: number) => {
     await deleteCoin(idx);
   };
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   return (
     <div
