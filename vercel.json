@@ -1,0 +1,3 @@
+{
+  "ignoredBuildStep": "echo 'Ignoring ./server directory' && git diff --quiet HEAD^ HEAD ./server"
+}
