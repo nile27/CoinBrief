@@ -1,147 +1,48 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import GreenArrow from "@/../public/GreenArrow.svg";
-import RedArrow from "@/../public/RedArrow.svg";
-import BtnStyle from "@/components/CustomUI/BtnStyle";
-
+import CoinImg from "@/components/CustomUI/CoinImg";
 import { useCoinStore, useUserStore } from "@/store/store";
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { formatKRW } from "@/utill/utill";
+import BoxRealTime from "./BoxRealTime";
+import MyCoinImg from "./MyCoinImg";
 
 const DetailCoin = () => {
-  const { coinId, selectedCoin, setCoinId, setExchange } = useCoinStore();
-  const { mycoin } = useUserStore.getState().user;
-  const [coinData, setCoinData] = useState<any>({});
-
-  useEffect(() => {
-    const exchangeFetch = async () => {
-      try {
-        const response = await fetch(`/api/exchange`);
-
-        if (!response.ok) {
-          throw new Error("환율 정보를 찾을 수 없습니다.");
-        }
-
-        const data = await response.json();
-
-        setExchange(Number(data.data.KRW));
-        console.log(data);
-      } catch (error) {
-        console.error("환율 에러:", error);
-      }
-    };
-    exchangeFetch();
-  }, []);
-
-  useEffect(() => {
-    setCoinId(mycoin[selectedCoin].id);
-
-    const coinDataFetch = async () => {
-      try {
-        if (!mycoin[selectedCoin].id) {
-          throw new Error("잘못된 코인 정보입니다.");
-        }
-
-        const response = await fetch(
-          `https://api.coinpaprika.com/v1/tickers/${mycoin[selectedCoin].id}`
-        );
-
-        if (!response.ok) {
-          throw new Error("코인파프리카 매핑 실패.");
-        }
-
-        const data = await response.json();
-
-        setCoinData(data);
-      } catch (error) {
-        console.error("코인파프리카 검색 에러:", error);
-      }
-    };
-
-    coinDataFetch();
-  }, [selectedCoin]);
+  const { mycoin } = useUserStore().user;
 
   return (
-    <section className=" w-[370px] h-auto rounded-[12px] flex flex-col gap-4 justify-start items-center py-6 px-4 border-[1px] border-border dark:border-border-dark">
-      <div className=" w-full h-auto flex justify-start items-center gap-5 ">
-        <img
-          src={`https://coinpaprika.com/coin/${coinId}/logo.png`}
-          alt={coinId}
-          className="w-[40px] h-[40px]"
-        />
-        <span className=" text-smallHeader font-bold">{coinData.symbol}</span>
-        <span className=" text-smallHeader font-bold">{coinData.name}</span>
+    <section className="w-1/3 bg-container max-h-[400px] overflow-y-scroll dark:bg-container-dark p-4 rounded shadow-lg tablet:w-full">
+      <div className=" flex w-full justify-between items-center">
+        <h2 className="text-lg font-semibold mb-4">내 코인 목록</h2>
+        <span>{mycoin.length}/4</span>
       </div>
-
-      <div className="w-full h-auto flex flex-col gap-3">
-        <div className=" w-full h-auto flex justify-between items-center ">
-          <span className="w-auto h-auto  ">24시간</span>
-
-          <div className=" w-auto h-auto flex gap-2 items-center pr-1">
-            {!coinData || !coinData.quotes || !coinData.quotes.USD ? (
-              <span className="text-gray-500">Loading...</span>
-            ) : (
-              <>
-                {coinData.quotes.USD.percent_change_24h >= 0 ? (
-                  <GreenArrow className="text-green" />
-                ) : (
-                  <RedArrow className="text-red" />
-                )}
-                <span
-                  className={`w-[40px] h-auto text-right ${
-                    coinData.quotes.USD.percent_change_24h >= 0
-                      ? "text-green"
-                      : "text-red"
-                  }`}
-                >
-                  {`${coinData.quotes.USD.percent_change_24h}%`}
-                </span>
-              </>
-            )}
-          </div>
+      {mycoin.length === 0 ? (
+        <div className="h-[200px] w-full flex justify-center items-center">
+          코인을 등록해주세요.
         </div>
-        <div className=" w-full h-auto flex justify-between items-center gap-5">
-          <span className="w-auto h-auto  ">7일</span>
-          <div className=" w-auto h-auto flex gap-2 items-center pr-1">
-            {!coinData || !coinData.quotes || !coinData.quotes.USD ? (
-              <span className="text-gray-500">Loading...</span>
-            ) : (
-              <>
-                {coinData.quotes.USD.percent_change_7d >= 0 ? (
-                  <GreenArrow className="text-green" />
-                ) : (
-                  <RedArrow className="text-red" />
-                )}
-                <span
-                  className={`w-[40px] h-auto text-right ${
-                    coinData.quotes.USD.percent_change_7d >= 0
-                      ? "text-green"
-                      : "text-red"
-                  }`}
-                >
-                  {`${coinData.quotes.USD.percent_change_7d}%`}
-                </span>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
+      ) : (
+        <ul className="space-y-3 w-full h-auto">
+          {mycoin.map((item, idx) => (
+            <li
+              key={idx}
+              className="flex items-center justify-between p-3 min-h-[56px] bg-gray-100 dark:bg-gray-800 rounded shadow  tablet:items-start tablet:gap-3"
+            >
+              <div className="flex items-center gap-3 ">
+                <MyCoinImg symbol={item.symbol} name={item.name} />
 
-      <div className=" w-full h-auto flex flex-col justify-start items-start gap-1">
-        <span className="w-auto h-auto font-semibold ">시가총액</span>
-        <div className=" w-full h-auto flex justify-between items-center gap-5 ">
-          <span className="w-auto h-auto text-[18px]  ">USD</span>
-          <span className="w-auto h-auto text-[18px] ">
-            {!coinData || !coinData.quotes || !coinData.quotes.USD ? (
-              <span className="text-gray-500">Loading...</span>
-            ) : (
-              `$ ${coinData.quotes.USD.market_cap.toLocaleString()}`
-            )}
-          </span>
-        </div>
-      </div>
-      <Link href={`detailcoin/${coinData.id}`} className="w-full h-auto">
-        <BtnStyle size="medium">자세히 보기</BtnStyle>
-      </Link>
+                <div className="  tablet:flex items-center gap-6  ">
+                  <p className="font-medium">{item.symbol}</p>
+                  <p className="text-gray-500 text-sm iphone:hidden">
+                    {item.name}
+                  </p>
+                </div>
+              </div>
+              <div className="h-auto w-auto min-h-[30px] text-right  tablet:h-full">
+                <BoxRealTime symbol={item.symbol} index={idx} />
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 };

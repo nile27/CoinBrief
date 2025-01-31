@@ -1,59 +1,58 @@
 "use client";
+import { useCoinStore } from "@/store/store";
 import { useEffect, useState } from "react";
-import { RealTimeData, useCoinStore } from "@/store/store";
+import io from "socket.io-client";
+import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
+interface UpbitData {
+  market: string;
+  trade_price: number;
+  change_rate: number;
+  acc_trade_price_24h: number;
+  code: string;
+}
 interface IProps {
-  rate: string;
-  setRate: React.Dispatch<React.SetStateAction<string>>;
   symbol: string;
   index: number;
 }
 
 export default function BoxRealTime(props: IProps) {
-  const { setRate, symbol, index, rate } = props;
+  const { symbol, index } = props;
+  const [rate, setRate] = useState("");
+  const { theme } = useTheme();
 
+  const [priceChange, setPriceChange] = useState<"up" | "down" | null>(null);
   const { setRealTimeData, selectedCoin, exchange } = useCoinStore();
   const [realKrw, setRealKrw] = useState<number>(0);
   const [realDallor, setRealDallor] = useState<string>();
 
   useEffect(() => {
-    const socket = new WebSocket("wss://pubwss.bithumb.com/pub/ws");
+    const newSocket = io("http://localhost:4000");
 
-    socket.onopen = () => {
-      socket.send(
-        JSON.stringify({
-          type: "ticker",
-          symbols: [`${symbol}_KRW`],
-          tickTypes: ["1M"],
-        })
-      );
-    };
+    newSocket.on("connect", () => {
+      console.log("✅ Socket.io 연결됨");
+      newSocket.emit("subscribe", symbol);
+    });
 
-    socket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.type === "ticker" && data.content) {
-          const price = parseFloat(data.content.closePrice);
+    newSocket.on("upbit_data", (message: UpbitData) => {
+      console.log(message);
+      if (message.code === `KRW-${symbol}`) {
+        if (realKrw !== null) {
+          setPriceChange(message.trade_price > realKrw ? "up" : "down");
 
-          setRealKrw(price);
-          setRate(data.content.chgRate);
+          setTimeout(() => setPriceChange(null), 1000);
         }
-      } catch (error) {
-        console.error(error);
+
+        setRealKrw(message.trade_price);
+        setRate((message.change_rate * 100).toFixed(2));
       }
-    };
-
-    socket.onerror = (error) => {
-      console.error("웹소켓 에러", error);
-    };
-
-    socket.onclose = () => {
-      console.log("웹소켓 종료");
-    };
+    });
 
     return () => {
-      socket.close();
+      newSocket.emit("unsubscribe", [symbol]);
+      newSocket.disconnect();
     };
-  }, []);
+  }, [symbol]);
 
   useEffect(() => {
     if (selectedCoin === index) {
@@ -72,26 +71,31 @@ export default function BoxRealTime(props: IProps) {
   }, [realKrw]);
 
   return (
-    <div className=" w-full h-auto flex flex-col ">
-      <div className=" w-full h-auto flex justify-between items-center gap-5 ">
-        <div className=" w-full h-auto flex justify-start items-center gap-5">
-          <span className="w-[52px] h-auto font-semibold text-[20px] ">
-            USD
-          </span>
-          <span className="w-auto h-auto text-[20px]">
-            {realDallor ? `$${realDallor.toLocaleString()}` : "Loading..."}
-          </span>
-        </div>
-      </div>
-      <div className=" w-full h-auto flex justify-between items-center gap-5 ">
-        <div className=" w-full h-auto flex justify-start items-center gap-5">
-          <span className="w-[52px] h-auto font-semibold text-[19px]   ">
-            KRW
-          </span>
-          <span className="w-auto h-auto text-[20px]">
-            {realKrw ? `₩${realKrw.toLocaleString()}` : "Loading..."}
-          </span>
-        </div>
+    <div className=" w-full h-[30px] flex flex-col tablet:h-full ">
+      <div className=" w-full h-[30px] flex flex-col onlyMoblie:flex-row onlyTablet:flex-row  onlyMoblie:gap-8 onlyTablet:gap-8 onlyMoblie:items-center onlyTablet:items-center justify-center items-end gap-1 iphone:flex-col">
+        <motion.span
+          animate={{
+            color:
+              priceChange === "up"
+                ? "#16a34a"
+                : priceChange === "down"
+                ? "#dc2626"
+                : theme === "light"
+                ? "#000000"
+                : "#ffffff",
+          }}
+          transition={{ duration: 0.5 }}
+          className=" iphone:text-sm  block"
+        >
+          {realKrw ? `₩${realKrw.toLocaleString()}` : "Loading..."}
+        </motion.span>
+        <span
+          className={`${
+            Number(rate) >= 0 ? "text-green" : "text-red"
+          } text-right iphone:text-sm  block`}
+        >
+          {rate}%
+        </span>
       </div>
     </div>
   );
