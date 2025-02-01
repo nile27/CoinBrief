@@ -31,7 +31,7 @@ export default function BoxRealTime({ symbol }: { symbol: string }) {
   const { setStaticData, staticData } = useCoinStore();
 
   useEffect(() => {
-    const newSocket = io("http://localhost:4000");
+    const newSocket = io(`${process.env.NEXT_PUBLIC_WEBSOCKET_URL}`);
 
     newSocket.on("connect", () => {
       newSocket.emit("subscribe", symbol);
