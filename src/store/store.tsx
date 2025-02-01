@@ -44,31 +44,53 @@ interface SearchState {
   fetchCoins: () => Promise<void>;
 }
 export interface RealTimeData {
-  realKrw: number;
-  realRate: string;
+  trade_price: number;
+  change_rate: string;
+}
+
+export interface StaticData {
+  acc_trade_volume_24h: number;
+  acc_trade_price_24h: number;
+  high_price: number;
+  low_price: number;
 }
 
 interface CoinState {
   selectedCoin: number;
-  realTimeData: RealTimeData;
+  staticData: Record<string, StaticData>;
   exchange: number;
   coinId: string;
 
   setCoinId: (coin: string) => void;
   setSelectedCoin: (coin: number) => void;
-  setRealTimeData: (data: RealTimeData) => void;
+  removeStaticData: (symbol: string) => void;
+  setStaticData: (symbol: string, data: StaticData) => void;
   setExchange: (exchange: number) => void;
 }
 
 export const useCoinStore = create<CoinState>((set) => ({
   selectedCoin: 0,
-  realTimeData: { realKrw: 0, realRate: "" },
+  staticData: {},
   exchange: 1400,
   coinId: "",
 
   setCoinId: (coin) => set({ coinId: coin }),
   setSelectedCoin: (coin) => set({ selectedCoin: coin }),
-  setRealTimeData: (data) => set({ realTimeData: data }),
+
+  setStaticData: (symbol: string, data: StaticData) =>
+    set((state) => ({
+      staticData: {
+        ...state.staticData,
+        [symbol]: data,
+      },
+    })),
+  removeStaticData: (symbol: string) =>
+    set((state) => {
+      const newStaticData = { ...state.staticData };
+      delete newStaticData[symbol];
+      return { staticData: newStaticData };
+    }),
+
   setExchange: (exchange) => set({ exchange: exchange }),
 }));
 

@@ -1,278 +1,215 @@
 "use client";
-
-import { useState, useEffect } from "react";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  Tooltip,
-  Legend,
-  Filler,
-  ChartOptions,
-} from "chart.js";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
+import dynamic from "next/dynamic";
+import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 import { useCoinStore, useCurrency, useUserStore } from "@/store/store";
+import { formatCurrency } from "@/utill/utill";
 
-ChartJS.register(
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  Tooltip,
-  Legend,
-  Filler
-);
+const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-interface ChartDataset {
-  label: string;
-  data: number[];
-  borderColor: string;
-  backgroundColor: string;
-  fill: boolean;
-  tension: number;
-  pointRadius: number;
-  pointHoverRadius: number;
+interface IKlineChart {
+  candle_date_time_kst: string;
+  opening_price: number;
+  high_price: number;
+  low_price: number;
+  trade_price: number;
 }
 
-interface ChartDataType {
-  labels: string[];
-  datasets: ChartDataset[];
-}
-
-export default function DetailChart() {
-  const { selectedCoin } = useCoinStore();
-  const { mycoin } = useUserStore.getState().user;
-  const [coinSymbol, setCoinSymbol] = useState("");
-  const [chartData, setChartData] = useState<ChartDataType | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [changeDate, setChangeDate] = useState<"1d" | "1w" | "1M">("1d");
-  const [showVolume, setShowVolume] = useState<boolean>(false);
+export default function MyCoinChart() {
+  const [klineData, setKlineData] = useState<any[]>([]);
+  const [originalData, setOriginalData] = useState<IKlineChart[]>([]);
+  const [changeDate, setChangeDate] = useState<"minutes/1" | "days">(
+    "minutes/1"
+  );
+  const [loading, setLoading] = useState(false);
+  const { theme } = useTheme();
+  const { mycoin } = useUserStore().user;
   const { currency } = useCurrency();
+  const { exchange, selectedCoin } = useCoinStore();
+  const isDark = theme === "dark";
+
+  const coinSymbol = mycoin[selectedCoin]?.symbol;
 
   useEffect(() => {
-    const mySymbol = mycoin[selectedCoin]?.symbol || "";
-    setCoinSymbol(mySymbol);
-    const fetchChartData = async () => {
+    if (!coinSymbol) return;
+    const fetchKlines = async () => {
       try {
-        setIsLoading(true);
-        setError(null);
-
-        const symbol =
-          mySymbol.toUpperCase() + (currency === "$" ? "USDT" : "BUSD");
-
-        const res = await fetch(
-          `/api/klines?symbol=${symbol}&interval=${changeDate}&limit=100`
+        setLoading(true);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/candles/${changeDate}?market=KRW-${coinSymbol}&count=50`
         );
-        if (!res.ok) {
-          throw new Error("Failed to fetch chart data.");
+        const data = await response.json();
+
+        if (!Array.isArray(data)) {
+          throw new Error("유효하지 않은 데이터입니다.");
         }
 
-        const data = await res.json();
-
-        const labels = data.map((item: any) =>
-          new Date(item[0]).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-          })
-        );
-
-        const prices = data.map((item: any) => parseFloat(item[4]));
-        const volumes = data.map((item: any) => parseFloat(item[5]));
-
-        setChartData({
-          labels,
-          datasets: [
-            {
-              label: showVolume
-                ? `${mySymbol} Volume (${currency})`
-                : `${mySymbol} Price (${currency})`,
-              data: showVolume ? volumes : prices,
-              borderColor: showVolume
-                ? "rgba(255, 99, 132, 1)"
-                : "rgba(75, 192, 192, 1)",
-              backgroundColor: showVolume
-                ? "rgba(255, 99, 132, 0.2)"
-                : "rgba(75, 192, 192, 0.2)",
-              fill: true,
-              tension: 0.3,
-              pointRadius: 0,
-              pointHoverRadius: 0,
-            },
-          ],
-        });
+        setOriginalData(data);
       } catch (error) {
-        console.error("Error fetching chart data:", error);
-        setError("Failed to load chart data. Please try again later.");
+        console.error("데이터를 불러오는데 실패하였습니다.", error);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
-    if (mySymbol) fetchChartData();
-  }, [currency, changeDate, showVolume, selectedCoin]);
+    fetchKlines();
+  }, [selectedCoin, changeDate, coinSymbol]);
 
-  if (error)
-    return (
-      <div className="max-w-[800px] w-full h-[full] flex justify-center items-center text-red-500">
-        {error}
-      </div>
-    );
+  useEffect(() => {
+    if (originalData.length === 0) return;
 
-  if (mycoin.length === 0) {
-    return (
-      <section className=" w-[800px] h-[300px] rounded-[12px] flex flex-col gap-4 justify-center items-center py-6 px-4 border-[1px] border-border dark:border-border-dark">
-        <div className="w-full h-auto mb-2 flex justify-between px-2">
-          <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
-            <BtnStyle size="auto" color="focus" disabled>
-              Price
-            </BtnStyle>
-            <BtnStyle size="auto" color="focus" disabled>
-              Volume
-            </BtnStyle>
-          </div>
-          <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
-            <BtnStyle size="auto" color="focus" disabled>
-              24시간
-            </BtnStyle>
-            <BtnStyle size="auto" color="focus" disabled>
-              7일
-            </BtnStyle>
-            <BtnStyle size="auto" color="focus" disabled>
-              1개월
-            </BtnStyle>
-          </div>
-        </div>
-        <div className="w-full h-full flex justify-center items-center  text-smallHeader font-bold">
-          코인을 등록해주세요.
-        </div>
-      </section>
-    );
-  }
+    const formattedData = originalData
+      .map((kline: IKlineChart) => {
+        if (
+          !kline.candle_date_time_kst ||
+          !kline.opening_price ||
+          !kline.high_price ||
+          !kline.low_price ||
+          !kline.trade_price
+        ) {
+          console.warn("유효하지 않는 데이터 입니다.", kline);
+          return null;
+        }
+        return {
+          x: new Date(kline.candle_date_time_kst),
+          y:
+            currency === "$"
+              ? [
+                  kline.opening_price / exchange,
+                  kline.high_price / exchange,
+                  kline.low_price / exchange,
+                  kline.trade_price / exchange,
+                ]
+              : [
+                  kline.opening_price,
+                  kline.high_price,
+                  kline.low_price,
+                  kline.trade_price,
+                ],
+        };
+      })
+      .filter(Boolean);
 
-  const options: ChartOptions<"line"> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: {
-      mode: "index",
-      intersect: false,
+    setKlineData(formattedData);
+  }, [currency, exchange, originalData]);
+
+  const series = [
+    {
+      name: `${coinSymbol} Price`,
+      data: klineData,
     },
-    plugins: {
-      tooltip: {
-        enabled: true,
-        callbacks: {
-          label: function (context) {
-            const value = context.raw as number;
-            return showVolume
-              ? `${value.toLocaleString()} units`
-              : `${currency}${value.toLocaleString()}`;
-          },
-        },
-      },
-    },
-    scales: {
-      x: {
-        grid: {
-          display: false,
-        },
-      },
-      y: {
-        ticks: {
-          callback: function (value) {
-            return showVolume
-              ? `${value.toLocaleString()}`
-              : `${currency}${value.toLocaleString()}`;
-          },
-        },
-      },
-    },
-  };
+  ];
 
   return (
-    <article className="w-full max-w-[900px] h-auto flex flex-col justify-center items-center">
-      <div className="w-full h-auto mb-2 flex justify-between px-2">
-        <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
-          <BtnStyle
-            size="auto"
-            color="focus"
-            disabled={!showVolume}
-            onClick={() => setShowVolume(false)}
-          >
-            Price
-          </BtnStyle>
-          <BtnStyle
-            size="auto"
-            color="focus"
-            disabled={showVolume}
-            onClick={() => setShowVolume(true)}
-          >
-            Volume
-          </BtnStyle>
+    <>
+      {loading || mycoin.length === 0 ? (
+        <div className="w-full h-[400px] flex justify-center items-center">
+          Loading...
         </div>
-        <div className="w-[250px] rounded-md h-auto py-1 flex justify-center items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
-          <BtnStyle
-            size="auto"
-            color="focus"
-            disabled={changeDate === "1d"}
-            onClick={() => setChangeDate("1d")}
-          >
-            24시간
-          </BtnStyle>
-          <BtnStyle
-            size="auto"
-            color="focus"
-            disabled={changeDate === "1w"}
-            onClick={() => setChangeDate("1w")}
-          >
-            7일
-          </BtnStyle>
-          <BtnStyle
-            size="auto"
-            color="focus"
-            disabled={changeDate === "1M"}
-            onClick={() => setChangeDate("1M")}
-          >
-            1개월
-          </BtnStyle>
-        </div>
-      </div>
-      <div className="w-full min-h-[400px] ">
-        {chartData && (
-          <Line
-            data={chartData}
-            options={options}
-            plugins={[
-              {
-                id: "verticalLine",
-                afterDraw: (chart) => {
-                  if (
-                    Array.isArray(chart.tooltip?.active) &&
-                    chart.tooltip?.active?.length
-                  ) {
-                    const ctx = chart.ctx;
-                    const activePoint = chart.tooltip.active[0];
-                    const x = activePoint.element.x;
-                    const topY = chart.scales.y.top;
-                    const bottomY = chart.scales.y.bottom;
-
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.moveTo(x, topY);
-                    ctx.lineTo(x, bottomY);
-                    ctx.lineWidth = 1.5;
-                    ctx.strokeStyle = "#8E7CC3";
-                    ctx.stroke();
-                    ctx.restore();
-                  }
+      ) : (
+        <section className="w-full flex tablet:flex-col border-t-2 border-border dark:border-border-dark pt-4 tablet:gap-3">
+          <div className=" w-auto flex justify-end items-center h-full pt-10 tablet:pt-1">
+            <div className=" flex flex-col tablet:flex-row rounded-md  w-auto  tablet:w-auto   justify-start items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
+              <BtnStyle
+                size="auto"
+                color="focus"
+                disabled={changeDate === "minutes/1"}
+                onClick={() => setChangeDate("minutes/1")}
+              >
+                1M
+              </BtnStyle>
+              <BtnStyle
+                size="auto"
+                color="focus"
+                disabled={changeDate === "days"}
+                onClick={() => setChangeDate("days")}
+              >
+                1D
+              </BtnStyle>
+            </div>
+          </div>
+          <div className="w-full h-auto">
+            <ApexChart
+              options={{
+                chart: {
+                  type: "candlestick",
+                  background: isDark ? "#181820" : "#F8F9FA",
                 },
-              },
-            ]}
-          />
-        )}
-      </div>
-    </article>
+                theme: {
+                  mode: isDark ? "dark" : "light",
+                },
+                title: {
+                  text: `${coinSymbol}: ${changeDate} Candlestick Chart`,
+                  align: "center",
+                },
+                xaxis: {
+                  type: "datetime",
+                  tickAmount: 6,
+                  labels: {
+                    formatter: (
+                      value: string,
+                      timestamp?: number,
+                      opts?: any
+                    ) => {
+                      const date = new Date(timestamp || 0);
+                      const options: Intl.DateTimeFormatOptions = {
+                        month: "short",
+                        day: "numeric",
+                      };
+                      return date.toLocaleDateString("en-US", options);
+                    },
+                  },
+                },
+                yaxis: {
+                  labels: {
+                    formatter: (value) =>
+                      currency === "$"
+                        ? `$${formatCurrency(value, "$")}`
+                        : `₩${formatCurrency(value, "₩")}`,
+                  },
+                  tooltip: {
+                    enabled: true,
+                  },
+                },
+                tooltip: {
+                  custom: ({ seriesIndex, dataPointIndex, w }) => {
+                    const seriesData =
+                      w.config.series[seriesIndex].data[dataPointIndex];
+
+                    const { y } = seriesData;
+
+                    const open = y[0].toLocaleString();
+                    const high = y[1].toLocaleString();
+                    const low = y[2].toLocaleString();
+                    const close = y[3].toLocaleString();
+
+                    return `
+                  <div style="
+                    padding: 10px; 
+                    background:${theme === "dark" ? "#181820" : "#F8F9FA"} ; 
+                    border: 1px solid #ccc; 
+                    border-radius: 8px; 
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                    font-size: 12px; 
+                    color:${theme === "dark" ? "#F8F9FA" : "#181820"} ;
+                  ">
+                    <div><strong>Open:</strong> ${currency}${open}</div>
+                    <div><strong>High:</strong> ${currency}${high}</div>
+                    <div><strong>Low:</strong> ${currency}${low}</div>
+                    <div><strong>Close:</strong> ${currency}${close}</div>
+                  </div>
+                `;
+                  },
+                },
+              }}
+              series={series}
+              type="candlestick"
+              height={400}
+            />
+          </div>
+        </section>
+      )}
+    </>
   );
 }

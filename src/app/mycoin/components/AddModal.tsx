@@ -49,7 +49,7 @@ const AddModal = ({
       setSearch("");
       setResults([]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

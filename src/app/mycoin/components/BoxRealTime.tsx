@@ -1,6 +1,6 @@
 "use client";
-import { useCoinStore } from "@/store/store";
-import { useEffect, useState } from "react";
+import { useCoinStore, useUserStore } from "@/store/store";
+import { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
@@ -9,66 +9,65 @@ interface UpbitData {
   trade_price: number;
   change_rate: number;
   acc_trade_price_24h: number;
+  acc_trade_volume_24h: number;
   code: string;
+  high_price: number;
+  low_price: number;
 }
-interface IProps {
-  symbol: string;
-  index: number;
+export interface StaticData {
+  acc_trade_volume_24h: number;
+  acc_trade_price_24h: number;
+  high_price: number;
+  low_price: number;
 }
 
-export default function BoxRealTime(props: IProps) {
-  const { symbol, index } = props;
-  const [rate, setRate] = useState("");
+export default function BoxRealTime({ symbol }: { symbol: string }) {
   const { theme } = useTheme();
-
   const [priceChange, setPriceChange] = useState<"up" | "down" | null>(null);
-  const { setRealTimeData, selectedCoin, exchange } = useCoinStore();
-  const [realKrw, setRealKrw] = useState<number>(0);
-  const [realDallor, setRealDallor] = useState<string>();
+  const [realTimeData, setRealTimeData] = useState({
+    trade_price: 0,
+    change_rate: "",
+  });
+  const { setStaticData, staticData } = useCoinStore();
 
   useEffect(() => {
     const newSocket = io("http://localhost:4000");
 
     newSocket.on("connect", () => {
-      console.log("✅ Socket.io 연결됨");
       newSocket.emit("subscribe", symbol);
     });
 
     newSocket.on("upbit_data", (message: UpbitData) => {
-      console.log(message);
       if (message.code === `KRW-${symbol}`) {
-        if (realKrw !== null) {
-          setPriceChange(message.trade_price > realKrw ? "up" : "down");
+        if (realTimeData.trade_price !== null) {
+          setPriceChange(
+            message.trade_price > realTimeData.trade_price ? "up" : "down"
+          );
 
           setTimeout(() => setPriceChange(null), 1000);
         }
+        setRealTimeData({
+          trade_price: message.trade_price,
+          change_rate: (message.change_rate * 100).toFixed(2),
+        });
 
-        setRealKrw(message.trade_price);
-        setRate((message.change_rate * 100).toFixed(2));
+        if (!staticData[message.code.split("-")[1]]) {
+          setStaticData(message.code.split("-")[1], {
+            acc_trade_price_24h: message.acc_trade_price_24h,
+            high_price: message.high_price,
+            low_price: message.low_price,
+            acc_trade_volume_24h: message.acc_trade_volume_24h,
+          });
+        }
       }
     });
 
     return () => {
-      newSocket.emit("unsubscribe", [symbol]);
+      newSocket.emit("unsubscribe", symbol);
+      newSocket.off("upbit_data");
       newSocket.disconnect();
     };
   }, [symbol]);
-
-  useEffect(() => {
-    if (selectedCoin === index) {
-      setRealTimeData({
-        realKrw: realKrw,
-        realRate: rate,
-      });
-    }
-  }, [selectedCoin, rate]);
-
-  useEffect(() => {
-    if (realKrw) {
-      const dollar = Number((realKrw / exchange).toFixed(2)).toLocaleString();
-      setRealDallor(dollar);
-    }
-  }, [realKrw]);
 
   return (
     <div className=" w-full h-[30px] flex flex-col tablet:h-full ">
@@ -87,14 +86,16 @@ export default function BoxRealTime(props: IProps) {
           transition={{ duration: 0.5 }}
           className=" iphone:text-sm  block"
         >
-          {realKrw ? `₩${realKrw.toLocaleString()}` : "Loading..."}
+          {realTimeData.trade_price
+            ? `₩${realTimeData.trade_price.toLocaleString()}`
+            : "Loading..."}
         </motion.span>
         <span
           className={`${
-            Number(rate) >= 0 ? "text-green" : "text-red"
+            Number(realTimeData.change_rate) >= 0 ? "text-green" : "text-red"
           } text-right iphone:text-sm  block`}
         >
-          {rate}%
+          {realTimeData.change_rate}%
         </span>
       </div>
     </div>
