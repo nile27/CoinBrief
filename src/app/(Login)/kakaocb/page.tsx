@@ -74,8 +74,6 @@ const KakaoCallback = () => {
           email: user.email,
         };
 
-        console.log("로그인 성공:", userCredential.user);
-
         setUser(userData);
         login();
         navi.push("/mycoin");

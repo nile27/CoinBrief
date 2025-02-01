@@ -45,13 +45,7 @@ io.on("connection", (socket) => {
           return;
         }
 
-        console.log("📩 업비트 데이터:", receivedData);
-        socket.emit("upbit_data", {
-          market: receivedData.code,
-          trade_price: receivedData.trade_price,
-          change_rate: receivedData.signed_change_rate,
-          acc_trade_price_24h: receivedData.acc_trade_price_24h,
-        });
+        socket.emit("upbit_data", receivedData);
       } catch (error) {
         console.error("❌ JSON 파싱 오류:", error);
       }

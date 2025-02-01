@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { CircleX } from "lucide-react";
-import { useUserStore } from "@/store/store";
+import { useCoinStore, useUserStore } from "@/store/store";
 
 const DeleteModal = ({
   setIsDeleteModal,
@@ -9,9 +9,13 @@ const DeleteModal = ({
   setIsDeleteModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { user, deleteCoin } = useUserStore();
+  const { setSelectedCoin, removeStaticData } = useCoinStore();
 
-  const handleDeleteCoin = async (idx: number) => {
+  const handleDeleteCoin = async (symbol: string, idx: number) => {
     await deleteCoin(idx);
+
+    removeStaticData(symbol);
+    setSelectedCoin(0);
   };
 
   useEffect(() => {
@@ -49,7 +53,7 @@ const DeleteModal = ({
                 {coin.name} ({coin.symbol})
               </span>
               <button
-                onClick={() => handleDeleteCoin(idx)}
+                onClick={() => handleDeleteCoin(coin.symbol, idx)}
                 className="text-gray-500 hover:text-red-500"
               >
                 <CircleX />

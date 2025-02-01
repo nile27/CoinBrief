@@ -1,26 +1,20 @@
-import React from "react";
-
-import MyCoinChart from "./components/MyCoinChart";
-import CoinBoxList from "./components/CoinBoxList";
-import AddCoinBox from "./components/AddCoinBox";
+import HeaderCoinBox from "./components/HeaderCoinBox";
 import DetailCoin from "./components/DetailCoin";
+import MyCoinChart from "./components/MyCoinChart";
+import MyCoinArticle from "./components/MyCoinArticle";
 
 const Mycoin = () => {
   return (
-    <main className="w-[100vw] h-auto p-4 flex flex-col justify-center items-center gap-10 ">
-      <section className="w-full h-[auto] flex justify-center gap-10 items-center">
+    <section className="w-[100vw] h-auto p-4 flex flex-col justify-center items-center gap-10 ">
+      <HeaderCoinBox />
+      <main className="flex gap-6 tablet:flex-col w-full px-6">
         <DetailCoin />
-        {/* <MyCoinChart /> */}
-      </section>
-      <section className="w-full h-auto flex flex-col gap-3 justify-center items-center">
-        <div className=" w-full h-[40px] flex justify-between items-center  px-10">
-          <h1 className=" text-[24px] font-semibold w-full">내 코인 목록</h1>
-
-          <AddCoinBox />
-        </div>
-        <CoinBoxList />
-      </section>
-    </main>
+        <section className="flex-1 flex flex-col gap-6">
+          <MyCoinChart />
+          <MyCoinArticle />
+        </section>
+      </main>
+    </section>
   );
 };
 
