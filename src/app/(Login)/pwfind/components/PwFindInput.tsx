@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import InputStyle from "@/components/CustomUI/InputStyle";
-import BtnStyle from "@/components/CustomUI/BtnStyle";
 
 interface IProps {
   setIsInput: React.Dispatch<React.SetStateAction<boolean>>;
@@ -49,6 +48,7 @@ const PwFindInput = ({
       <InputStyle
         disabled={verify}
         placeholder="인증 번호"
+        autoComplete="off"
         onChange={(e) => setOtp(e.target.value)}
       />
       <button

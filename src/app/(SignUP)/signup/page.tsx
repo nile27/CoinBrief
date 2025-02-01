@@ -86,6 +86,7 @@ const SignUp = () => {
             <label htmlFor="formName" className="hidden"></label>
             <InputStyle
               placeholder="이름"
+              autoComplete="new-username"
               {...register("name", { required: errorMessages.nameRequired })}
             />
 
@@ -94,6 +95,7 @@ const SignUp = () => {
               <InputStyle
                 placeholder="이메일"
                 disabled={verify}
+                autoComplete="new-email"
                 {...register("email", {
                   required: errorMessages.emailRequired,
                   pattern: {
@@ -113,6 +115,7 @@ const SignUp = () => {
             <label htmlFor="formNickName" className="hidden"></label>
             <InputStyle
               placeholder="닉네임"
+              autoComplete="new-displayName"
               {...register("displayName", {
                 required: errorMessages.nicknameRequired,
               })}
@@ -121,6 +124,7 @@ const SignUp = () => {
             <label htmlFor="formPassword" className="hidden"></label>
             <InputStyle
               type="password"
+              autoComplete="new-password"
               placeholder="비밀번호 (8~20 영문 숫자, 특수문자 조합 중 2개 이상)"
               {...register("password", {
                 required: errorMessages.passwordRequired,
@@ -138,6 +142,7 @@ const SignUp = () => {
             <InputStyle
               placeholder="비밀번호 확인"
               type="password"
+              autoComplete="new-confirmPassword"
               {...register("confirmPassword", {
                 required: errorMessages.passwordRequired,
                 validate: (value) =>

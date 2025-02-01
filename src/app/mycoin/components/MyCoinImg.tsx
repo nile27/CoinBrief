@@ -5,7 +5,7 @@ const MyCoinImg = ({ name, symbol }: { name: string; symbol: string }) => {
   const [src, setSrc] = useState("/Group.png");
 
   useEffect(() => {
-    setSrc(`https://static.upbit.com/logos/${symbol.toUpperCase()}.png`);
+    setSrc(`${process.env.NEXT_PUBLIC_IMAGE_URL}${symbol.toUpperCase()}.png`);
   }, [symbol]);
 
   const addDefaultImg = () => {

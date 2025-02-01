@@ -5,9 +5,9 @@ import BtnStyle from "../CustomUI/BtnStyle";
 
 const LoginMain = () => {
   return (
-    <section className="w-full h-full px-10 flex justify-center items-center ">
-      <div className=" w-full h-full flex justify-end items-center ">
-        <div className=" relative min-w-[576px] max-w-[720px] max-h-[605px] min-h-[474px]  dark:border-border-dark border-border rounded-[15px] border-[10px] ">
+    <section className="w-full h-full px-10 flex justify-center items-center  ">
+      <div className="  tablet:hidden w-full h-full flex justify-end items-center  ">
+        <div className=" relative min-w-[576px] max-w-[600px] max-h-[505px] min-h-[474px]  dark:border-border-dark border-border rounded-[15px] border-[10px] ">
           <Image
             src="/MainImg.svg"
             alt="main-img"
@@ -18,7 +18,7 @@ const LoginMain = () => {
       </div>
       <div className=" w-full h-full flex flex-col justify-center items-center">
         <div className="w-auto h-auto min-w-[300px] flex flex-col justify-center items-center  ">
-          <h1 className=" w-full h-[90px] text-start text-[70px] dark:text-text-dark text-text font-extrabold p-0">
+          <h1 className=" w-full h-[90px] text-start text-[70px] dark:text-text-dark text-text font-extrabold ">
             CoinBrief
           </h1>
           <p className="  dark:text-[rgba(228,228,235,0.59)] text-[rgba(113,113,113,0.59)]  ">

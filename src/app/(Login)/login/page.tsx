@@ -103,6 +103,7 @@ const Login = () => {
           <div className="flex flex-col gap-5 w-full ">
             <label htmlFor="formEmail" className="hidden"></label>
             <InputStyle
+              autoComplete="current-password"
               placeholder="이메일"
               {...register("email", {
                 required: errorMessages.emailRequired,
@@ -116,6 +117,7 @@ const Login = () => {
             <InputStyle
               type="password"
               placeholder="비밀번호 "
+              autoComplete="current-password"
               {...register("password", {
                 required: errorMessages.passwordMismatch,
                 minLength: {

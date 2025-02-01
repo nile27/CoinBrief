@@ -46,6 +46,7 @@ const SearchInput = ({ allCoins }: { allCoins: ProcessedCoin[] }) => {
         <input
           type="text"
           placeholder="코인 이름 또는 심볼 검색"
+          autoComplete="off"
           value={searchTerm}
           onChange={(e) => handleInputChange(e.target.value)}
           onBlur={handleBlur}

@@ -4,20 +4,6 @@ import Dollar from "@/../public/Dollar.svg";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
 import { useCoinStore } from "@/store/store";
 
-interface ExchangeInterface {
-  result: number;
-  cur_unit: string;
-  ttb: string;
-  tts: string;
-  deal_bas_r: string;
-  bkpr: string;
-  yy_efee_r: string;
-  ten_dd_efee_r: string;
-  kftc_bkpr: string;
-  kftc_deal_bas_r: string;
-  cur_nm: string;
-}
-
 const CurrencyCalc = () => {
   const [usdValue, setUsdValue] = useState<string>("1");
   const [krwValue, setKrwValue] = useState<string>("");
@@ -66,6 +52,7 @@ const CurrencyCalc = () => {
             </div>
             <input
               type="text"
+              autoComplete="off"
               className=" w-full h-auto px-2 bg-transparent outline-none overflow-x-auto "
               value={krwValue}
               onChange={handleKRWChange}
@@ -81,6 +68,7 @@ const CurrencyCalc = () => {
 
             <input
               type="text"
+              autoComplete="off"
               className=" w-full h-auto px-2 bg-transparent outline-none overflow-x-auto "
               value={usdValue}
               onChange={handleUsdChange}

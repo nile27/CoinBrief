@@ -65,6 +65,7 @@ const PwChange = () => {
             <label htmlFor="formPassword" className="hidden"></label>
             <InputStyle
               type="password"
+              autoComplete="current-password"
               placeholder="비밀번호 (8~20 영문 숫자, 특수문자 조합 중 2개 이상)"
               {...register("password", {
                 required: errorMessages.passwordRequired,
@@ -81,6 +82,7 @@ const PwChange = () => {
 
             <InputStyle
               placeholder="비밀번호 확인"
+              autoComplete="current-confirmPassword"
               type="password"
               {...register("confirmPassword", {
                 required: errorMessages.passwordRequired,

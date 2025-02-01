@@ -6,7 +6,6 @@ import { useUserStore, useSearchData } from "@/store/store";
 import { searchCoinBySymbol } from "../utill/utill";
 interface Coin {
   id: string;
-
   symbol: string;
 }
 
@@ -38,12 +37,10 @@ const AddModal = ({
   const handleSelectCoin = async (coin: Coin) => {
     try {
       setIsModal(false);
-      const data = await searchCoinBySymbol(coin.symbol);
-
       await Addcoin({
-        id: data[0].id,
-        name: data[0].name,
-        symbol: data[0].symbol,
+        id: coin.id,
+        name: coin.id,
+        symbol: coin.symbol,
       });
 
       setSearch("");
@@ -72,6 +69,7 @@ const AddModal = ({
         </button>
         <h2 className="text-lg font-bold mb-4">내 코인 추가</h2>
         <InputStyle
+          autoComplete="off"
           placeholder="코인의 이름 또는 심볼로 검색해주세요."
           value={search}
           onChange={(e) => setSearch(e.target.value)}

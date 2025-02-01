@@ -77,6 +77,7 @@ const DeleteModal = ({
         </p>
         <InputStyle
           type="text"
+          autoComplete="off"
           value={inputValue}
           onChange={handleInputChange}
           placeholder="회원탈퇴를 입력하세요."

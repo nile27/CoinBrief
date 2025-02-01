@@ -59,6 +59,7 @@ const PwFind = () => {
           <div className="w-full h-auto flex flex-col gap-4 ">
             <label htmlFor="formName" className="hidden"></label>
             <InputStyle
+              autoComplete="username"
               placeholder="이름"
               disabled={verify}
               {...register("name", { required: "이름을 입력해주세요." })}
@@ -66,6 +67,7 @@ const PwFind = () => {
             <div className=" w-full h-auto flex justify-center items-center  gap-2">
               <label htmlFor="formEmail" className="hidden"></label>
               <InputStyle
+                autoComplete="email"
                 placeholder="이메일"
                 disabled={verify}
                 {...register("email", {

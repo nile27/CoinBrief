@@ -64,6 +64,7 @@ const SignUPOTP = ({
           <div className="flex justify-between mb-3 gap-5">
             <InputStyle
               placeholder="인증 번호"
+              autoComplete="off"
               onChange={(e) => setOtp(e.target.value)}
             />
             <BtnStyle size="small" onClick={verifyOtp}>
