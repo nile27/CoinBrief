@@ -34,8 +34,11 @@ const KakaoCallback = () => {
             }),
           }
         );
+        console.log("tokenRes", tokenRes);
 
-        if (!tokenRes.ok) throw new Error("토큰 정보를 받을 수 없습니다.");
+        if (!tokenRes.ok) {
+          throw new Error(`토큰 정보를 받을 수 없습니다`);
+        }
         const tokenData = await tokenRes.json();
         const accessToken = tokenData.access_token;
 
@@ -58,6 +61,7 @@ const KakaoCallback = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, name: displayName, displayName }),
         });
+        console.log("customTokenRes", customTokenRes);
 
         if (!customTokenRes.ok)
           throw new Error("토큰 정보를 받을 수 없습니다.");
