@@ -135,6 +135,9 @@ export default function MyCoinChart() {
                 chart: {
                   type: "candlestick",
                   background: isDark ? "#181820" : "#F8F9FA",
+                  zoom: {
+                    enabled: false,
+                  },
                 },
                 theme: {
                   mode: isDark ? "dark" : "light",

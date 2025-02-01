@@ -142,6 +142,9 @@ export default function KlineChart({ symbol }: { symbol: string }) {
                 chart: {
                   type: "candlestick",
                   background: isDark ? "#181820" : "#F8F9FA",
+                  zoom: {
+                    enabled: false,
+                  },
                 },
                 theme: {
                   mode: isDark ? "dark" : "light",
