@@ -1,4 +1,3 @@
-import { Container } from "postcss";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -74,6 +73,8 @@ const config: Config = {
       },
       screens: {
         mobile: { max: "690px" },
+        onlyMobile: { max: "690px", min: "450px" },
+        iphone: { max: "450px" },
         tablet: { max: "840px" },
         onlyTablet: { max: "840px", min: "690px" },
         textBoxHalf: { max: "1170px" },

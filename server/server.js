@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
 
     upbitSocket.on("open", () => {
       console.log("✅ 업비트 웹소켓 연결됨");
-      console.log(symbol);
+
       const subscribeData = [
         { ticket: "test" },
         { type: "ticker", codes: [`KRW-${symbol}`] },
@@ -45,7 +45,6 @@ io.on("connection", (socket) => {
           return;
         }
 
-        console.log("📩 업비트 데이터:", receivedData);
         socket.emit("upbit_data", receivedData);
       } catch (error) {
         console.error("❌ JSON 파싱 오류:", error);
