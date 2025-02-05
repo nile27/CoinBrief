@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { CircleX } from "lucide-react";
 import InputStyle from "@/components/CustomUI/InputStyle";
 import { useUserStore, useSearchData } from "@/store/store";
-import { searchCoinBySymbol } from "../utill/utill";
+
 interface Coin {
   id: string;
   symbol: string;

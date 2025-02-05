@@ -28,6 +28,41 @@ const Login = () => {
   const { setUser } = useUserStore();
   const [errMessage, setErrMessage] = useState<string>("");
 
+  const testUser = {
+    email: process.env.NEXT_PUBLIC_TEST_EMAIL,
+    password: process.env.NEXT_PUBLIC_TEST_PW,
+  };
+
+  const handleTestLogin = async () => {
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(testUser),
+      });
+
+      if (!response.ok) {
+        throw new Error("테스트 계정 로그인 실패");
+      }
+
+      const data = await response.json();
+      const user = {
+        id: data.data.id,
+        name: data.data.name,
+        email: data.data.email,
+        displayName: data.data.nickname,
+        mycoin: data.data.mycoin,
+      };
+
+      login();
+      setUser(user);
+      navi.push("/mycoin");
+    } catch (error) {
+      console.error("테스트 계정 로그인 실패:", error);
+      setErrMessage("테스트 계정 로그인 실패");
+    }
+  };
+
   const handleGoogleLogin = async () => {
     try {
       const userData = await googleLogin();
@@ -81,9 +116,14 @@ const Login = () => {
   return (
     <section className=" h-full w-auto flex  justify-center items-center">
       <div className="w-auto h-auto gap-3 px-10 py-5 flex flex-col justify-center items-center border-border dark:border-border-dark border rounded-[15px]">
-        <h1 className="w-full h-full text-header font-extrabold text-start">
-          로그인
-        </h1>
+        <div className="w-full h-full flex justify-center items-center">
+          <h1 className="w-full h-full text-header font-extrabold text-start">
+            로그인
+          </h1>
+          <BtnStyle onClick={handleTestLogin} size="auto">
+            테스트 계정 로그인
+          </BtnStyle>
+        </div>
 
         <div className=" w-full h-auto flex justify-start items-center gap-5">
           <p className=" dark:text-[rgba(228,228,235,0.59)] text-[rgba(113,113,113,0.59)]">
