@@ -11,7 +11,11 @@ const CoinList = async ({ params }: { params: { page: string } }) => {
   const page = Number(params.page);
   const itemsPerPage = 50;
 
-  const allCoins = await getCoinData();
+  const upbitCoins = await fetch("http://localhost:3000/api/upbit/coins", {
+    method: "GET",
+  });
+  const allCoins = await upbitCoins.json();
+
   const totalPages = Math.ceil(allCoins.length / itemsPerPage);
 
   const paginatedCoins = allCoins.slice(

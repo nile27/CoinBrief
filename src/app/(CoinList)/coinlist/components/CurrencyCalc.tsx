@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, ChangeEvent, useEffect } from "react";
 import Dollar from "@/../public/Dollar.svg";
-import BtnStyle from "@/components/CustomUI/BtnStyle";
 import { useCoinStore } from "@/store/store";
 
 const CurrencyCalc = () => {
