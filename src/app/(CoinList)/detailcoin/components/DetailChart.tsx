@@ -35,10 +35,9 @@ export default function KlineChart({ symbol }: { symbol: string }) {
     const fetchKlines = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/candles/${changeDate}?market=KRW-${symbol}&count=30`
+          `/api/upbit/kline?market=KRW-${symbol}&interval=${changeDate}&count=30`
         );
         const data = await response.json();
-
         if (!Array.isArray(data)) {
           throw new Error("유효하지 않는 데이터 입니다.");
         }

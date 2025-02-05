@@ -3,10 +3,12 @@ import { useState } from "react";
 import SignUPOTP from "./SignUPOTP";
 
 const OTPDiv = ({
+  name,
   email,
   setVerify,
   verify,
 }: {
+  name: string;
   email: string;
   setVerify: React.Dispatch<React.SetStateAction<boolean>>;
   verify: boolean;
@@ -18,7 +20,7 @@ const OTPDiv = ({
       const response = await fetch("/api/sendotp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, name }),
       });
 
       if (response.ok) {

@@ -37,7 +37,7 @@ export default function MyCoinChart() {
       try {
         setLoading(true);
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_UPBIT_API_URL}/candles/${changeDate}?market=KRW-${coinSymbol}&count=50`
+          `/api/upbit/kline?market=KRW-${coinSymbol}&interval=${changeDate}&count=30`
         );
         const data = await response.json();
 
@@ -129,7 +129,7 @@ export default function MyCoinChart() {
               </BtnStyle>
             </div>
           </div>
-          <div className="w-full h-auto">
+          <div className="w-full h-[400px]">
             <ApexChart
               options={{
                 chart: {
@@ -193,6 +193,7 @@ export default function MyCoinChart() {
                     background:${theme === "dark" ? "#181820" : "#F8F9FA"} ; 
                     border: 1px solid #ccc; 
                     border-radius: 8px; 
+                    height: 400px;
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
                     font-size: 12px; 
                     color:${theme === "dark" ? "#F8F9FA" : "#181820"} ;

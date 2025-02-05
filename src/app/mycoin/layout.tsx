@@ -12,7 +12,6 @@ export default function Layout({
   return (
     <main className=" flex w-[100vw] h-[90vh] items-center justify-between flex-col p-5">
       {children}
-      <Footer />
     </main>
   );
 }

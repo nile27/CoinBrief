@@ -8,7 +8,9 @@ const MyCoinArticle = () => {
 
   if (user.mycoin.length === 0) {
     return (
-      <span className="text-smallHeader font-bold">코인을 등록해주세요.</span>
+      <span className="text-smallHeader h-[200px] w-full flex justify-center items-center font-bold">
+        코인을 등록해주세요.
+      </span>
     );
   }
 
@@ -53,7 +55,7 @@ const MyCoinArticle = () => {
           <p className="font-bold tablet:w-1/2 tablet:text-left text-[14px]">
             {item.title}
           </p>
-          <p className="text-lg tablet:w-1/2 tablet:text-right text-[14px]">
+          <p className="text-lg tablet:w-1/2 tablet:text-right text-[14px] whitespace-nowrap">
             {formatKRW(item.value)} {item.currency}
           </p>
         </div>

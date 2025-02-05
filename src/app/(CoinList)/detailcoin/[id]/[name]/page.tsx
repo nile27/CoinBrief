@@ -11,10 +11,7 @@ async function DetailCoin({
   const { id, name } = params;
 
   const coinDataResponse = await fetch(
-    `${
-      process.env.NEXT_PUBLIC_UPBIT_API_URL
-    }/ticker?markets=KRW-${id.toUpperCase()}`,
-    { cache: "no-store" }
+    `${process.env.NEXT_PUBLIC_BASE_URL}api/upbit/detailcoin?id=${id}`
   );
   const coinDataJson: TickerData[] = await coinDataResponse.json();
 

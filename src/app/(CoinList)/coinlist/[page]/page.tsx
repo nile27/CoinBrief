@@ -1,7 +1,6 @@
 import CurrencyCalc from "../components/CurrencyCalc";
 import TopVolume from "../components/TopVolume";
 import CoinListTable from "../components/CoinListTable";
-import { getCoinData } from "../utill/utill";
 import SearchCoin from "../components/SearchCoin";
 import TopLosers from "../components/TopLosers";
 
@@ -11,9 +10,12 @@ const CoinList = async ({ params }: { params: { page: string } }) => {
   const page = Number(params.page);
   const itemsPerPage = 50;
 
-  const upbitCoins = await fetch("http://localhost:3000/api/upbit/coins", {
-    method: "GET",
-  });
+  const upbitCoins = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}api/upbit/coins`,
+    {
+      method: "GET",
+    }
+  );
   const allCoins = await upbitCoins.json();
 
   const totalPages = Math.ceil(allCoins.length / itemsPerPage);

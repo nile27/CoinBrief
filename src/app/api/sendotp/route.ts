@@ -14,9 +14,9 @@ export async function POST(request: Request) {
     .where("name", "==", name)
     .get();
 
-  if (querySnapShot.empty) {
+  if (!querySnapShot.empty) {
     return NextResponse.json(
-      { message: "등록되지 않은 회원입니다." },
+      { message: "이미 가입된 회원입니다." },
       { status: 401 }
     );
   }

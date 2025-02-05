@@ -106,6 +106,7 @@ const SignUp = () => {
               />
 
               <OTPDiv
+                name={watch("name")}
                 email={watch("email")}
                 setVerify={setVetify}
                 verify={verify}
