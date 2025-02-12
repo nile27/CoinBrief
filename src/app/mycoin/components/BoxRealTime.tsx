@@ -22,7 +22,7 @@ export interface StaticData {
 }
 
 export default function BoxRealTime({ symbol }: { symbol: string }) {
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
   const [priceChange, setPriceChange] = useState<"up" | "down" | null>(null);
   const [realTimeData, setRealTimeData] = useState({
     trade_price: 0,
@@ -79,9 +79,13 @@ export default function BoxRealTime({ symbol }: { symbol: string }) {
                 ? "#16a34a"
                 : priceChange === "down"
                 ? "#dc2626"
+                : theme === "dark"
+                ? "#F8F9FA"
                 : theme === "light"
-                ? "#000000"
-                : "#ffffff",
+                ? "#181820"
+                : systemTheme === "dark"
+                ? "#F8F9FA"
+                : "#181820",
           }}
           transition={{ duration: 0.5 }}
           className=" iphone:text-sm  block"

@@ -26,10 +26,21 @@ export default function KlineChart({ symbol }: { symbol: string }) {
   const [changeDate, setChangeDate] = useState<"days" | "weeks" | "months">(
     "days"
   );
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
   const { currency } = useCurrency();
   const { exchange } = useCoinStore();
-  const isDark = theme === "dark";
+
+  const isDark =
+    theme === "dark" || (theme === "system" && systemTheme === "dark");
+
+  const color =
+    theme === "dark"
+      ? "#F8F9FA"
+      : theme === "light"
+      ? "#181820"
+      : systemTheme === "dark"
+      ? "#F8F9FA"
+      : "#181820";
 
   useEffect(() => {
     const fetchKlines = async () => {
@@ -196,12 +207,12 @@ export default function KlineChart({ symbol }: { symbol: string }) {
                     return `
                   <div style="
                     padding: 10px; 
-                    background:${theme === "dark" ? "#181820" : "#F8F9FA"} ; 
+                    background:${color} ; 
                     border: 1px solid #ccc; 
                     border-radius: 8px; 
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
                     font-size: 12px; 
-                    color:${theme === "dark" ? "#F8F9FA" : "#181820"} ;
+                    color:${color} ;
                   ">
                     <div><strong>Open:</strong> ${currency}${open}</div>
                     <div><strong>High:</strong> ${currency}${high}</div>

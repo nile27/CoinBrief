@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import { useCoinStore, useCurrency, useUserStore } from "@/store/store";
 import { formatCurrency } from "@/utill/utill";
+import { Console } from "console";
 
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -19,17 +20,24 @@ interface IKlineChart {
 export default function MyCoinChart() {
   const [klineData, setKlineData] = useState<any[]>([]);
   const [originalData, setOriginalData] = useState<IKlineChart[]>([]);
-  const [changeDate, setChangeDate] = useState<"minutes/1" | "days">(
-    "minutes/1"
-  );
   const [loading, setLoading] = useState(false);
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
   const { mycoin } = useUserStore().user;
   const { currency } = useCurrency();
   const { exchange, selectedCoin } = useCoinStore();
-  const isDark = theme === "dark";
+  const isDark =
+    theme === "dark" || (theme === "system" && systemTheme === "dark");
 
   const coinSymbol = mycoin[selectedCoin]?.symbol;
+
+  const color =
+    theme === "dark"
+      ? "#F8F9FA"
+      : theme === "light"
+      ? "#181820"
+      : systemTheme === "dark"
+      ? "#F8F9FA"
+      : "#181820";
 
   useEffect(() => {
     if (!coinSymbol) return;
@@ -37,7 +45,7 @@ export default function MyCoinChart() {
       try {
         setLoading(true);
         const response = await fetch(
-          `/api/upbit/kline?market=KRW-${coinSymbol}&interval=${changeDate}&count=30`
+          `/api/upbit/kline?market=KRW-${coinSymbol}&interval=days&count=30`
         );
         const data = await response.json();
 
@@ -54,7 +62,7 @@ export default function MyCoinChart() {
     };
 
     fetchKlines();
-  }, [selectedCoin, changeDate, coinSymbol]);
+  }, [selectedCoin, coinSymbol]);
 
   useEffect(() => {
     if (originalData.length === 0) return;
@@ -110,24 +118,7 @@ export default function MyCoinChart() {
       ) : (
         <section className="w-full flex tablet:flex-col border-t-2 border-border dark:border-border-dark pt-4 tablet:gap-3">
           <div className=" w-auto flex justify-end items-center h-full pt-10 tablet:pt-1">
-            <div className=" flex flex-col tablet:flex-row rounded-md  w-auto  tablet:w-auto   justify-start items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark">
-              <BtnStyle
-                size="auto"
-                color="focus"
-                disabled={changeDate === "minutes/1"}
-                onClick={() => setChangeDate("minutes/1")}
-              >
-                1M
-              </BtnStyle>
-              <BtnStyle
-                size="auto"
-                color="focus"
-                disabled={changeDate === "days"}
-                onClick={() => setChangeDate("days")}
-              >
-                1D
-              </BtnStyle>
-            </div>
+            <div className=" flex flex-col tablet:flex-row rounded-md  w-auto  tablet:w-auto   justify-start items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark"></div>
           </div>
           <div className="w-full h-[400px]">
             <ApexChart
@@ -143,7 +134,7 @@ export default function MyCoinChart() {
                   mode: isDark ? "dark" : "light",
                 },
                 title: {
-                  text: `${coinSymbol}: ${changeDate} Candlestick Chart`,
+                  text: `${coinSymbol}: days Candlestick Chart`,
                   align: "center",
                 },
                 xaxis: {
@@ -190,13 +181,13 @@ export default function MyCoinChart() {
                     return `
                   <div style="
                     padding: 10px; 
-                    background:${theme === "dark" ? "#181820" : "#F8F9FA"} ; 
+                    background:${color} ; 
                     border: 1px solid #ccc; 
                     border-radius: 8px; 
                     height: 400px;
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
                     font-size: 12px; 
-                    color:${theme === "dark" ? "#F8F9FA" : "#181820"} ;
+                    color:${color} ;
                   ">
                     <div><strong>Open:</strong> ${currency}${open}</div>
                     <div><strong>High:</strong> ${currency}${high}</div>
