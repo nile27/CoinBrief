@@ -1,6 +1,5 @@
 import LoginMain from "@/components/Main/LoginMain";
 import Footer from "@/components/CustomUI/Footer";
-import { useEffect } from "react";
 
 export default function Home() {
   return (

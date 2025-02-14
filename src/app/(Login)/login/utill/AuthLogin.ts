@@ -28,6 +28,14 @@ export const googleLogin = async (): Promise<Iuser | null> => {
     );
     const querySnapshot = await getDocs(signedUser);
 
+    const token = await user.getIdToken();
+
+    await fetch("/api/setsession", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+    });
+
     if (!querySnapshot.empty) {
       const signedUserDoc = querySnapshot.docs[0];
       const signedUserData = signedUserDoc.data() as Iuser;

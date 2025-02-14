@@ -23,6 +23,7 @@ export async function POST(req: Request) {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const userData = docSnap.data();
+        const token = await user.getIdToken();
 
         const response = NextResponse.json(
           {
@@ -37,6 +38,13 @@ export async function POST(req: Request) {
           },
           { status: 200 }
         );
+        response.cookies.set("session", token, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "strict",
+          maxAge: 60,
+          path: "/",
+        });
 
         return response;
       } else {

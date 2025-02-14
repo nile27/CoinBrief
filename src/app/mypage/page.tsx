@@ -1,14 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useUserStore } from "@/store/store";
-
+import { useUserStore, useAuthStore } from "@/store/store";
 import DeleteModal from "./components/DeleteModal";
+import notFound from "../not-found";
 
 const Mypage = () => {
   const { user } = useUserStore.getState();
-
+  const { isLogin } = useAuthStore.getState();
   const [isModal, setIsModal] = useState<boolean>(false);
+
+  if (!isLogin) {
+    return notFound();
+  }
 
   return (
     <section className=" w-full h-full flex flex-col ">

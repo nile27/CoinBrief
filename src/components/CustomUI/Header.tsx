@@ -25,7 +25,8 @@ const Header = () => {
   const { isLogin, logout } = useAuthStore();
   const { deleteUser } = useUserStore();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await fetch("/api/logout", { method: "POST" });
     logout();
     deleteUser();
     navi.push("/");

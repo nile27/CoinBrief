@@ -3,12 +3,15 @@ import TopVolume from "../components/TopVolume";
 import CoinListTable from "../components/CoinListTable";
 import SearchCoin from "../components/SearchCoin";
 import TopLosers from "../components/TopLosers";
+import { sessionCheck } from "@/lib/auth";
 
 import Link from "next/link";
+import notFound from "../../../not-found";
 
 const CoinList = async ({ params }: { params: { page: string } }) => {
   const page = Number(params.page);
   const itemsPerPage = 50;
+  const session = await sessionCheck();
 
   const upbitCoins = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}api/upbit/coins`,
@@ -24,6 +27,10 @@ const CoinList = async ({ params }: { params: { page: string } }) => {
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );
+
+  if (!session) {
+    return notFound();
+  }
 
   return (
     <section className="flex flex-col w-full h-full gap-1">

@@ -1,10 +1,16 @@
 import HeaderCoinBox from "./components/HeaderCoinBox";
 import DetailCoin from "./components/DetailCoin";
-import MyCoinChart from "./components/MyCoinChart";
-import MyCoinArticle from "./components/MyCoinArticle";
 import MycoinLoading from "./components/MycoinLoading";
+import { sessionCheck } from "@/lib/auth";
+import notFound from "@/app/not-found";
 
-const Mycoin = () => {
+const Mycoin = async () => {
+  const session = await sessionCheck();
+
+  if (!session) {
+    return notFound();
+  }
+
   return (
     <section className="w-[100vw] h-auto p-4 flex flex-col justify-center items-center gap-10 ">
       <HeaderCoinBox />

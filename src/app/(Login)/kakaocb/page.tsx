@@ -75,9 +75,16 @@ const KakaoCallback = () => {
           mycoin: user.mycoin,
           email: user.email,
         };
-
+        const idToken = await userCredential.user.getIdToken();
         setUser(userData);
         login();
+
+        await fetch("/api/setsession", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: idToken }),
+        });
+
         navi.push("/mycoin");
       } catch (error) {
         console.error("Kakao 로그인 에러:", error);

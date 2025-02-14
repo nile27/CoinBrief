@@ -2,7 +2,8 @@ import CoinArticle from "../../components/CoinArticle";
 import DetailChart from "../../components/DetailChart";
 import CoinName from "../../components/CoinName";
 import { TickerData } from "@/type/type";
-
+import { sessionCheck } from "@/lib/auth";
+import notFound from "@/app/not-found";
 async function DetailCoin({
   params,
 }: {
@@ -14,7 +15,10 @@ async function DetailCoin({
     `${process.env.NEXT_PUBLIC_BASE_URL}api/upbit/detailcoin?id=${id}`
   );
   const coinDataJson: TickerData[] = await coinDataResponse.json();
-
+  const session = await sessionCheck();
+  if (!session) {
+    return notFound();
+  }
   return (
     <section className=" w-full h-auto flex flex-col p-10 gap-10">
       <div className="w-full  gap-5 flex tablet:flex-col   justify-center items-start px-8 py-5  rounded-lg">
