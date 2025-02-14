@@ -106,6 +106,7 @@ const Header = () => {
                   {navList.map((items: string, key: number) => {
                     return (
                       <DropdownMenuItem
+                        key={key}
                         className="  bg-container dark:bg-container-dark"
                         onClick={() => navi.push(`${navLink[key]}`)}
                       >
