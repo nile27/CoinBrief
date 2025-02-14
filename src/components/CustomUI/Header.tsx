@@ -57,9 +57,10 @@ const Header = () => {
                 <li
                   className=" w-auto h-auto flex justify-center items-center  cursor-pointer  "
                   key={key}
+                  onClick={() => navi.push(`${navLink[key]}`)}
                 >
                   <span className="dark:text-text-dark  text-text text-smallHeader font-semibold border-b-[2px] border-transparent hover:border-text dark:hover:border-text-dark ">
-                    <Link href={navLink[key]}>{items}</Link>
+                    {items}
                   </span>
                 </li>
               );
@@ -104,11 +105,12 @@ const Header = () => {
                 >
                   {navList.map((items: string, key: number) => {
                     return (
-                      <Link key={key} href={navLink[key]}>
-                        <DropdownMenuItem className="  bg-container dark:bg-container-dark">
-                          {items}
-                        </DropdownMenuItem>
-                      </Link>
+                      <DropdownMenuItem
+                        className="  bg-container dark:bg-container-dark"
+                        onClick={() => navi.push(`${navLink[key]}`)}
+                      >
+                        {items}
+                      </DropdownMenuItem>
                     );
                   })}
                 </DropdownMenuContent>

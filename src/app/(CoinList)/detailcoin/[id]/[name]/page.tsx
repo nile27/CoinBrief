@@ -17,7 +17,6 @@ async function DetailCoin({
   const coinDataJson: TickerData[] = await coinDataResponse.json();
   const session = await sessionCheck();
   if (!session) {
-    console.log(session);
     return notFound();
   }
   return (

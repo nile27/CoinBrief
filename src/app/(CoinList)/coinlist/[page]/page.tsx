@@ -27,7 +27,7 @@ const CoinList = async ({ params }: { params: { page: string } }) => {
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );
-  console.log(session);
+
   if (!session) {
     return notFound();
   }
