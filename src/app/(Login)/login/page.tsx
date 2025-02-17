@@ -39,6 +39,7 @@ const Login = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(testUser),
+        cache: "no-store",
       });
 
       if (!response.ok) {
@@ -56,7 +57,7 @@ const Login = () => {
 
       login();
       setUser(user);
-      navi.push("/mycoin");
+      window.location.href = "/mycoin";
     } catch (error) {
       console.error("테스트 계정 로그인 실패:", error);
       setErrMessage("테스트 계정 로그인 실패");
@@ -69,7 +70,7 @@ const Login = () => {
       if (userData) {
         setUser(userData);
         login();
-        navi.push("/mycoin");
+        window.location.href = "/mycoin";
       }
     } catch (error) {
       setErrMessage("잘못된 접근입니다.");

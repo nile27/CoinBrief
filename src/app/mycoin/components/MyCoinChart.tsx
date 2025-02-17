@@ -1,11 +1,9 @@
 "use client";
-import BtnStyle from "@/components/CustomUI/BtnStyle";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import { useCoinStore, useCurrency, useUserStore } from "@/store/store";
 import { formatCurrency } from "@/utill/utill";
-import { Console } from "console";
 
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 

@@ -1,5 +1,3 @@
-import Footer from "@/components/CustomUI/Footer";
-
 export const metadata = {
   title: "MyCoin",
 };

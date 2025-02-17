@@ -1,6 +1,5 @@
 "use client";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { getAuth, signInWithCustomToken } from "firebase/auth";
 import { useUserStore, useAuthStore } from "@/store/store";
 import Loading from "@/app/loading";
@@ -8,7 +7,7 @@ import Loading from "@/app/loading";
 const KakaoCallback = () => {
   const { setUser } = useUserStore();
   const { login } = useAuthStore();
-  const navi = useRouter();
+
   useEffect(() => {
     const handleKakaoLogin = async () => {
       const params = new URLSearchParams(window.location.search);
@@ -16,7 +15,7 @@ const KakaoCallback = () => {
 
       if (!code) {
         alert("잘못된 접근입니다.");
-        navi.push("/");
+        window.location.href = "/";
         return;
       }
 
@@ -84,8 +83,7 @@ const KakaoCallback = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token: idToken }),
         });
-
-        navi.push("/mycoin");
+        window.location.href = "/mycoin";
       } catch (error) {
         console.error("Kakao 로그인 에러:", error);
       }

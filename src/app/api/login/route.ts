@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import { signInWithEmailAndPassword } from "firebase/auth";
-
 import { auth, firestore } from "@/firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
-import { revalidateTag } from "next/cache";
 
 export async function POST(req: Request) {
   if (req.method === "POST") {
@@ -47,7 +45,6 @@ export async function POST(req: Request) {
           path: "/",
         });
 
-        revalidateTag("session");
         return response;
       } else {
         return NextResponse.json(

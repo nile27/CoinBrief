@@ -1,7 +1,4 @@
 "use client";
-
-import { verify } from "crypto";
-
 interface IProps {
   email: string;
   name: string;

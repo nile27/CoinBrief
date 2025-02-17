@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, ChangeEvent } from "react";
 import Dollar from "@/../public/Dollar.svg";
 import { useCoinStore } from "@/store/store";
 

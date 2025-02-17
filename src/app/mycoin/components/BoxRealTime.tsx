@@ -1,6 +1,6 @@
 "use client";
-import { useCoinStore, useUserStore } from "@/store/store";
-import { useEffect, useState, useRef } from "react";
+import { useCoinStore } from "@/store/store";
+import { useEffect, useState } from "react";
 import io from "socket.io-client";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
