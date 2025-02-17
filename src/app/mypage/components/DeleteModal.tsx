@@ -26,7 +26,8 @@ const DeleteModal = ({
     setIsButtonEnabled(value === "회원탈퇴");
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await fetch("/api/logout", { method: "POST" });
     logout();
     deleteUser();
     navi.push("/");
