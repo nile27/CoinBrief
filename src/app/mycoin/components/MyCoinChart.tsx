@@ -30,13 +30,12 @@ export default function MyCoinChart() {
 
   const color =
     theme === "dark"
-      ? "#F8F9FA"
+      ? { bg: "#181820", text: "#F8F9FA" }
       : theme === "light"
-      ? "#181820"
+      ? { bg: "#F8F9FA", text: "#181820" }
       : systemTheme === "dark"
-      ? "#F8F9FA"
-      : "#181820";
-
+      ? { bg: "#181820", text: "#F8F9FA" }
+      : { bg: "#F8F9FA", text: "#181820" };
   useEffect(() => {
     if (!coinSymbol) return;
     const fetchKlines = async () => {
@@ -179,13 +178,13 @@ export default function MyCoinChart() {
                     return `
                   <div style="
                     padding: 10px; 
-                    background:${color} ; 
+                    background:${color.bg} ; 
                     border: 1px solid #ccc; 
                     border-radius: 8px; 
-                    height: 400px;
+                    height: auto;
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
                     font-size: 12px; 
-                    color:${color} ;
+                    color:${color.text} ;
                   ">
                     <div><strong>Open:</strong> ${currency}${open}</div>
                     <div><strong>High:</strong> ${currency}${high}</div>
