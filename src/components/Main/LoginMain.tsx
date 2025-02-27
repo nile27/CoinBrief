@@ -7,7 +7,7 @@ const LoginMain = () => {
   return (
     <section className="w-full h-full px-10 flex justify-center items-center  ">
       <div className="  tablet:hidden w-full h-full flex justify-end items-center  ">
-        <div className=" relative min-w-[576px] max-w-[600px] max-h-[505px] min-h-[474px]  dark:border-border-dark border-border rounded-[15px] border-[10px] ">
+        <div className=" h-auto relative min-w-[576px] max-w-[600px] max-h-[505px] min-h-[400px]  dark:border-border-dark border-border rounded-[15px] border-[10px] ">
           <Image
             src="/MainImg.svg"
             alt="main-img"
