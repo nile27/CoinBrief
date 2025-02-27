@@ -112,7 +112,7 @@ export default function KlineChart({ symbol }: { symbol: string }) {
     <>
       {loading ? (
         <div className="w-full h-[400px] flex justify-center items-center">
-          <Loading />
+          Loading...
         </div>
       ) : (
         <section className="w-full flex tablet:flex-col border-t-2 border-border dark:border-border-dark pt-4 tablet:gap-3">
