@@ -1,12 +1,12 @@
 ![header](https://capsule-render.vercel.app/api?type=waving&color=364F84&fontColor=ffffff&height=200&section=header&text=AightNow&fontSize=70&animation=fadeIn&fontAlignY=40&desc=&descSize=30)
 
-# ⚡️ AightNow
+<h1 style='display:flex; text-align:center;'> <img src="https://github.com/user-attachments/assets/509332bd-1a09-478a-9776-e5b099c00ce2" align="center"/> AightNow </h1>
 
-### 실시간 미국 기업 공시와 데일리 뉴스 데이터를 분석해 다양한 언어로 맞춤형 기업 분석 리포트를 제공하는 AI 애널리스트 플랫폼
+### 실시간 코인 가격 및 정보 조회 플랫폼
 
-해외 주식 정보를 조회하고, AI 분석을 통해 수치와 그래프로 표기해주고, 수익성, 성장성등의 데이터를 확인할 수 있으며, 관심 종목들의 최신 뉴스, AI의 애널리스트를 확인 할 수 있습니다.
+실시간 코인 시세 조회 및 환율 변환 기능을 제공하는 웹 애플리케이션으로, 웹소켓과 Upbit API를 활용하여 실시간 데이터를 반영하고 ApexChart를 통해 시각적으로 분석할 수 있도록 구현하였습니다.
 
-| 배포 사이트 | 💻 [배포 링크](https://spacspace-aight-now.vercel.app/) |
+| 배포 사이트 | 💻 [배포 링크](https://coinbrief.vercel.app/) |
 | :---------: | :-----------------------------------------------------: |
 
 <br>
