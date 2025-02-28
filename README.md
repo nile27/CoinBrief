@@ -81,18 +81,33 @@
 
 # 📚프로젝트 스택
 
-<div style='display:flex; gap:7px'>
+<div style='gap:7px'>
+<h2> 🛠️ Front-End</h2>
+	<div style='display:flex; gap:7px'>
 	<img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=Next.js" />
-  	<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
-<img src="https://img.shields.io/badge/Zustand-433e38?style=for-the-badge" />
+  	<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />	
+		<img src="https://img.shields.io/badge/Zustand-433e38?style=for-the-badge" />
 <img src="https://img.shields.io/badge/tailwindcss-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
- <img src="https://img.shields.io/badge/firebase-DD2C00?style=for-the-badge&logo=firebase&logoColor=white" />
-<img src="https://img.shields.io/badge/ApexCharts-3891eb?style=for-the-badge" />
+		<img src="https://img.shields.io/badge/ApexCharts-3891eb?style=for-the-badge" />
  <img src="https://img.shields.io/badge/shadcnui-000000?style=for-the-badge&logo=shadcnui" />
- <img src="https://img.shields.io/badge/socketdotio-010101?style=for-the-badge&logo=socketdotio" />
-<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express" />
- <img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express" />
+		<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express" />
+	</div>
+	<div style=' gap:7px'>
+<h2> 🛠️ Back-End</h2>
+		<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express" />
+ 
 <img src="https://img.shields.io/badge/Nodemailer-5FA04E?style=for-the-badge" />
+	</div>
+	<div style=' gap:7px'>
+<h2> 🛠️ DB & ETC</h2>
+ <img src="https://img.shields.io/badge/firebase-DD2C00?style=for-the-badge&logo=firebase&logoColor=white" />
+
+ <img src="https://img.shields.io/badge/socketdotio-010101?style=for-the-badge&logo=socketdotio" />
+</div>
+	
+
+ 
+
 </div>
 <br>
 
