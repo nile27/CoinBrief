@@ -81,31 +81,23 @@
 
 # 📚프로젝트 스택
 
-[![프로젝트 스택](https://skillicons.dev/icons?i=nextjs,ts,tailwind,svg,firebase,vercel,npm,figma,)](https://skillicons.dev)
-
 <div style='display:flex; gap:7px'>
-<a href='https://zustand-demo.pmnd.rs/'>
-<img width='45px' height='45px'  background='white' src='https://user-images.githubusercontent.com/958486/218346783-72be5ae3-b953-4dd7-b239-788a882fdad6.svg'>
-</a>
-
-<a href='https://www.langchain.com/'>
-<img width='45px' height='45px' src='https://avatars.githubusercontent.com/u/126733545?s=48&v=4'>
-</a>
-
-<a href='https://pptr.dev/'>
-<img width='45px' height='45px' src='https://user-images.githubusercontent.com/10379601/29446482-04f7036a-841f-11e7-9872-91d1fc2ea683.png'>
-</a>
-
-<a href = 'https://github.com/nextauthjs/next-auth'>
-<img width='45px' height='45px' src='https://camo.githubusercontent.com/f070d134a8f8c1a5b6634dd92b29ae3170edc93b26b0b34eb97629f9c2ba65e9/68747470733a2f2f617574686a732e6465762f696d672f6c6f676f2d736d2e706e67'>
-</a>
+	<img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=Next.js" />
+  	<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+<img src="https://img.shields.io/badge/Zustand-433e38?style=for-the-badge" />
+<img src="https://img.shields.io/badge/tailwindcss-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
+ <img src="https://img.shields.io/badge/firebase-DD2C00?style=for-the-badge&logo=firebase&logoColor=white" />
+<img src="https://img.shields.io/badge/ApexCharts-3891eb?style=for-the-badge" />
+ <img src="https://img.shields.io/badge/shadcnui-000000?style=for-the-badge&logo=shadcnui" />
+ <img src="https://img.shields.io/badge/socketdotio-010101?style=for-the-badge&logo=socketdotio" />
+<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express" />
+ <img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express" />
+<img src="https://img.shields.io/badge/Nodemailer-5FA04E?style=for-the-badge" />
 </div>
 <br>
 
-# 🤙 컨벤션
 
-
-## 🤙 Commit 컨벤션
+# 🤙 Commit 컨벤션
 
 - `feat` : 새로운 기능 추가, 기존의 기능을 요구 사항에 맞추어 수정
 - `fix` : 기능에 대한 버그 수정
