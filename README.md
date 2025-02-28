@@ -11,7 +11,7 @@
 | :---------: | :-----------------: |
 | Figma | 💻 [배포 링크](https://www.figma.com/design/xxO2ItVjjcXe3QsYKTmkPR/coin_project?node-id=4-2&p=f&t=bnnTBeGYCcaMUDY6-0)|
 
-- 프로젝트 기간: 2025.01.01 ~ 2024.01.31 (5주)
+- 프로젝트 기간: 2025.01.01 ~ 2025.01.31 (5주)
 - 프로젝트 인원: 개인
 
 ## 🛠️ 주요 기능 🛠️
