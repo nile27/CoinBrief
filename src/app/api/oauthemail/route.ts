@@ -66,9 +66,6 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.error("서버 처리 중 오류:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "서버 처리 중 오류" }, { status: 500 });
   }
 }

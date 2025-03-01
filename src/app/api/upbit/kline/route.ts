@@ -31,7 +31,7 @@ export async function GET(req: Request) {
     const data = await response.json();
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    console.error("🚨 업비트 캔들 데이터 호출 실패:", error);
+    console.error("업비트 캔들 데이터 호출 실패:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 }

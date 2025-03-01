@@ -1,11 +1,9 @@
 "use client";
 
 import BtnStyle from "@/components/CustomUI/BtnStyle";
-
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
-import Loading from "@/app/loading";
 import { useCoinStore, useCurrency } from "@/store/store";
 import { formatCurrency } from "@/utill/utill";
 

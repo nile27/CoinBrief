@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const { uid, coin } = await request.json();
 
     if (!uid || !coin) {
-      return NextResponse.json({ error: "Invalid data" }, { status: 400 });
+      return NextResponse.json({ error: "데이터 누락" }, { status: 400 });
     }
 
     const userDoc = doc(firestore, "users", uid);
@@ -18,10 +18,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.error("Error deleting coin:", error);
-    return NextResponse.json(
-      { error: "Failed to delete coin" },
-      { status: 500 }
-    );
+    console.error("코인 삭제 실패:", error);
+    return NextResponse.json({ error: "코인 삭제 실패" }, { status: 500 });
   }
 }
