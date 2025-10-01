@@ -1,6 +1,6 @@
-![header](https://capsule-render.vercel.app/api?type=waving&color=8E7CC3&fontColor=ffffff&height=200&section=header&text=AightNow&fontSize=70&animation=fadeIn&fontAlignY=40&desc=&descSize=30)
+![header](https://capsule-render.vercel.app/api?type=waving&color=8E7CC3&fontColor=ffffff&height=200&section=header&text=CoinBrief&fontSize=70&animation=fadeIn&fontAlignY=40&desc=&descSize=30)
 
-<h1 style='display:flex; text-align:center;'> <img src="https://github.com/user-attachments/assets/509332bd-1a09-478a-9776-e5b099c00ce2" align="center"/> AightNow </h1>
+<h1 style='display:flex; text-align:center;'> <img src="https://github.com/user-attachments/assets/509332bd-1a09-478a-9776-e5b099c00ce2" align="center"/> CoinBrief </h1>
 
 ### 실시간 코인 가격 및 정보 조회 플랫폼
 
