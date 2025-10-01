@@ -34,12 +34,12 @@ const CoinList = async ({ params }: { params: { page: string } }) => {
 
   return (
     <section className="flex flex-col w-full h-full gap-1">
-      <section className=" flex w-full px-5 justify-center gap-5 mt-7 mb-5 tablet:flex-col items-center ">
+      <section className=" flex w-full px-5 justify-center gap-5 mt-7 mb-5 mobile:flex-col items-center ">
         <TopVolume coins={allCoins} />
         <TopLosers coins={allCoins} />
         <CurrencyCalc />
       </section>
-      <section className="w-full h-auto px-20 flex justify-start">
+      <section className="w-full h-auto px-20 tablet:px-10 mobile:px-0 flex justify-start">
         <SearchCoin allCoins={allCoins} />
       </section>
       <section className="w-full h-auto px-5 ">

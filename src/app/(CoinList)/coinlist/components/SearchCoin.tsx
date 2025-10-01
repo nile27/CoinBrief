@@ -23,7 +23,7 @@ const SearchInput = ({ allCoins }: { allCoins: ProcessedCoin[] }) => {
   const handleInputChange = (value: string) => {
     setSearchTerm(value);
 
-    if (value.trim().length >= 2) {
+    if (value.trim().length >= 1) {
       const results: Coin[] = allCoins.filter(
         (coin: ProcessedCoin) =>
           coin.korean_name.includes(value) ||
@@ -40,7 +40,7 @@ const SearchInput = ({ allCoins }: { allCoins: ProcessedCoin[] }) => {
   };
 
   return (
-    <div className="relative w-[300px] ">
+    <div className="relative w-[300px] mobile:w-full ">
       <div className="w-full flex px-2 bg-container dark:bg-container-dark items-center">
         <Search width={20} height={20} />
         <input

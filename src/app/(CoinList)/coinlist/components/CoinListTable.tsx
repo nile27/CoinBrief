@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
   return (
-    <div className="w-full px-10 text-sm text-right">
+    <div className="w-full px-10 mobile:px-0 tablet:px-0 text-sm text-right">
       <div className="flex items-center bg-gray-100 dark:bg-gray-800 border-b-2 border-border dark:border-border-dark text-text dark:text-text-dark py-2 px-4">
         <div className="w-[20%] text-left text-medium font-bold">코인</div>
         <div className=" w-[25%] mr-[5%] flex tablet:justify-center mobile:flex-col text-medium font-bold ">

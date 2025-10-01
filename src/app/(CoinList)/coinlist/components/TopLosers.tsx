@@ -11,7 +11,7 @@ const TopGainers = ({ coins }: { coins: ProcessedCoin[] }) => {
     .slice(0, 3);
 
   return (
-    <section className="w-[320px] h-auto max-h-[300px]  p-4 bg-container dark:bg-container-dark rounded-lg shadow-lg">
+    <section className="w-[320px] mobile:w-full max-w-[500px] h-auto max-h-[300px] p-4 bg-container dark:bg-container-dark rounded-lg shadow-lg">
       <h2 className="text-smallHeader font-extrabold mb-4">
         🚀 가장 많이 하락한 코인(24H)
       </h2>
