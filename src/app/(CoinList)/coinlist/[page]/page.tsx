@@ -7,6 +7,7 @@ import { sessionCheck } from "@/lib/auth";
 
 import Link from "next/link";
 import notFound from "../../../not-found";
+import { ProcessedCoin } from "@/type/type";
 
 const CoinList = async ({ params }: { params: { page: string } }) => {
   const page = Number(params.page);
@@ -19,11 +20,14 @@ const CoinList = async ({ params }: { params: { page: string } }) => {
       method: "GET",
     }
   );
-  const allCoins = await upbitCoins.json();
+  const allCoins: ProcessedCoin[] = await upbitCoins.json();
 
   const totalPages = Math.ceil(allCoins.length / itemsPerPage);
+  const sortedCoins: ProcessedCoin[] = allCoins
+    .filter((coin) => coin && coin.symbol)
+    .sort((a, b) => a.symbol.localeCompare(b.symbol));
 
-  const paginatedCoins = allCoins.slice(
+  const paginatedCoins = sortedCoins.slice(
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );
