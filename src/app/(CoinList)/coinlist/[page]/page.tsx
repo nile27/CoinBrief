@@ -1,4 +1,4 @@
-"use Client";
+"use client";
 import CurrencyCalc from "../components/CurrencyCalc";
 import TopVolume from "../components/TopVolume";
 import CoinListTable from "../components/CoinListTable";
