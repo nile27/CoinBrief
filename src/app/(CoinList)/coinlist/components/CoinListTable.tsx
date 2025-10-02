@@ -35,9 +35,9 @@ const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
       </div>
 
       <ul className=" divide-border dark:divide-border-dark">
-        {getCoinList.map((coin, index) => (
+        {getCoinList.map((coin) => (
           <li
-            key={index}
+            key={coin.symbol}
             className="flex w-full items-center h-[80px] hover:bg-container hover:dark:bg-container-dark cursor-pointer px-4"
           >
             <Link
