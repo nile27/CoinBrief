@@ -1,4 +1,3 @@
-"use client";
 import CurrencyCalc from "../components/CurrencyCalc";
 import TopVolume from "../components/TopVolume";
 import CoinListTable from "../components/CoinListTable";
@@ -9,7 +8,6 @@ import { sessionCheck } from "@/lib/auth";
 import Link from "next/link";
 import notFound from "../../../not-found";
 import { ProcessedCoin } from "@/type/type";
-import { useEffect } from "react";
 
 const CoinList = async ({ params }: { params: { page: string } }) => {
   const page = Number(params.page);
@@ -37,10 +35,6 @@ const CoinList = async ({ params }: { params: { page: string } }) => {
   if (!session) {
     return notFound();
   }
-
-  useEffect(() => {
-    console.log(paginatedCoins);
-  }, []);
 
   return (
     <section className="flex flex-col w-full h-full gap-1">
