@@ -23,7 +23,7 @@ const SearchInput = ({ allCoins }: { allCoins: ProcessedCoin[] }) => {
   const handleInputChange = (value: string) => {
     setSearchTerm(value);
 
-    if (value.trim().length >= 1) {
+    if (value.trim().length >= 2) {
       const results: Coin[] = allCoins.filter(
         (coin: ProcessedCoin) =>
           coin.korean_name.includes(value) ||
