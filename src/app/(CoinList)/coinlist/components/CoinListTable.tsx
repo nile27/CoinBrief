@@ -1,21 +1,17 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ProcessedCoin } from "@/type/type";
 import { formatKRW } from "@/utill/utill";
 import CoinImg from "../../../../components/CustomUI/CoinImg";
 import Link from "next/link";
 
 const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
+  const [coinList, setCoinList] = useState<ProcessedCoin[]>([]);
+
   useEffect(() => {
-    console.log(
-      "📦 받아온 코인 리스트:",
-      getCoinList.map((c) => c.symbol)
-    );
-    console.log(
-      "👻 PUNDIX 포함 여부:",
-      getCoinList.some((c) => c.symbol === "PUNDIX")
-    );
+    setCoinList(getCoinList);
   }, [getCoinList]);
+
   return (
     <div className="w-full px-10 mobile:px-0 tablet:px-0 text-sm text-right">
       <div className="flex items-center bg-gray-100 dark:bg-gray-800 border-b-2 border-border dark:border-border-dark text-text dark:text-text-dark py-2 px-4">
@@ -46,7 +42,7 @@ const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
       </div>
 
       <ul className=" divide-border dark:divide-border-dark">
-        {getCoinList.map((coin) => (
+        {coinList.map((coin) => (
           <li
             key={coin.symbol}
             className="flex w-full items-center h-[80px] hover:bg-container hover:dark:bg-container-dark cursor-pointer px-4"
