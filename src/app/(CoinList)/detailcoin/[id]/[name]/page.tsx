@@ -4,12 +4,10 @@ import CoinName from "../../components/CoinName";
 import { TickerData } from "@/type/type";
 import { sessionCheck } from "@/lib/auth";
 import notFound from "@/app/not-found";
-async function DetailCoin({
-  params,
-}: {
-  params: { id: string; name: string };
+async function DetailCoin(props: {
+  params: Promise<{ id: string; name: string }>;
 }) {
-  const { id, name } = params;
+  const { id, name } = await props.params;
 
   const coinDataResponse = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}api/upbit/detailcoin?id=${id}`
