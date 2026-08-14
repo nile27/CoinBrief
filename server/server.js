@@ -6,12 +6,25 @@ const WebSocket = require("ws");
 
 const app = express();
 const server = http.createServer(app);
+const ALLOWED_ORIGINS = [
+  "https://coinbrief.vercel.app",
+  "http://localhost:3000",
+];
+
 const io = new Server(server, {
-  cors: { origin: "*" },
+  cors: { origin: ALLOWED_ORIGINS },
 });
 
 const UPBIT_WEBSOCKET_URL =
   process.env.UPBIT_WEBSOCKET_URL || "wss://api.upbit.com/websocket/v1";
+
+// 헬스체크 / 깨우기(keep-alive)용 엔드포인트
+app.get("/", (req, res) => {
+  res.status(200).send("OK");
+});
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", time: Date.now() });
+});
 
 io.on("connection", (socket) => {
   console.log("✅ 클라이언트 연결됨");
@@ -76,7 +89,7 @@ io.on("connection", (socket) => {
   });
 });
 
-const PORT = process.env.SERVER_PORT || 4000;
+const PORT = process.env.PORT || process.env.SERVER_PORT || 4000;
 server.listen(PORT, () => {
   console.log(`웹소켓 서버 시작 ${PORT}`);
 });
