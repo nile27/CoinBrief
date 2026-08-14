@@ -9,8 +9,9 @@ import Link from "next/link";
 import notFound from "../../../not-found";
 import { ProcessedCoin } from "@/type/type";
 
-const CoinList = async ({ params }: { params: { page: string } }) => {
-  const page = Number(params.page);
+const CoinList = async ({ params }: { params: Promise<{ page: string }> }) => {
+  const { page: pageParam } = await params;
+  const page = Number(pageParam);
   const itemsPerPage = 50;
   const session = await sessionCheck();
 

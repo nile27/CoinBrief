@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import admin from "@/firebase/firebaseAdmin";
 
 export async function sessionCheck() {
-  const cookieHeader = headers().get("cookie");
+  const cookieHeader = (await headers()).get("cookie");
 
   if (!cookieHeader) {
     console.log("세션 없음");
@@ -12,7 +12,7 @@ export async function sessionCheck() {
 
   const sessionCookie = cookieHeader
     .split("; ")
-    .find((c) => c.startsWith("session="));
+    .find((c: string) => c.startsWith("session="));
 
   if (!sessionCookie) {
     console.log("세션 쿠키 없음");

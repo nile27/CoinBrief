@@ -37,7 +37,7 @@ const DetailCoin = () => {
               key={idx}
               className={`flex rounde-md items-center cursor-pointer justify-between p-3 min-h-[56px]  rounded shadow  tablet:items-start tablet:gap-3 ${
                 selectedCoin === idx
-                  ? " transform scale-105 transition-all duration-200 border border-border dark:border-border-dark"
+                  ? " transform scale-[101%] transition-all duration-200 border border-border dark:border-border-dark"
                   : "bg-gray-100 dark:bg-gray-800"
               }`}
               onClick={() => setSelectedCoin(idx)}
