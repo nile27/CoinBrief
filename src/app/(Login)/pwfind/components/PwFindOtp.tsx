@@ -26,6 +26,7 @@ const PwFindOtp = ({
       });
 
       if (response.ok) {
+        setIsInput(true);
         alert("이메일을 보냈습니다. 이메일을 확인해주세요.");
       } else {
         const errorData = await response.json();
@@ -39,12 +40,12 @@ const PwFindOtp = ({
 
   const handleModal = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    setIsInput(true);
     sendOtp();
   };
   return (
     <>
       <button
+        type="button"
         onClick={handleModal}
         disabled={!email || !name || !emailRegex.test(email) || verify}
         className={` bg-btn dark:bg-btn-dark  hover:bg-btn-hover dark:hover:bg-btn-hover-dark disabled:bg-secondary disabled:text-muted dark:disabled:bg-secondary-dark dark:disabled:text-muted-dark

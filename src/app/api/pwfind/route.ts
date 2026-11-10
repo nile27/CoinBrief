@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "crypto";
+import { otpMismatch } from "@/lib/otpFail";
 import admin from "@/firebase/firebaseAdmin";
 
 const db = admin.firestore();
@@ -53,10 +54,7 @@ export async function POST(req: Request) {
       }
 
       if (storedOtp !== otp) {
-        return new Response(
-          JSON.stringify({ message: "OTP가 일치하지 않습니다." }),
-          { status: 400 }
-        );
+        return otpMismatch(email);
       }
 
       await db.collection("otps").doc(email).delete();

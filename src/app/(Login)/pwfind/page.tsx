@@ -24,17 +24,45 @@ const PwFind = () => {
   const [verify, setVerify] = useState(false);
   const [isInput, setIsInput] = useState<boolean>(false);
 
+  const [otp, setOtp] = useState("");
   const [verifyMessage, setVerifyMessage] = useState("");
   const navi = useRouter();
 
-  const handleOnclick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const verifyOtp = async () => {
+    try {
+      const response = await fetch("/api/pwfind", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: watch("email"),
+          name: watch("name"),
+          otp: otp.trim(),
+        }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (response.ok) {
+        setVerify(true);
+        setVerifyMessage("OTP 인증 성공!");
+        const encodeEmail = encodeBase64(watch("email"));
+        navi.push(`/pwchange?email=${encodeEmail}`);
+      } else {
+        setVerifyMessage(data.message || "OTP 검증 중 문제가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("OTP 검증 에러:", error);
+      setVerifyMessage("OTP 검증 중 문제가 발생했습니다.");
+    }
+  };
+
+  // Enter / "확인" / "인증" 모두 여기로: 인증 번호를 검증하고 성공하면 이동
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!verify) {
-      setVerifyMessage("본인 인증을 진행해주세요.");
-      return;
+    if (verify) {
+      navi.push(`/pwchange?email=${encodeBase64(watch("email"))}`);
+    } else if (isInput && otp.trim()) {
+      verifyOtp();
     } else {
-      const encodeEmail = encodeBase64(watch("email"));
-      navi.push(`/pwchange?email=${encodeEmail} `);
+      setVerifyMessage("본인 인증을 진행해주세요.");
     }
   };
 
@@ -55,7 +83,7 @@ const PwFind = () => {
             회원가입
           </Link>
         </div>
-        <form className="flex flex-col gap-3 w-full h-auto  border-border dark:border-border-dark pb-3">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full h-auto  border-border dark:border-border-dark pb-3">
           <div className="w-full h-auto flex flex-col gap-4 ">
             <label htmlFor="formName" className="hidden"></label>
             <InputStyle
@@ -90,12 +118,9 @@ const PwFind = () => {
 
             {isInput && watch("name") && (
               <PwFindInput
-                email={watch("email")}
-                name={watch("name")}
-                setIsInput={setIsInput}
-                setVerify={setVerify}
                 verify={verify}
-                setVerifyMessage={setVerifyMessage}
+                setOtp={setOtp}
+                onVerify={verifyOtp}
               />
             )}
 
@@ -108,7 +133,7 @@ const PwFind = () => {
             )}
           </div>
 
-          <BtnStyle size="medium" onClick={handleOnclick}>
+          <BtnStyle size="medium" type="submit">
             확인
           </BtnStyle>
         </form>
