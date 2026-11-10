@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CirclePlus, CircleX } from "lucide-react";
 import AddModal from "./AddModal";
 import DeleteModal from "./DeleteModal";
@@ -18,12 +18,9 @@ const AddCoinBox = () => {
       );
       return;
     }
+    fetchCoins(); // 검색 목록은 모달을 열 때 불러온다 (진입 시 Firestore 장기 연결을 열지 않기 위해)
     setAddModal(true);
   };
-
-  useEffect(() => {
-    fetchCoins();
-  }, []);
 
   return (
     <div className="flex items-center gap-3">

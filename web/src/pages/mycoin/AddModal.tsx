@@ -24,7 +24,7 @@ const AddModal = ({
       coin.symbol.toUpperCase().includes(search.toUpperCase())
     );
     setResults(filteredResults);
-  }, [search]);
+  }, [search, data]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";

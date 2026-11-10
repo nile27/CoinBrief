@@ -14,7 +14,7 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
       useAuthStore.getState().logout(); // 만료된 세션이면 어디서든 로그아웃 처리
       useUserStore.getState().deleteUser();
     }
-    throw new ApiError(res.status, body?.message ?? res.statusText);
+    throw new ApiError(res.status, body?.message ?? body?.error ?? res.statusText);
   }
   return body as T;
 }
