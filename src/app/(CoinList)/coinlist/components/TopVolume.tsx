@@ -5,7 +5,7 @@ import Link from "next/link";
 const TopCoinList = ({ coins }: { coins: ProcessedCoin[] }) => {
   const sortedCoins = [...coins]
     .sort(
-      (a, b) => Number(b.acc_trade_volume_24h) - Number(a.acc_trade_volume_24h)
+      (a, b) => Number(b.acc_trade_price_24h) - Number(a.acc_trade_price_24h)
     )
     .slice(0, 3);
   return (
@@ -35,7 +35,7 @@ const TopCoinList = ({ coins }: { coins: ProcessedCoin[] }) => {
               </div>
 
               <span className="whitespace-nowrap text-sm font-medium tabular-nums">
-                ₩{formatKRW(Number(coin.acc_trade_volume_24h)).toLocaleString()}
+                ₩{formatKRW(Number(coin.acc_trade_price_24h))}
               </span>
             </li>
           </Link>

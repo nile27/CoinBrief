@@ -32,14 +32,6 @@ export default function KlineChart({ symbol }: { symbol: string }) {
   const isDark =
     theme === "dark" || (theme === "system" && systemTheme === "dark");
   const t = chartTheme(isDark);
-  const color =
-    theme === "dark"
-      ? { bg: "#1a1918", text: "#fbfbfa" }
-      : theme === "light"
-      ? { bg: "#fbfbfa", text: "#1a1918" }
-      : systemTheme === "dark"
-      ? { bg: "#1a1918", text: "#fbfbfa" }
-      : { bg: "#fbfbfa", text: "#1a1918" };
 
   useEffect(() => {
     const fetchKlines = async () => {
@@ -209,11 +201,11 @@ export default function KlineChart({ symbol }: { symbol: string }) {
                     return `
                   <div style="
                     padding: 10px; 
-                    background:${color.bg} ; 
+                    background:${t.chart.background} ; 
                     border: 1px solid ${t.tooltipBorder}; 
                     border-radius: 6px; 
                     font-size: 12px; 
-                    color:${color.text} ;
+                    color:${t.title.color} ;
                   ">
                   
                     <div><strong>Open:</strong> ${currency}${open}</div>

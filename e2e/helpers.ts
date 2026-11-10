@@ -4,7 +4,7 @@ import path from "node:path";
 
 export const SHOT_DIR =
   process.env.SHOT_DIR ??
-  "/private/tmp/claude-501/-Users-immingyu-Desktop-coin-project/97b2b40d-39d9-429e-b95c-bb1e116f12e1/scratchpad/phase2-shots";
+  path.join(process.cwd(), "test-results", "screenshots");
 
 /** 모바일 프로젝트인지 (뷰포트 너비 기준) */
 export const isNarrow = (page: Page) => (page.viewportSize()?.width ?? 1440) <= 500;
