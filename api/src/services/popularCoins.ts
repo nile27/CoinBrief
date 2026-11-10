@@ -1,4 +1,3 @@
-import { env } from "../lib/firebase.js";
 // 서버 전용: 업비트 REST로 24h 거래대금 상위 KRW 마켓을 가져온다. (소켓/릴레이 사용 안 함)
 export interface PopularCoin {
   market: string;
@@ -34,7 +33,7 @@ const STABLECOINS = new Set([
 
 export async function getPopularCoins(count = 4): Promise<PopularCoinsResult> {
   try {
-    const base = env("UPBIT_API_URL");
+    const base = process.env.UPBIT_API_URL;
     const [marketRes, tickerRes] = await Promise.all([
       fetch(`${base}/market/all?isDetails=false`),
       fetch(`${base}/ticker/all?quoteCurrencies=KRW`),

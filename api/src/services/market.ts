@@ -1,7 +1,6 @@
-import { env } from "../lib/firebase.js";
 import { HttpError } from "../lib/http.js";
 
-const upbit = () => env("UPBIT_API_URL");
+const upbit = () => process.env.UPBIT_API_URL;
 
 export async function listCoins() {
   const nameRes = await fetch(`${upbit()}/market/all?isDetails=false`);

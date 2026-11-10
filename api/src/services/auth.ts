@@ -1,4 +1,4 @@
-import { auth, db, env } from "../lib/firebase.js";
+import { auth, db } from "../lib/firebase.js";
 import { FIVE_DAYS, HttpError } from "../lib/http.js";
 
 export const createSessionCookie = (idToken: string) => auth.createSessionCookie(idToken, { expiresIn: FIVE_DAYS });
@@ -7,7 +7,7 @@ export const revokeSession = (uid: string) => auth.revokeRefreshTokens(uid).catc
 
 // 클라이언트 SDK 대신 REST (상태 공유 없음)
 export async function loginWithPassword(email: string, password: string) {
-  const key = env("FIREBASE_API_KEY");
+  const key = process.env.FIREBASE_API_KEY;
   const signIn = await fetch(
     `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${key}`,
     {
@@ -49,7 +49,7 @@ export async function register(email: string, password: string, displayName: str
 
 // Kakao: 클라이언트가 보낸 이메일을 믿지 않고 액세스 토큰으로 서버가 직접 프로필 조회
 export async function kakaoLogin(accessToken: string) {
-  const kakao = await fetch(process.env.KAKAO_KAPI_URL ?? "https://kapi.kakao.com/v2/user/me", {
+  const kakao = await fetch("https://kapi.kakao.com/v2/user/me", {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   if (!kakao.ok) throw new HttpError(401, { error: "카카오 인증 실패" });

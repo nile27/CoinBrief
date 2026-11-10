@@ -33,7 +33,7 @@ export default function BoxRealTime({ symbol }: { symbol: string }) {
   const { setStaticData } = useCoinStore();
 
   useEffect(() => {
-    const newSocket = io(`${import.meta.env.NEXT_PUBLIC_WEBSOCKET_URL}`);
+    const newSocket = io(`${import.meta.env.VITE_WEBSOCKET_URL}`);
 
     newSocket.on("connect", () => {
       newSocket.emit("subscribe", symbol);

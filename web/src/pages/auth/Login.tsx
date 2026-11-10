@@ -28,8 +28,8 @@ const Login = () => {
   const [errMessage, setErrMessage] = useState<string>("");
 
   const testUser = {
-    email: import.meta.env.NEXT_PUBLIC_TEST_EMAIL,
-    password: import.meta.env.NEXT_PUBLIC_TEST_PW,
+    email: import.meta.env.VITE_TEST_EMAIL,
+    password: import.meta.env.VITE_TEST_PW,
   };
 
   const handleTestLogin = async () => {

@@ -25,13 +25,13 @@ const KakaoCallback = () => {
 
       try {
         const tokenRes = await fetch(
-          `${import.meta.env.NEXT_PUBLIC_KAKAO_TOKEN_URL}/token`,
+          `${import.meta.env.VITE_KAKAO_TOKEN_URL}/token`,
           {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({
               grant_type: "authorization_code",
-              client_id: import.meta.env.NEXT_PUBLIC_KAKAO_API_KEY || "",
+              client_id: import.meta.env.VITE_KAKAO_API_KEY || "",
               redirect_uri: `${window.location.origin}/kakaocb`,
               code,
             }),

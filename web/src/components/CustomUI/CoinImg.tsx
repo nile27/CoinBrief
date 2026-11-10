@@ -4,7 +4,7 @@ const CoinImg = ({ name, symbol }: { name: string; symbol: string }) => {
   const [src, setSrc] = useState("/Group.png");
 
   useEffect(() => {
-    setSrc(`${import.meta.env.NEXT_PUBLIC_IMAGE_URL}${symbol.toUpperCase()}.png`);
+    setSrc(`${import.meta.env.VITE_IMAGE_URL}${symbol.toUpperCase()}.png`);
   }, [symbol]);
 
   const addDefaultImg = () => {
