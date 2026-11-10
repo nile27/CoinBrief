@@ -14,13 +14,13 @@ import { auth } from "@/firebase/firebase";
 
 import Link from "next/link";
 import { useAuthStore, useUserStore } from "@/store/store";
-import BtnStyle from "./BtnStyle";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const Header = () => {
   const navList = ["내 코인", "코인리스트"];
   const navLink = ["/mycoin", "/coinlist/1"];
   const navi = useRouter();
+  const pathname = usePathname();
 
   const { isLogin, logout } = useAuthStore();
   const { deleteUser } = useUserStore();
@@ -33,53 +33,51 @@ const Header = () => {
     signOut(auth);
   };
 
+  const navClass =
+    "text-[15px] font-medium text-muted transition-colors hover:text-ink dark:text-muted-dark dark:hover:text-ink-dark";
+  const isHome = pathname === "/";
+
   return (
-    <header
-      className={`  top-0 w-full h-[10vh] flex items-center pl-[1.5rem] pr-[1.5rem] ${
-        isLogin ? "justify-start" : "justify-between"
-      }`}
-    >
-      {!isLogin ? (
-        <Link href={"/"}>
-          <LogoD />
-        </Link>
-      ) : (
-        <Link href={"/mycoin"}>
-          <LogoD />
-        </Link>
-      )}
+    <header className="flex h-[10vh] min-h-[56px] w-full items-center border-b border-border bg-background px-6 text-text dark:border-border-dark dark:bg-background-dark dark:text-text-dark mobile:px-4">
+      <Link
+        href={isLogin ? "/mycoin" : "/"}
+        aria-label="CoinBrief 홈"
+        className="flex shrink-0 items-center text-ink dark:text-ink-dark"
+      >
+        <LogoD />
+      </Link>
 
       {isLogin ? (
-        <div className=" w-full h-full flex justify-between items-center pl-[3rem] tablet:justify-end ">
-          <ul className=" w-auto h-full flex justify-between items-center gap-[5rem] tablet:hidden">
-            {navList.map((items: string, key: number) => {
-              return (
-                <li
-                  className=" w-auto h-auto flex justify-center items-center  cursor-pointer  "
-                  key={key}
-                  onClick={() => navi.push(`${navLink[key]}`)}
+        <nav
+          aria-label="주요 메뉴"
+          className="flex h-full w-full items-center justify-between pl-10 tablet:justify-end tablet:pl-0"
+        >
+          <ul className="flex h-full items-center gap-8 tablet:hidden">
+            {navList.map((items: string, key: number) => (
+              <li key={key} className="flex items-center">
+                <Link
+                  href={navLink[key]}
+                  className={`${navClass} ${
+                    pathname?.startsWith(navLink[key].replace(/\/1$/, ""))
+                      ? "!text-ink dark:!text-ink-dark"
+                      : ""
+                  }`}
                 >
-                  <span className="dark:text-text-dark  text-text text-smallHeader font-semibold border-b-[2px] border-transparent hover:border-text dark:hover:border-text-dark ">
-                    {items}
-                  </span>
-                </li>
-              );
-            })}
+                  {items}
+                </Link>
+              </li>
+            ))}
           </ul>
 
-          <div className="w-auto h-full flex justify-end items-center gap-2 ">
+          <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="bg-background dark:bg-background-dark w-[3rem] h-[3rem] p-0 border-border dark:border-border-dark"
-                >
-                  <UserRound />
+                <Button variant="outline" size="icon" aria-label="계정 메뉴">
+                  <UserRound strokeWidth={1.75} />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href={"/mypage"}>마이페이지</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
@@ -88,48 +86,41 @@ const Header = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             <DarkBtn />
-            <div className=" hidden tablet:flex w-auto h-auto ">
+            <div className="hidden tablet:flex">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="bg-background dark:bg-background-dark w-[3rem] h-[3rem] p-0 border-border dark:border-border-dark"
-                  >
-                    <AlignJustify />
+                  <Button variant="outline" size="icon" aria-label="메뉴">
+                    <AlignJustify strokeWidth={1.75} />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  className=" flex flex-col gap-3 p-2"
-                >
-                  {navList.map((items: string, key: number) => {
-                    return (
-                      <DropdownMenuItem
-                        key={key}
-                        className="  bg-container dark:bg-container-dark"
-                        onClick={() => navi.push(`${navLink[key]}`)}
-                      >
-                        {items}
-                      </DropdownMenuItem>
-                    );
-                  })}
+                <DropdownMenuContent align="end">
+                  {navList.map((items: string, key: number) => (
+                    <DropdownMenuItem key={key} asChild>
+                      <Link href={navLink[key]}>{items}</Link>
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           </div>
-        </div>
+        </nav>
       ) : (
-        <div className=" w-auto h-auto pr-[10px]">
-          <div className="w-auto h-auto flex items-center gap-2">
-            <Link href={"/login"}>
-              <BtnStyle size="small">LOGIN</BtnStyle>
+        <nav
+          aria-label="계정"
+          className="ml-auto flex items-center gap-5"
+        >
+          {/* 홈 히어로에 로그인/회원가입이 이미 있어, 헤더에는 조용한 텍스트 링크만 둔다.
+              홈에서는 '로그인' 하나만, 다른 화면에서는 둘 다 보여준다. */}
+          <Link href={"/login"} className={navClass}>
+            로그인
+          </Link>
+          {!isHome && (
+            <Link href={"/signup"} className={navClass}>
+              회원가입
             </Link>
-            <Link href={"/signup"}>
-              <BtnStyle size="small">SignUp</BtnStyle>
-            </Link>
-          </div>
-        </div>
+          )}
+          <DarkBtn />
+        </nav>
       )}
     </header>
   );

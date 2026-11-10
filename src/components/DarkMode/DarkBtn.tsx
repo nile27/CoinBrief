@@ -5,43 +5,22 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
+// 라이트 <-> 다크 한 번에 전환. 아이콘은 CSS(dark:)로 바꿔 hydration 불일치가 없다.
 function DarkBtn() {
-  const { setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
 
   return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="bg-background dark:bg-background-dark w-[3rem] h-[3rem] p-0 border-border dark:border-border-dark"
-          >
-            <Sun className="w-24 h-25 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 " />
-            <Moon
-              size={20}
-              className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-            />
-            <span className="sr-only">Toggle theme</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => setTheme("light")}>
-            Light
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setTheme("dark")}>
-            Dark
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
+    <Button
+      variant="outline"
+      size="icon"
+      aria-label="테마 전환"
+      title="테마 전환"
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+    >
+      <Sun className="block dark:hidden" strokeWidth={1.75} />
+      <Moon className="hidden dark:block" strokeWidth={1.75} />
+    </Button>
   );
 }
 

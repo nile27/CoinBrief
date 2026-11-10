@@ -2,25 +2,29 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className=" bottom-0 w-full h-[8%] dark:bg-background-dark bg-background flex justify-between items-center gap-[10%] px-[20%] mobile:hidden">
-      <span>2024.12.15</span>
-      <div className=" flex justify-center items-center w-auto h-full p-2 gap-10">
-        <a
-          className="w-auto h-auto"
-          target="_blank"
-          href="https://www.figma.com/design/xxO2ItVjjcXe3QsYKTmkPR/coin_project?node-id=4-2&p=f&t=DBAnGhVx8fhAQNCT-0"
-        >
-          Figma
-        </a>
-        <a
-          className="w-auto h-auto"
-          target="_blank"
-          href="https://github.com/nile27/CoinBrief"
-        >
-          Github
-        </a>
+    <footer className="w-full border-t border-border dark:border-border-dark mt-auto">
+      <div className="mx-auto flex w-full max-w-[1024px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-6 py-8 text-sm text-muted dark:text-muted-dark">
+        <span>CoinBrief</span>
+        <div className="flex items-center gap-6">
+          <a
+            className="transition-colors hover:text-ink dark:hover:text-ink-dark"
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.figma.com/design/xxO2ItVjjcXe3QsYKTmkPR/coin_project?node-id=4-2&p=f&t=DBAnGhVx8fhAQNCT-0"
+          >
+            Figma
+          </a>
+          <a
+            className="transition-colors hover:text-ink dark:hover:text-ink-dark"
+            target="_blank"
+            rel="noreferrer"
+            href="https://github.com/nile27/CoinBrief"
+          >
+            Github
+          </a>
+        </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

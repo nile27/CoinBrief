@@ -3,7 +3,6 @@ import { useCoinStore } from "@/store/store";
 import { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 
-import { useTheme } from "next-themes";
 interface UpbitData {
   market: string;
   trade_price: number;
@@ -23,7 +22,6 @@ export interface StaticData {
 }
 
 export default function BoxRealTime({ symbol }: { symbol: string }) {
-  const { theme, systemTheme } = useTheme();
   const tradePriceRef = useRef<number>(0);
   const changeRateRef = useRef<string>("EVEN");
   const changeRef = useRef<string>("");
@@ -78,32 +76,23 @@ export default function BoxRealTime({ symbol }: { symbol: string }) {
     };
   }, [symbol]);
 
+  const dir = changeRef.current;
   return (
-    <div className=" w-full h-[30px] flex flex-col tablet:h-full ">
-      <div className=" w-full h-[30px] flex flex-col onlyMoblie:flex-row onlyTablet:flex-row  onlyMoblie:gap-8 onlyTablet:gap-8 onlyMoblie:items-center onlyTablet:items-center justify-center items-end gap-1 iphone:flex-col">
-        <span
-          style={{
-            color:
-              theme === "dark"
-                ? "#F8F9FA"
-                : theme === "light"
-                ? "#181820"
-                : systemTheme === "dark"
-                ? "#F8F9FA"
-                : "#181820",
-          }}
-          className="iphone:text-sm block"
-        >
-          {tradePrice ? `₩${tradePrice.toLocaleString()}` : "Loading..."}
-        </span>
-        <span
-          className={`${
-            changeRef.current === "FALL" ? "text-red" : "text-green"
-          } text-right iphone:text-sm block`}
-        >
-          {changeRate}%
-        </span>
-      </div>
+    <div className="flex flex-col items-end gap-0.5 text-sm tabular-nums">
+      <span className="font-medium text-ink dark:text-ink-dark">
+        {tradePrice ? `₩${tradePrice.toLocaleString()}` : "불러오는 중"}
+      </span>
+      <span
+        className={
+          dir === "FALL"
+            ? "text-down"
+            : dir === "RISE"
+            ? "text-up"
+            : "text-muted dark:text-muted-dark"
+        }
+      >
+        {changeRate ? `${dir === "FALL" ? "-" : dir === "RISE" ? "+" : ""}${changeRate}%` : ""}
+      </span>
     </div>
   );
 }

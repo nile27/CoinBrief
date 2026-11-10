@@ -46,8 +46,8 @@ const OTPDiv = ({
       <button
         onClick={handleModal}
         disabled={!email || !emailRegex.test(email)}
-        className={` bg-btn dark:bg-btn-dark  hover:bg-hover dark:hover:bg-hover-dark disabled:bg-container-dark dark:disabled:bg-container-dark
-         min-w-[80px] h-[40px] text-[14px] text-text-dark dark:text-text-dark font-semibold rounded-[10px]`}
+        className={` bg-btn dark:bg-btn-dark  hover:bg-btn-hover dark:hover:bg-btn-hover-dark disabled:bg-secondary disabled:text-muted dark:disabled:bg-secondary-dark dark:disabled:text-muted-dark
+         min-w-[80px] h-[40px] text-[14px] text-btn-ink dark:text-btn-ink-dark font-semibold rounded-md`}
       >
         메일 보내기
       </button>

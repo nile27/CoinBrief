@@ -49,17 +49,15 @@ const PwChange = () => {
   };
 
   return (
-    <section className=" h-full w-auto  flex  justify-center items-center">
-      <div className="w-auto h-auto gap-3 px-10 py-5 flex flex-col justify-center items-center border-border dark:border-border-dark border rounded-[15px]">
-        <h1
-          className={` h-full  text-header font-extrabold text-start w-[388px]`}
-        >
+    <section className="flex w-full flex-1 items-center justify-center px-4 py-10">
+      <div className="flex w-full max-w-[440px] flex-col gap-4 rounded-[10px] border border-border bg-container px-8 py-8 dark:border-border-dark dark:bg-container-dark mobile:px-5">
+        <h1 className="w-full font-serif text-[28px] font-semibold text-ink dark:text-ink-dark">
           비밀번호 변경
         </h1>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-5 w-full h-auto  border-[rgba(113,113,113,0.8)] dark:border-[rgba(228,228,235,0.8)] pb-6"
+          className="flex flex-col gap-5 w-full h-auto  border-border dark:border-border-dark pb-6"
         >
           <div className="w-full h-auto flex flex-col gap-4 pb-2">
             <label htmlFor="formPassword" className="hidden"></label>
@@ -93,7 +91,7 @@ const PwChange = () => {
 
             {Object.keys(errors).length > 0 ||
               (errMessages && (
-                <p className="text-red-500 text-sm mt-2">
+                <p className="text-red text-sm">
                   {errors.password?.message ||
                     errors.confirmPassword?.message ||
                     errMessages}

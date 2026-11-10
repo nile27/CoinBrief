@@ -27,19 +27,13 @@ const AddCoinBox = () => {
   }, []);
 
   return (
-    <div className="w-auto h-full flex justify-center items-center gap-5">
-      <button
-        onClick={addModalHandler}
-        className=" group dark:hover:border-[#076d08] hover:border-[#58d073] hover:text-gray-400 dark:hover:text-gray-400 flex gap-2 w-auto px-4 py-2 items-center rounded-full border border-green "
-      >
-        <CirclePlus className="text-green  dark:group-hover:text-[#076d08] group-hover:text-[#58d073]" />
+    <div className="flex items-center gap-3">
+      <button onClick={addModalHandler} className="h-10 gap-2 px-4 rounded-md border border-border bg-container text-sm text-ink transition-colors hover:bg-hover dark:border-border-dark dark:bg-container-dark dark:text-ink-dark dark:hover:bg-hover-dark flex items-center">
+        <CirclePlus size={18} className="text-muted dark:text-muted-dark" />
         <span className="whitespace-nowrap">코인 등록</span>
       </button>
-      <button
-        onClick={() => setDeleteModal(true)}
-        className="  group dark:hover:border-[#ac2929] hover:border-[#ed7c7c] hover:text-gray-400 dark:hover:text-gray-400 flex gap-2 w-auto px-4 py-2 items-center rounded-full border border-red "
-      >
-        <CircleX className="text-red  dark:group-hover:text-[#ac2929] group-hover:text-[#ed7c7c]" />
+      <button onClick={() => setDeleteModal(true)} className="h-10 gap-2 px-4 rounded-md border border-border bg-container text-sm text-ink transition-colors hover:bg-hover dark:border-border-dark dark:bg-container-dark dark:text-ink-dark dark:hover:bg-hover-dark flex items-center">
+        <CircleX size={18} className="text-muted dark:text-muted-dark" />
         <span className="whitespace-nowrap">코인 삭제</span>
       </button>
 

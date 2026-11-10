@@ -5,9 +5,9 @@ import { useUserStore } from "@/store/store";
 const MycoinLoading = () => {
   const { mycoin } = useUserStore().user;
   return (
-    <section className="flex-1 flex flex-col gap-6">
+    <section className="flex min-w-0 flex-col gap-6">
       {mycoin.length === 0 ? (
-        <div className=" flex justify-center items-center w-full h-[370px]">
+        <div className="flex h-[370px] w-full items-center justify-center text-muted dark:text-muted-dark">
           코인을 등록해주세요.
         </div>
       ) : (

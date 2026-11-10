@@ -21,40 +21,36 @@ const DetailCoin = () => {
   }, [mycoin]);
 
   return (
-    <section className="w-1/3 bg-container max-h-[400px] overflow-y-scroll dark:bg-container-dark p-4 rounded shadow-lg tablet:w-full">
-      <div className=" flex w-full justify-between items-center">
-        <h2 className="text-lg font-semibold mb-4">내 코인 목록</h2>
-        <span>{mycoin.length}/4</span>
+    <section className="max-h-[440px] overflow-y-auto rounded-[10px] border border-border bg-container p-4 dark:border-border-dark dark:bg-container-dark">
+      <div className="mb-3 flex w-full items-baseline justify-between">
+        <h2 className="text-[15px] font-semibold text-ink dark:text-ink-dark">
+          내 코인 목록
+        </h2>
+        <span className="text-sm tabular-nums text-muted dark:text-muted-dark">
+          {mycoin.length}/4
+        </span>
       </div>
       {myCoinArr.length === 0 ? (
-        <div className="h-[200px] w-full flex justify-center items-center">
+        <div className="flex h-[200px] w-full items-center justify-center text-muted dark:text-muted-dark">
           코인을 등록해주세요.
         </div>
       ) : (
-        <ul className="space-y-3 w-full h-auto">
+        <ul className="flex w-full flex-col gap-2">
           {mycoin.map((item, idx) => (
             <li
               key={idx}
-              className={`flex rounde-md items-center cursor-pointer justify-between p-3 min-h-[56px]  rounded shadow  tablet:items-start tablet:gap-3 ${
+              className={`flex min-h-[60px] cursor-pointer items-center justify-between gap-3 rounded-md border p-3 transition-colors ${
                 selectedCoin === idx
-                  ? " transform scale-[101%] transition-all duration-200 border border-border dark:border-border-dark"
-                  : "bg-gray-100 dark:bg-gray-800"
+                  ? "border-ink bg-background dark:border-ink-dark dark:bg-background-dark"
+                  : "border-transparent bg-secondary hover:bg-hover dark:bg-secondary-dark dark:hover:bg-hover-dark"
               }`}
               onClick={() => setSelectedCoin(idx)}
             >
-              <div className="flex items-center gap-3 ">
+              <div className="flex min-w-0 items-center gap-3">
                 <MyCoinImg symbol={item.symbol} name={item.name} />
-
-                <div className="  tablet:flex items-center gap-6  ">
-                  <p className="font-medium">{item.symbol}</p>
-                  <p className="text-gray-500 text-sm iphone:hidden">
-                    {item.name}
-                  </p>
-                </div>
+                <p className="font-medium text-ink dark:text-ink-dark">{item.symbol}</p>
               </div>
-              <div className="h-auto w-auto min-h-[30px] text-right  tablet:h-full">
-                <BoxRealTime symbol={item.symbol} />
-              </div>
+              <BoxRealTime symbol={item.symbol} />
             </li>
           ))}
         </ul>
