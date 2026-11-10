@@ -32,7 +32,7 @@ const KakaoCallback = () => {
             body: new URLSearchParams({
               grant_type: "authorization_code",
               client_id: import.meta.env.NEXT_PUBLIC_KAKAO_API_KEY || "",
-              redirect_uri: import.meta.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL || "",
+              redirect_uri: `${window.location.origin}/kakaocb`,
               code,
             }),
           }

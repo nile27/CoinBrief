@@ -79,6 +79,6 @@ export const googleLogin = async (): Promise<Iuser | null> => {
 };
 
 export const kakaoLogin = () => {
-  const url = `${import.meta.env.NEXT_PUBLIC_KAKAO_TOKEN_URL}/authorize?client_id=${import.meta.env.NEXT_PUBLIC_KAKAO_API_KEY}&redirect_uri=${import.meta.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL}&response_type=code`;
+  const url = `${import.meta.env.NEXT_PUBLIC_KAKAO_TOKEN_URL}/authorize?client_id=${import.meta.env.NEXT_PUBLIC_KAKAO_API_KEY}&redirect_uri=${window.location.origin}/kakaocb&response_type=code`;
   window.location.href = url;
 };
