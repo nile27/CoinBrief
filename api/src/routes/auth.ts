@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { randomBytes } from "node:crypto";
 import nodemailer from "nodemailer";
-import { auth, db, env, Timestamp } from "../firebase.js";
+import { auth, db, env, FieldValue, Timestamp } from "../firebase.js";
 import { cookieOpts, readSession, setSession } from "../session.js";
 
 const r = Router();
@@ -101,15 +101,20 @@ r.post("/register", async (req, res) => {
 });
 
 r.post("/sendotp", async (req, res) => {
-  const { email, name } = req.body ?? {};
+  const { email, name, purpose = "signup" } = req.body ?? {};
+  if (!email || !name) {
+    res.status(400).json({ message: "이메일과 이름을 입력해주세요." });
+    return;
+  }
+  const isPwFind = purpose === "pwfind";
   try {
     const users = await db.collection("users").where("email", "==", email).where("name", "==", name).get();
-    if (!users.empty) {
-      res.status(401).json({ message: "이미 가입된 회원입니다." });
+    if (isPwFind && users.empty) {
+      res.status(404).json({ message: "가입 정보를 찾을 수 없습니다. 이름과 이메일을 확인해주세요." });
       return;
     }
-    if (!email || !name) {
-      res.status(400).json({ message: "이메일과 이름을 입력해주세요." });
+    if (!isPwFind && !users.empty) {
+      res.status(401).json({ message: "이미 가입된 회원입니다." });
       return;
     }
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -121,13 +126,14 @@ r.post("/sendotp", async (req, res) => {
       service: "Gmail",
       auth: { user: process.env.GMAIL_APP_EMAIL, pass: process.env.GMAIL_APP_PASSWORD },
     });
+    const title = isPwFind ? "비밀번호 재설정 인증 번호" : "회원가입 인증 번호";
     await transporter.sendMail({
       from: process.env.GMAIL_APP_EMAIL,
       to: email,
-      subject: "회원가입 OTP 인증 번호",
+      subject: title,
       html: `
       <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
-        <h1 style="color: #4CAF50;">OTP 인증 번호</h1>
+        <h1 style="color: #4CAF50;">${title}</h1>
         <p>인증 번호는 <strong>${otp}</strong>입니다.</p>
         <p>5분 내로 입력해주세요.</p>
         <footer style="margin-top: 20px; font-size: 0.9em; color: #888;">
@@ -157,7 +163,14 @@ async function checkOtp(email: string, otp: string, res: import("express").Respo
     return false;
   }
   if (stored !== otp) {
-    res.status(400).json({ message: "OTP가 일치하지 않습니다." });
+    // 5회 틀리면 OTP 폐기
+    await ref.update({ attempts: FieldValue.increment(1) });
+    if (((await ref.get()).data()?.attempts ?? 0) >= 5) {
+      await ref.delete();
+      res.status(429).json({ message: "인증 시도 횟수를 초과했습니다. 인증 번호를 다시 받아주세요." });
+    } else {
+      res.status(400).json({ message: "OTP가 일치하지 않습니다." });
+    }
     return false;
   }
   await ref.delete();
@@ -249,8 +262,8 @@ r.post("/oauthemail", async (req, res) => {
     const account = profile.kakao_account ?? {};
     const email: string | undefined = account.email;
     const displayName: string | undefined = profile.properties?.nickname;
-    if (!email || !displayName || !account.is_email_valid || !account.is_email_verified) {
-      res.status(400).json({ error: "인증된 이메일, 닉네임을 확인해주세요." });
+    if (!email || !displayName || account.is_email_verified === false) {
+      res.status(401).json({ error: "카카오 계정의 인증된 이메일/닉네임이 필요합니다." });
       return;
     }
     const name = displayName;
