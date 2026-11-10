@@ -6,7 +6,16 @@ const db = admin.firestore();
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { email, name } = body;
+  const { email, name, purpose = "signup" } = body;
+
+  if (!email || !name) {
+    return NextResponse.json(
+      { message: "이메일과 이름을 입력해주세요." },
+      { status: 400 }
+    );
+  }
+
+  const isPwFind = purpose === "pwfind";
 
   const querySnapShot = await db
     .collection("users")
@@ -14,17 +23,17 @@ export async function POST(request: Request) {
     .where("name", "==", name)
     .get();
 
-  if (!querySnapShot.empty) {
+  if (isPwFind && querySnapShot.empty) {
     return NextResponse.json(
-      { message: "이미 가입된 회원입니다." },
-      { status: 401 }
+      { message: "가입 정보를 찾을 수 없습니다. 이름과 이메일을 확인해주세요." },
+      { status: 404 }
     );
   }
 
-  if (!email || !name) {
+  if (!isPwFind && !querySnapShot.empty) {
     return NextResponse.json(
-      { message: "이메일과 이름을 입력해주세요." },
-      { status: 400 }
+      { message: "이미 가입된 회원입니다." },
+      { status: 401 }
     );
   }
 
@@ -46,14 +55,16 @@ export async function POST(request: Request) {
     },
   });
 
+  const title = isPwFind ? "비밀번호 재설정 인증 번호" : "회원가입 인증 번호";
+
   try {
     await transporter.sendMail({
       from: process.env.GMAIL_APP_EMAIL,
       to: email,
-      subject: "회원가입 OTP 인증 번호",
+      subject: title,
       html: `
       <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
-        <h1 style="color: #4CAF50;">OTP 인증 번호</h1>
+        <h1 style="color: #4CAF50;">${title}</h1>
         <p>인증 번호는 <strong>${otp}</strong>입니다.</p>
         <p>5분 내로 입력해주세요.</p>
         <footer style="margin-top: 20px; font-size: 0.9em; color: #888;">

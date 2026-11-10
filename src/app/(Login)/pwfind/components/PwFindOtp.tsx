@@ -22,7 +22,7 @@ const PwFindOtp = ({
       const response = await fetch("/api/sendotp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name }),
+        body: JSON.stringify({ email, name, purpose: "pwfind" }),
       });
 
       if (response.ok) {
