@@ -4,6 +4,8 @@ import CoinName from "../../components/CoinName";
 import { TickerData } from "@/type/type";
 import { sessionCheck } from "@/lib/auth";
 import notFound from "@/app/not-found";
+import ExchangeSync from "@/components/ExchangeSync";
+import { getUsdKrw } from "@/lib/exchangeRate";
 async function DetailCoin(props: {
   params: Promise<{ id: string; name: string }>;
 }) {
@@ -13,14 +15,15 @@ async function DetailCoin(props: {
     `${process.env.NEXT_PUBLIC_BASE_URL}api/upbit/detailcoin?id=${id}`
   );
   const coinDataJson: TickerData[] = await coinDataResponse.json();
-  const session = await sessionCheck();
+  const [session, usd] = await Promise.all([sessionCheck(), getUsdKrw()]);
   if (!session) {
     return notFound();
   }
   return (
-    <section className=" w-full h-auto flex flex-col p-10 gap-10">
-      <div className="w-full  gap-5 flex tablet:flex-col   justify-center items-start px-8 py-5  rounded-lg">
-        <div className="w-full flex flex-col">
+    <section className="mx-auto flex w-full max-w-[1200px] flex-col gap-8 px-4 py-8">
+      <ExchangeSync rate={usd?.rate ?? null} />
+      <div className="grid grid-cols-[minmax(0,1fr)_360px] items-start gap-6 tablet:grid-cols-1">
+        <div className="flex min-w-0 flex-col gap-6">
           <CoinName
             price={{
               price: coinDataJson[0].trade_price,

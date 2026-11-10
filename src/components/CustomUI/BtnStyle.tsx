@@ -25,9 +25,9 @@ const BtnStyle = ({
       },
       color: {
         default:
-          "disabled:bg-[#f1f5f9] disabled:dark:text-text-dark dark:disabled:bg-container-dark disabled:text-text bg-btn dark:bg-btn-dark  hover:bg-hover dark:hover:bg-hover-dark",
+          "bg-btn text-btn-ink hover:bg-btn-hover dark:bg-btn-dark dark:text-btn-ink-dark dark:hover:bg-btn-hover-dark disabled:bg-secondary disabled:text-muted disabled:hover:bg-secondary dark:disabled:bg-secondary-dark dark:disabled:text-muted-dark dark:disabled:hover:bg-secondary-dark disabled:cursor-not-allowed",
         focus:
-          "bg-[#f1f5f9] dark:text-text-dark dark:bg-container-dark disabled:text-text  disabled:bg-gray-200 dark:disabled:bg-gray-700  hover:bg-gray-200 dark:hover:bg-gray-700",
+          "bg-secondary text-ink border border-border hover:bg-hover dark:bg-secondary-dark dark:text-ink-dark dark:border-border-dark dark:hover:bg-hover-dark disabled:text-muted disabled:cursor-not-allowed",
       },
     },
     defaultVariants: {
@@ -39,7 +39,7 @@ const BtnStyle = ({
       {...restBtnProps}
       className={cn(
         buttonVariants({ size, color }),
-        " font-semibold rounded-[10px] whitespace-nowrap"
+        "font-semibold rounded-md whitespace-nowrap transition-colors duration-200 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink dark:focus-visible:outline-ink-dark"
       )}
     >
       {children}

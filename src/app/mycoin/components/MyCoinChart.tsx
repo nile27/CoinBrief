@@ -4,6 +4,7 @@ import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import { useCoinStore, useCurrency, useUserStore } from "@/store/store";
 import { formatCurrency } from "@/utill/utill";
+import { chartTheme } from "@/lib/chartTheme";
 
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -28,14 +29,15 @@ export default function MyCoinChart() {
 
   const coinSymbol = mycoin[selectedCoin]?.symbol;
 
+  const t = chartTheme(isDark);
   const color =
     theme === "dark"
-      ? { bg: "#181820", text: "#F8F9FA" }
+      ? { bg: "#1a1918", text: "#fbfbfa" }
       : theme === "light"
-      ? { bg: "#F8F9FA", text: "#181820" }
+      ? { bg: "#fbfbfa", text: "#1a1918" }
       : systemTheme === "dark"
-      ? { bg: "#181820", text: "#F8F9FA" }
-      : { bg: "#F8F9FA", text: "#181820" };
+      ? { bg: "#1a1918", text: "#fbfbfa" }
+      : { bg: "#fbfbfa", text: "#1a1918" };
   useEffect(() => {
     if (!coinSymbol) return;
     const fetchKlines = async () => {
@@ -109,20 +111,20 @@ export default function MyCoinChart() {
   return (
     <>
       {loading || mycoin.length === 0 ? (
-        <div className="w-full h-[400px] flex justify-center items-center">
-          Loading...
+        <div className="flex h-[400px] w-full items-center justify-center text-muted dark:text-muted-dark">
+          불러오는 중...
         </div>
       ) : (
-        <section className="w-full flex tablet:flex-col border-t-2 border-border dark:border-border-dark pt-4 tablet:gap-3">
+        <section className="w-full flex tablet:flex-col rounded-[10px] border border-border dark:border-border-dark p-4 tablet:gap-3">
           <div className=" w-auto flex justify-end items-center h-full pt-10 tablet:pt-1">
-            <div className=" flex flex-col tablet:flex-row rounded-md  w-auto  tablet:w-auto   justify-start items-center gap-2 bg-[#f1f5f9] dark:bg-container-dark"></div>
+            <div className=" flex flex-col tablet:flex-row rounded-md  w-auto  tablet:w-auto   justify-start items-center gap-2 bg-secondary dark:bg-container-dark"></div>
           </div>
           <div className="w-full h-[400px]">
             <ApexChart
               options={{
                 chart: {
                   type: "candlestick",
-                  background: isDark ? "#181820" : "#F8F9FA",
+                  ...t.chart,
                   animations: {
                     enabled: false,
                   },
@@ -130,16 +132,19 @@ export default function MyCoinChart() {
                     enabled: false,
                   },
                 },
-                theme: {
-                  mode: isDark ? "dark" : "light",
-                },
+                theme: t.theme,
+                grid: t.grid,
+                plotOptions: t.plotOptions,
                 title: {
                   text: `${coinSymbol}: days Candlestick Chart`,
                   align: "center",
+                  style: t.title,
                 },
                 xaxis: {
                   type: "datetime",
                   tickAmount: 6,
+                  axisBorder: t.axis,
+                  axisTicks: t.axis,
                   labels: {
                     formatter: (
                       value: string,
@@ -182,10 +187,9 @@ export default function MyCoinChart() {
                   <div style="
                     padding: 10px; 
                     background:${color.bg} ; 
-                    border: 1px solid #ccc; 
-                    border-radius: 8px; 
+                    border: 1px solid ${t.tooltipBorder}; 
+                    border-radius: 6px; 
                     height: auto;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
                     font-size: 12px; 
                     color:${color.text} ;
                   ">

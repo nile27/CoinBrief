@@ -50,3 +50,13 @@ export function formatCurrency(value: number, currency: "₩" | "$"): string {
 
   return value.toString();
 }
+
+// 원화 시세 표시용: 100원 미만은 소수점(최대 4자리), 1,000원 미만은 최대 1자리, 이상은 정수 + 천 단위 구분.
+export function formatKRWPrice(value: number): string {
+  if (value >= 1000) return Math.round(value).toLocaleString("ko-KR");
+  if (value >= 100) return value.toLocaleString("ko-KR", { maximumFractionDigits: 1 });
+  return value.toLocaleString("ko-KR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
+  });
+}

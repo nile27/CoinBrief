@@ -6,12 +6,12 @@ type InputInterface = React.ComponentProps<"input"> & {
 };
 
 const InputStyle = React.forwardRef<HTMLInputElement, InputInterface>(
-  function InputStyle({ placeholder, ...restInputProps }, ref) {
+  function InputStyle({ placeholder, state, ...restInputProps }, ref) {
     return (
       <input
         {...restInputProps}
         ref={ref}
-        className={` disabled:dark:text-[rgba(228,228,235,0.59)] disabled:text-[rgba(113,113,113,0.59)] w-full min-w-[300px] h-[40px] pl-4 text-sm bg-container dark:bg-container-dark text-text dark:text-text-dark rounded-md border-[2px] dark:border-[0px] outline-none `}
+        className="w-full min-w-0 h-[44px] px-4 text-sm rounded-md border border-border bg-container text-text placeholder:text-muted outline-none transition-colors duration-200 hover:border-muted focus:border-ink disabled:bg-secondary disabled:text-muted dark:border-border-dark dark:bg-container-dark dark:text-text-dark dark:placeholder:text-muted-dark dark:hover:border-muted-dark dark:focus:border-ink-dark dark:disabled:bg-secondary-dark dark:disabled:text-muted-dark"
         placeholder={placeholder}
       ></input>
     );

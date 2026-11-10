@@ -1,21 +1,18 @@
 const Loading = () => {
   return (
-    <div>
-      <div
-        className={`bg-transprents m-0 p-0 h-[100vh] w-[100vw] flex justify-center items-center relative`}
-      >
-        <div
-          className={`bg-transprents rounded-xl m-0 p-0 h-[300px] w-[300px] flex justify-center items-center relative`}
-        >
-          <div className="flex gap-3 text-H text-text dark:text-text-dark relative">
-            <span className=" animate-[blur_3s_infinite_0ms]">L</span>
-            <span className=" animate-[blur_3s_infinite_200ms]">O</span>
-            <span className=" animate-[blur_3s_infinite_400ms]">A</span>
-            <span className="animate-[blur_3s_infinite_800ms]">D</span>
-            <span className=" animate-[blur_3s_infinite_1200ms]">E</span>
-            <span className=" animate-[blur_3s_infinite_1400ms]">R</span>
-          </div>
-        </div>
+    <div
+      role="status"
+      aria-label="불러오는 중"
+      className="m-0 flex h-[90vh] w-full items-center justify-center p-0"
+    >
+      <div className="flex gap-2 font-serif text-smallHeader text-muted dark:text-muted-dark">
+        <span className="animate-[blur_3s_infinite_0ms]">L</span>
+        <span className="animate-[blur_3s_infinite_200ms]">O</span>
+        <span className="animate-[blur_3s_infinite_400ms]">A</span>
+        <span className="animate-[blur_3s_infinite_800ms]">D</span>
+        <span className="animate-[blur_3s_infinite_1200ms]">I</span>
+        <span className="animate-[blur_3s_infinite_1400ms]">N</span>
+        <span className="animate-[blur_3s_infinite_1600ms]">G</span>
       </div>
     </div>
   );

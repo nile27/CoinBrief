@@ -40,9 +40,9 @@ const SearchInput = ({ allCoins }: { allCoins: ProcessedCoin[] }) => {
   };
 
   return (
-    <div className="relative w-[300px] mobile:w-full ">
-      <div className="w-full flex px-2 bg-container dark:bg-container-dark items-center">
-        <Search width={20} height={20} />
+    <div className="relative z-30 w-[320px] max-w-full mobile:w-full">
+      <div className="flex h-10 w-full items-center rounded-md border border-border bg-container px-3 focus-within:border-ink dark:border-border-dark dark:bg-container-dark dark:focus-within:border-ink-dark">
+        <Search width={16} height={16} className="shrink-0 text-muted dark:text-muted-dark" />
         <input
           type="text"
           placeholder="코인 이름 또는 심볼 검색"
@@ -50,16 +50,16 @@ const SearchInput = ({ allCoins }: { allCoins: ProcessedCoin[] }) => {
           value={searchTerm}
           onChange={(e) => handleInputChange(e.target.value)}
           onBlur={handleBlur}
-          className="w-full px-4 py-2  rounded outline-none bg-container dark:bg-container-dark "
+          className="w-full bg-transparent px-3 text-sm outline-none placeholder:text-muted dark:placeholder:text-muted-dark"
         />
       </div>
 
       {filteredCoins.length > 0 && (
-        <ul className="absolute top-full left-0 z-10 w-full bg-container dark:bg-container-dark border border-border dark:border-border-dark rounded shadow-md max-h-60 overflow-auto">
+        <ul className="absolute top-full left-0 z-30 w-full bg-container dark:bg-container-dark border border-border dark:border-border-dark rounded-md shadow-sm max-h-60 overflow-auto">
           {filteredCoins.map((coin: Coin, idx: number) => (
             <li
               key={idx}
-              className="flex gap-3 items-center px-4 py-2 dark:hover:bg-hover-dark hover:bg-hover cursor-pointer"
+              className="flex gap-3 items-center px-4 py-2 text-sm dark:hover:bg-hover-dark hover:bg-hover cursor-pointer"
               onClick={() => handleSearch(coin)}
               onMouseDown={(e) => e.preventDefault()}
             >

@@ -39,23 +39,23 @@ const PwFind = () => {
   };
 
   return (
-    <section className=" h-full w-auto  flex  justify-center items-center">
-      <div className="w-auto h-auto gap-3 px-10 py-5 flex flex-col justify-center items-center border-border dark:border-border-dark border rounded-[15px]">
-        <h1 className={`w-full h-full  text-header font-extrabold text-start`}>
+    <section className="flex w-full flex-1 items-center justify-center px-4 py-10">
+      <div className="flex w-full max-w-[440px] flex-col gap-4 rounded-[10px] border border-border bg-container px-8 py-8 dark:border-border-dark dark:bg-container-dark mobile:px-5">
+        <h1 className={`w-full font-serif text-[28px] font-semibold text-ink dark:text-ink-dark`}>
           비밀번호 찾기
         </h1>
-        <div className=" w-full h-auto flex justify-start items-center gap-5">
-          <p className=" dark:text-[rgba(228,228,235,0.59)] text-[rgba(113,113,113,0.59)]">
+        <div className=" flex w-full flex-wrap items-center gap-x-3">
+          <p className=" text-sm text-muted dark:text-muted-dark">
             CoinBrief의 회원이 아니신가요?
           </p>
           <Link
             href={"/signup"}
-            className=" text-primary dark:text-primary-dark underline"
+            className=" text-sm text-ink dark:text-ink-dark underline underline-offset-4 decoration-border dark:decoration-border-dark hover:decoration-ink"
           >
             회원가입
           </Link>
         </div>
-        <form className="flex flex-col gap-3 w-full h-auto  border-[rgba(113,113,113,0.8)] dark:border-[rgba(228,228,235,0.8)] pb-3">
+        <form className="flex flex-col gap-3 w-full h-auto  border-border dark:border-border-dark pb-3">
           <div className="w-full h-auto flex flex-col gap-4 ">
             <label htmlFor="formName" className="hidden"></label>
             <InputStyle
@@ -100,9 +100,9 @@ const PwFind = () => {
             )}
 
             {verify && Object.keys(errors).length <= 0 ? (
-              <p className="text-green text-sm mt-3">{verifyMessage}</p>
+              <p className="text-green text-sm">{verifyMessage}</p>
             ) : (
-              <p className="text-red-500 text-sm mt-3 ">
+              <p className="text-red text-sm ">
                 {errors.email?.message || errors.name?.message || verifyMessage}
               </p>
             )}

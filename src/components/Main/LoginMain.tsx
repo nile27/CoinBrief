@@ -1,36 +1,122 @@
-import Image from "next/image";
-import React from "react";
 import Link from "next/link";
-import BtnStyle from "../CustomUI/BtnStyle";
+import styles from "./Landing.module.css";
+import { formatKRWPrice } from "@/utill/utill";
+import type { PopularCoin } from "@/lib/popularCoins";
+import type { UsdKrw } from "@/lib/exchangeRate";
 
-const LoginMain = () => {
+type Props = {
+  coins: PopularCoin[];
+  fetchedAt: number | null;
+  usd: UsdKrw | null;
+};
+
+// "2026-11-10" -> "11/10"
+const shortDate = (d: string) => `${d.slice(5, 7)}/${d.slice(8, 10)}`;
+
+const timeFormatter = new Intl.DateTimeFormat("ko-KR", {
+  timeZone: "Asia/Seoul",
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: false,
+});
+
+const trend = (p: number) => {
+  // 표시 소수(2자리) 기준으로 0 이면 보합
+  const r = Math.round(p * 100) / 100;
+  return r > 0 ? "up" : r < 0 ? "down" : "flat";
+};
+
+const LoginMain = ({ coins, fetchedAt, usd }: Props) => {
   return (
-    <section className="w-full h-full px-10 flex justify-center items-center  ">
-      <div className="  tablet:hidden w-full h-full flex justify-end items-center  ">
-        <div className=" h-auto relative min-w-[576px] max-w-[600px] max-h-[505px] min-h-[400px]  dark:border-border-dark border-border rounded-[15px] border-[10px] ">
-          <Image
-            src="/MainImg.svg"
-            alt="main-img"
-            fill
-            className="rounded-[8px]"
-          />
-        </div>
-      </div>
-      <div className=" w-full h-full flex flex-col justify-center items-center">
-        <div className="w-auto h-auto min-w-[300px] flex flex-col justify-center items-center  ">
-          <h1 className=" w-full h-[90px] text-start text-[70px] dark:text-text-dark text-text font-extrabold ">
-            CoinBrief
+    <div className={styles.root}>
+      <div className={`${styles.wrap} ${styles.screen}`}>
+        <section className={styles.intro}>
+          <h1 className={`${styles.h1} ${styles.serif}`}>
+            내가 보는 코인만, 조용하고 간결하게.
           </h1>
-          <p className="  dark:text-[rgba(228,228,235,0.59)] text-[rgba(113,113,113,0.59)]  ">
-            The new social experience for you and your friends. <br /> Sign up
-            to learn more.
+          <p className={styles.lead}>
+            관심 있는 코인을 한곳에 모아 두고, 필요할 때 바로 확인하세요.
           </p>
-          <Link href={"/login"} className="w-full h-auto mt-20">
-            <BtnStyle size="XL">LOGIN</BtnStyle>
-          </Link>
-        </div>
+          <div className={styles.actions}>
+            <Link href="/login" className={styles.btn}>
+              로그인
+            </Link>
+            <Link href="/signup" className={styles.textLink}>
+              회원가입
+            </Link>
+          </div>
+        </section>
+
+        <section className={styles.market} aria-label="오늘의 인기 코인">
+          <div className={styles.marketHead}>
+            <h2 className={styles.marketTitle}>오늘의 인기 코인</h2>
+            <span className={styles.marketMeta}>
+              {fetchedAt
+                ? `24시간 거래대금 순 · ${timeFormatter.format(fetchedAt)} 기준`
+                : "24시간 거래대금 순"}
+            </span>
+          </div>
+
+          {coins.length > 0 ? (
+            <ul className={styles.grid}>
+              {coins.map((c) => {
+                const t = trend(c.changePercent);
+                const sign = t === "up" ? "+" : "";
+                return (
+                  <li key={c.market} className={styles.coin}>
+                    <div className={styles.coinTop}>
+                      <span className={styles.coinName}>{c.koreanName}</span>
+                      <span className={styles.coinSymbol}>{c.symbol}</span>
+                    </div>
+                    <div className={styles.price}>
+                      <span className={styles.won}>₩</span>
+                      {formatKRWPrice(c.price)}
+                    </div>
+                    <div className={`${styles.change} ${styles[t]}`}>
+                      <span aria-hidden="true">
+                        {t === "up" ? "▲" : t === "down" ? "▼" : "–"}
+                      </span>
+                      {sign}
+                      {c.changePercent.toFixed(2)}%
+                      <span className={styles.srOnly}>
+                        {t === "up" ? " 상승" : t === "down" ? " 하락" : " 보합"}
+                      </span>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p className={styles.empty}>시세를 불러오지 못했습니다</p>
+          )}
+
+          {usd && (
+            <p className={styles.fx}>
+              USD/KRW {usd.rate.toLocaleString("en-US", { maximumFractionDigits: 2 })} ·{" "}
+              {shortDate(usd.date)} 수출입은행 고시
+            </p>
+          )}
+        </section>
       </div>
-    </section>
+
+      <footer className={styles.footer}>
+        <div className={`${styles.wrap} ${styles.footerInner}`}>
+          <span>CoinBrief</span>
+          <div className={styles.footerLinks}>
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href="https://www.figma.com/design/xxO2ItVjjcXe3QsYKTmkPR/coin_project?node-id=4-2&p=f&t=DBAnGhVx8fhAQNCT-0"
+            >
+              Figma
+            </a>
+            <a target="_blank" rel="noreferrer" href="https://github.com/nile27/CoinBrief">
+              Github
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 };
 

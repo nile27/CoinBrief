@@ -59,81 +59,64 @@ const CoinName = ({ price, id, name, change }: Prop) => {
       prev_24H_price: price.prev_24H_price,
     });
   }, []);
+  const fall = change === "FALL";
+  const prevPrice = Number(currencyData.prev_24H_price);
+  const prevRate = currencyData.prev_24H_rate * 100;
+  const dirClass = (v: number) =>
+    v < 0 ? "text-down" : v > 0 ? "text-up" : "text-muted dark:text-muted-dark";
+  const Arrow = ({ v }: { v: number }) =>
+    v < 0 ? (
+      <RedArrow className={dirClass(v)} />
+    ) : v > 0 ? (
+      <GreenArrow className={dirClass(v)} />
+    ) : null;
   return (
-    <article className="flex w-full justify-start items-center gap-[90px]">
-      <div className="w-auto flex flex-col tablet:w-full">
-        <div className="w-auto tablet:w-full tablet:justify-between flex items-center justify-start gap-5">
-          <div className=" w-auto  flex gap-4 items-center">
-            <CoinImg symbol={id} name={name} />
-            <div className=" flex gap-3 items-center">
-              <h1 className="text-xl font-bold">{name}</h1>
-              <h1 className="text-xl font-bold">{id}</h1>
-            </div>
-          </div>
-          <BtnStyle size="change" onClick={handleExchange}>
-            통화 변경({currency})
-          </BtnStyle>
+    <article className="flex w-full flex-col gap-5">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex min-w-0 items-center gap-3">
+          <CoinImg symbol={id} name={name} />
+          <h1 className="truncate font-serif text-[28px] font-semibold text-ink dark:text-ink-dark mobile:text-[22px]">
+            {name}
+          </h1>
+          <span className="text-sm text-muted dark:text-muted-dark">{id}</span>
         </div>
-        <div className="my-3 text-[30px] font-bold flex items-center gap-4">
+        <BtnStyle size="change" color="focus" onClick={handleExchange}>
+          통화 변경({currency})
+        </BtnStyle>
+      </div>
+
+      <div className="flex flex-wrap items-end gap-x-6 gap-y-2">
+        <div className="text-[32px] font-semibold tabular-nums text-ink dark:text-ink-dark mobile:text-[26px]">
           {currency}
           {Number(currencyData.price).toLocaleString()}
-
-          <div className=" w-auto flex gap-3 justify-end items-center text-smallHeader">
-            {change === "FALL" ? (
-              <RedArrow className={"text-red"} />
-            ) : (
-              <GreenArrow className={"text-green"} />
-            )}
-            <span
-              className={`py-2 text-right ${
-                change === "FALL" ? "text-red" : "text-green"
-              }`}
-            >
-              {(currencyData.rate * 100).toFixed(2)}%
-            </span>
-          </div>
+        </div>
+        <div className={`flex items-center gap-2 pb-1 tabular-nums ${fall ? "text-down" : "text-up"}`}>
+          {fall ? <RedArrow className="text-down" /> : <GreenArrow className="text-up" />}
+          <span>
+            {fall ? "-" : "+"}
+            {(currencyData.rate * 100).toFixed(2)}%
+          </span>
         </div>
       </div>
 
-      <div className="flex w-auto flex-col  justify-center items-start tablet:hidden">
-        <span className=" whitespace-nowrap ">변동 금액 (어제)</span>
-
-        <div className=" w-auto flex gap-3  items-center">
-          {Number(currencyData.prev_24H_price) < 0 ? (
-            <RedArrow className={"text-red"} />
-          ) : (
-            <GreenArrow className={"text-green"} />
-          )}
-          <span
-            className={`py-2 ${
-              Number(currencyData.prev_24H_price) < 0
-                ? "text-red"
-                : "text-green"
-            }`}
-          >
-            {formatCurrency(
-              Number(currencyData.prev_24H_price),
-              currency as "₩" | "$"
-            )}
+      <dl className="grid grid-cols-2 gap-3 mobile:grid-cols-1">
+        <div className="rounded-md border border-border px-4 py-3 dark:border-border-dark">
+          <dt className="text-xs text-muted dark:text-muted-dark">변동 금액 (어제)</dt>
+          <dd className={`mt-1 flex items-center gap-2 tabular-nums ${dirClass(prevPrice)}`}>
+            <Arrow v={prevPrice} />
+            {formatCurrency(prevPrice, currency as "₩" | "$")}
             {currency}
-          </span>
+          </dd>
         </div>
-
-        <div className=" w-auto flex gap-3  items-center">
-          {Number(currencyData.prev_24H_rate) < 0 ? (
-            <RedArrow className={"text-red"} />
-          ) : (
-            <GreenArrow className={"text-green"} />
-          )}
-          <span
-            className={`py-2  ${
-              Number(currencyData.prev_24H_rate) < 0 ? "text-red" : "text-green"
-            }`}
-          >
-            {currencyData.prev_24H_rate.toFixed(3)}%
-          </span>
+        <div className="rounded-md border border-border px-4 py-3 dark:border-border-dark">
+          <dt className="text-xs text-muted dark:text-muted-dark">변동률 (어제)</dt>
+          <dd className={`mt-1 flex items-center gap-2 tabular-nums ${dirClass(prevRate)}`}>
+            <Arrow v={prevRate} />
+            {prevRate > 0 ? "+" : ""}
+            {prevRate.toFixed(2)}%
+          </dd>
         </div>
-      </div>
+      </dl>
     </article>
   );
 };

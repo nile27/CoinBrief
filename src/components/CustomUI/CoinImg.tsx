@@ -13,7 +13,7 @@ const CoinImg = ({ name, symbol }: { name: string; symbol: string }) => {
   };
 
   return (
-    <div className="w-[32px] h-[32px] tablet:hidden rounded-full  dark:bg-container flex justify-center items-center">
+    <div className="w-[32px] h-[32px] shrink-0 rounded-full flex justify-center items-center">
       <img
         src={src}
         alt={`${name} Logo`}

@@ -9,11 +9,11 @@ const TopCoinList = ({ coins }: { coins: ProcessedCoin[] }) => {
     )
     .slice(0, 3);
   return (
-    <section className="w-[320px] h-auto max-h-[300px] mobile:w-full max-w-[500px]  p-4 bg-container dark:bg-container-dark rounded-lg shadow-lg">
-      <h2 className="text-smallHeader font-extrabold mb-4">
-        🔥 가장 많이 거래된 코인 (24H)
+    <section className="rounded-[10px] border border-border bg-container p-5 dark:border-border-dark dark:bg-container-dark">
+      <h2 className="mb-4 text-[15px] font-semibold text-ink dark:text-ink-dark">
+        가장 많이 거래된 코인 (24H)
       </h2>
-      <ul className="space-y-1 w-full h-full flex flex-col justify-start items-center gap-3">
+      <ul className="flex w-full flex-col gap-3">
         {sortedCoins.map((coin, index) => (
           <Link
             key={coin.symbol}
@@ -23,18 +23,18 @@ const TopCoinList = ({ coins }: { coins: ProcessedCoin[] }) => {
             className="w-full h-auto"
           >
             <li className="flex w-full items-center gap-4 last:border-none">
-              <span className="text-xl font-bold ">{index + 1}</span>
+              <span className="w-4 text-sm font-semibold text-muted dark:text-muted-dark tabular-nums">{index + 1}</span>
 
               <CoinImg name={coin.korean_name} symbol={coin.symbol} />
 
-              <div className="flex flex-col flex-1">
-                <span className="text-base font-medium">
+              <div className="flex min-w-0 flex-1 flex-col">
+                <span className="truncate text-sm font-medium text-ink dark:text-ink-dark">
                   {coin.korean_name}
                 </span>
-                <span className="text-sm text-gray-500">{coin.symbol}</span>
+                <span className="text-xs text-muted dark:text-muted-dark">{coin.symbol}</span>
               </div>
 
-              <span className="text-sm font-semibold">
+              <span className="whitespace-nowrap text-sm font-medium tabular-nums">
                 ₩{formatKRW(Number(coin.acc_trade_volume_24h)).toLocaleString()}
               </span>
             </li>

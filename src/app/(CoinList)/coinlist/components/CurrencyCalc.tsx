@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, ChangeEvent } from "react";
-import Dollar from "@/../public/Dollar.svg";
 import { useCoinStore } from "@/store/store";
 
 const CurrencyCalc = () => {
@@ -36,44 +35,39 @@ const CurrencyCalc = () => {
   };
 
   return (
-    <section className=" tablet:hidden  bg-container dark:bg-container-dark w-[200px] max-h-[300px] py-3 px-5 flex flex-col justify-start items-start gap-3 border-2 border-border dark:border-border-dark rounded-[10px]">
-      <div className=" w-full h-auto flex  gap-5 items-center ">
-        <Dollar />
-        <h1 className=" text-smallHeader font-extrabold ">환율 계산기</h1>
-      </div>
-
-      <div className=" w-full h-full flex flex-col justify-between items-center gap-2">
-        <div className="w-full h-auto flex flex-col items-start gap-2 ">
-          <span className=" text-smallHeader block font-bold">KRW</span>
-          <div className=" dark:border-secondary-dark border-secondary border-8 rounded-lg w-full h-auto flex">
-            <div className=" dark:bg-secondary-dark bg-secondary  w-[26px] h-full text-smallHeader pl-1 pr-2">
-              ₩
-            </div>
+    <section className="flex flex-col gap-4 rounded-[10px] border border-border bg-container p-5 tablet:hidden dark:border-border-dark dark:bg-container-dark">
+      <h2 className="text-[15px] font-semibold text-ink dark:text-ink-dark">
+        환율 계산기
+      </h2>
+      <div className="flex flex-col gap-3">
+        <label className="flex w-full flex-col gap-1.5">
+          <span className="text-xs font-medium text-muted dark:text-muted-dark">KRW</span>
+          <div className="flex h-10 w-full items-center rounded-md border border-border bg-background px-3 focus-within:border-ink dark:border-border-dark dark:bg-background-dark dark:focus-within:border-ink-dark">
+            <span className="mr-2 text-sm text-muted dark:text-muted-dark">₩</span>
             <input
               type="text"
               autoComplete="off"
-              className=" w-full h-auto px-2 bg-transparent outline-none overflow-x-auto "
+              inputMode="decimal"
+              className="w-full min-w-0 bg-transparent text-sm tabular-nums outline-none"
               value={krwValue}
               onChange={handleKRWChange}
             />
           </div>
-        </div>
-        <div className="w-full h-auto flex flex-col items-start gap-2 ">
-          <span className=" text-smallHeader block font-bold">USD</span>
-          <div className=" dark:border-secondary-dark border-secondary border-8 rounded-lg w-full h-auto flex">
-            <div className=" dark:bg-secondary-dark bg-secondary w-[26px] h-full text-smallHeader pl-1 pr-2">
-              $
-            </div>
-
+        </label>
+        <label className="flex w-full flex-col gap-1.5">
+          <span className="text-xs font-medium text-muted dark:text-muted-dark">USD</span>
+          <div className="flex h-10 w-full items-center rounded-md border border-border bg-background px-3 focus-within:border-ink dark:border-border-dark dark:bg-background-dark dark:focus-within:border-ink-dark">
+            <span className="mr-2 text-sm text-muted dark:text-muted-dark">$</span>
             <input
               type="text"
               autoComplete="off"
-              className=" w-full h-auto px-2 bg-transparent outline-none overflow-x-auto "
+              inputMode="decimal"
+              className="w-full min-w-0 bg-transparent text-sm tabular-nums outline-none"
               value={usdValue}
               onChange={handleUsdChange}
             />
           </div>
-        </div>
+        </label>
       </div>
     </section>
   );

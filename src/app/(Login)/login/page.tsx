@@ -115,10 +115,10 @@ const Login = () => {
   };
 
   return (
-    <section className=" h-full w-auto flex  justify-center items-center">
-      <div className="w-auto h-auto gap-3 px-10 py-5 flex flex-col justify-center items-center border-border dark:border-border-dark border rounded-[15px]">
-        <div className="w-full h-full flex justify-center items-center">
-          <h1 className="w-full h-full text-header font-extrabold text-start">
+    <section className="flex w-full flex-1 items-center justify-center px-4 py-10">
+      <div className="flex w-full max-w-[440px] flex-col gap-4 rounded-[10px] border border-border bg-container px-8 py-8 dark:border-border-dark dark:bg-container-dark mobile:px-5">
+        <div className="w-full flex items-center justify-between gap-3">
+          <h1 className="w-full font-serif text-[28px] font-semibold text-ink dark:text-ink-dark">
             로그인
           </h1>
           <BtnStyle onClick={handleTestLogin} size="auto">
@@ -126,20 +126,20 @@ const Login = () => {
           </BtnStyle>
         </div>
 
-        <div className=" w-full h-auto flex justify-start items-center gap-5">
-          <p className=" dark:text-[rgba(228,228,235,0.59)] text-[rgba(113,113,113,0.59)]">
+        <div className=" flex w-full flex-wrap items-center gap-x-3">
+          <p className=" text-sm text-muted dark:text-muted-dark">
             비밀번호를 잊어버리셨나요?
           </p>
           <Link
             href={"/pwfind"}
-            className=" text-primary dark:text-primary-dark underline"
+            className=" text-sm text-ink dark:text-ink-dark underline underline-offset-4 decoration-border dark:decoration-border-dark hover:decoration-ink"
           >
             비밀번호 찾기
           </Link>
         </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-5 w-full h-auto border-b-[1px] border-[rgba(113,113,113,0.8)] dark:border-[rgba(228,228,235,0.8)] pb-6"
+          className="flex flex-col gap-5 w-full h-auto border-b-[1px] border-border dark:border-border-dark pb-6"
         >
           <div className="flex flex-col gap-5 w-full ">
             <label htmlFor="formEmail" className="hidden"></label>
@@ -169,12 +169,12 @@ const Login = () => {
             />
           </div>
           {Object.keys(errors).length > 0 && (
-            <p className="text-red-500 text-sm mt-2">
+            <p className="text-red text-sm">
               {errors.email?.message || errors.password?.message}
             </p>
           )}
           {errMessage && Object.keys(errors).length === 0 && (
-            <p className="text-red-500 text-sm mt-2">{errMessage}</p>
+            <p className="text-red text-sm">{errMessage}</p>
           )}
           <BtnStyle size="medium">LOGIN</BtnStyle>
         </form>
@@ -182,14 +182,14 @@ const Login = () => {
         <div className=" w-full h-auto mt-1 flex gap-2 justify-center items-center">
           <button
             onClick={handleGoogleLogin}
-            className="w-full h-[30px] gap-3 bg-container dark:bg-container-dark rounded-md flex justify-center items-center "
+            className="h-10 w-full gap-2 rounded-md border border-border text-sm flex justify-center items-center transition-colors hover:bg-hover dark:border-border-dark dark:hover:bg-hover-dark"
           >
             <Google />
             Google
           </button>
           <button
             onClick={kakaoLogin}
-            className="w-full h-[30px] gap-3 bg-container dark:bg-container-dark rounded-md flex justify-center items-center "
+            className="h-10 w-full gap-2 rounded-md border border-border text-sm flex justify-center items-center transition-colors hover:bg-hover dark:border-border-dark dark:hover:bg-hover-dark"
           >
             <Kakao />
             Kakao

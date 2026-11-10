@@ -58,16 +58,16 @@ const AddModal = ({
       <div className="absolute inset-0 bg-black opacity-50"></div>
 
       <div
-        className="bg-background dark:bg-background-dark w-[90%] max-w-lg p-6 rounded-lg shadow-lg relative"
+        className="w-[90%] max-w-lg p-6 rounded-[10px] border border-border dark:border-border-dark bg-container dark:bg-container-dark relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={() => setIsModal(false)}
           className="absolute top-4 right-4"
         >
-          <CircleX className="text-gray-500 hover:text-red-500" />
+          <CircleX className="text-muted hover:text-ink dark:text-muted-dark dark:hover:text-ink-dark" />
         </button>
-        <h2 className="text-lg font-bold mb-4">내 코인 추가</h2>
+        <h2 className="font-serif text-xl font-semibold text-ink dark:text-ink-dark mb-4">내 코인 추가</h2>
         <InputStyle
           autoComplete="off"
           placeholder="코인의 이름 또는 심볼로 검색해주세요."
@@ -75,7 +75,7 @@ const AddModal = ({
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <ul className="w-full border rounded-lg max-h-60 overflow-auto bg-background dark:bg-background-dark mt-2">
+        <ul className="w-full border border-border dark:border-border-dark rounded-md max-h-60 overflow-auto mt-2">
           {results.map((coin: Coin) => (
             <li
               key={coin.symbol}

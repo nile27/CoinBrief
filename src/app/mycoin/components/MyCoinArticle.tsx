@@ -8,7 +8,7 @@ const MyCoinArticle = () => {
 
   if (user.mycoin.length === 0) {
     return (
-      <span className="text-smallHeader h-[200px] w-full flex justify-center items-center font-bold">
+      <span className="flex h-[200px] w-full items-center justify-center text-muted dark:text-muted-dark">
         코인을 등록해주세요.
       </span>
     );
@@ -19,13 +19,13 @@ const MyCoinArticle = () => {
   if (!coinSymbol || !staticData[coinSymbol]) {
     return (
       <div className="flex justify-center items-center w-full h-[150px]">
-        <p className="text-gray-500">📡 데이터 로딩 중...</p>
+        <p className="text-muted dark:text-muted-dark">데이터 불러오는 중...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex gap-4 tablet:flex-col tablet:gap-2">
+    <div className="grid grid-cols-4 gap-3 tablet:grid-cols-2">
       {[
         {
           title: "최고가",
@@ -50,12 +50,10 @@ const MyCoinArticle = () => {
       ].map((item, idx) => (
         <div
           key={idx}
-          className="flex-1  bg-container dark:bg-container-dark p-4 rounded shadow-lg flex flex-col items-center justify-center tablet:flex-row tablet:justify-between tablet:items-center"
+          className="flex min-w-0 flex-col gap-1 rounded-[10px] border border-border bg-container p-4 dark:border-border-dark dark:bg-container-dark"
         >
-          <p className="font-bold tablet:w-1/2 tablet:text-left text-[14px]">
-            {item.title}
-          </p>
-          <p className="text-lg tablet:w-1/2 tablet:text-right text-[14px] whitespace-nowrap">
+          <p className="text-xs text-muted dark:text-muted-dark">{item.title}</p>
+          <p className="truncate text-[15px] font-medium tabular-nums text-ink dark:text-ink-dark">
             {formatKRW(item.value)} {item.currency}
           </p>
         </div>

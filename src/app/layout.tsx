@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Noto_Sans_KR, Noto_Serif_KR } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/DarkMode/Theme-provider";
 import Header from "@/components/CustomUI/Header";
 
-const roboto = Roboto({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
+const sans = Noto_Sans_KR({
+  weight: ["400", "500", "600", "700"],
   display: "swap",
+  preload: false,
+  variable: "--font-sans",
+});
+const serif = Noto_Serif_KR({
+  weight: ["500", "600"],
+  display: "swap",
+  preload: false,
+  variable: "--font-serif",
 });
 const openGraph = {
   url: process.env.NEXT_PUBLIC_OPENGRAPH,
@@ -46,8 +52,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning={true}>
-      <body className={roboto.className}>
+    <html lang="ko" suppressHydrationWarning={true}>
+      <body className={`${sans.variable} ${serif.variable} font-sans`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

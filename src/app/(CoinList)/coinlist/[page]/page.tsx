@@ -38,37 +38,39 @@ const CoinList = async ({ params }: { params: Promise<{ page: string }> }) => {
   }
 
   return (
-    <section className="flex flex-col w-full h-full gap-1">
-      <section className=" flex w-full px-5 justify-center gap-5 mt-7 mb-5 mobile:flex-col items-center ">
+    <section className="mx-auto flex w-full max-w-[1100px] flex-col gap-8 px-4 py-8 tablet:px-4">
+      <h1 className="font-serif text-[32px] font-semibold text-ink dark:text-ink-dark mobile:text-[26px]">
+        코인리스트
+      </h1>
+      <section className="grid grid-cols-3 items-stretch gap-4 tablet:grid-cols-1">
         <TopVolume coins={allCoins} />
         <TopLosers coins={allCoins} />
         <CurrencyCalc />
       </section>
-      <section className="w-full h-auto px-20 tablet:px-10 mobile:px-0 flex justify-start">
-        <SearchCoin allCoins={allCoins} />
-      </section>
-      <section className="w-full h-auto px-5 ">
-        <CoinListTable getCoinList={paginatedCoins} />
-      </section>
+      <SearchCoin allCoins={allCoins} />
+      <CoinListTable getCoinList={paginatedCoins} />
 
-      <section className="flex justify-center gap-4 mt-5">
+      <nav
+        aria-label="페이지"
+        className="flex flex-wrap justify-center gap-2"
+      >
         {Array.from({ length: totalPages }).map((_, index) => {
           const pageIndex = index + 1;
           return (
             <Link
               key={pageIndex}
               href={`/coinlist/${pageIndex}`}
-              className={`px-4 py-2 border rounded ${
+              className={`flex h-10 min-w-10 items-center justify-center rounded-md border px-3 text-sm tabular-nums transition-colors ${
                 pageIndex === page
-                  ? "dark:bg-hover-dark bg-hover text-white hover:bg-hover dark:hover:bg-hover-dark "
-                  : "bg-gray-200 dark:bg-gray-700 hover:bg-hover dark:hover:bg-hover-dark"
+                  ? "bg-btn text-btn-ink dark:bg-btn-dark dark:text-btn-ink-dark border-transparent"
+                  : "bg-container dark:bg-container-dark border-border dark:border-border-dark hover:bg-hover dark:hover:bg-hover-dark"
               }`}
             >
               {pageIndex}
             </Link>
           );
         })}
-      </section>
+      </nav>
     </section>
   );
 };

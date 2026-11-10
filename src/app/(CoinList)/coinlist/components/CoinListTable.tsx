@@ -12,82 +12,64 @@ const CoinList = ({ getCoinList }: { getCoinList: ProcessedCoin[] }) => {
     setCoinList(getCoinList);
   }, [getCoinList]);
 
+  const colHL = "w-28 shrink-0 text-right tabular-nums tablet:hidden";
   return (
-    <div className="w-full px-10 mobile:px-0 tablet:px-0 text-sm text-right">
-      <div className="flex items-center bg-gray-100 dark:bg-gray-800 border-b-2 border-border dark:border-border-dark text-text dark:text-text-dark py-2 px-4">
-        <div className="w-[20%] text-left text-medium font-bold">코인</div>
-        <div className=" w-[25%] mr-[5%] flex tablet:justify-center mobile:flex-col text-medium font-bold ">
-          <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-medium font-bold">
-            현재 가격
-          </span>
-          <span className="hidden  onlyTablet:block  ">/</span>
-          <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-[15px] font-bold">
-            변화량(24H)
-          </span>
+    <div className="w-full text-sm">
+      <div className="flex items-center gap-4 border-b border-border px-3 py-3 text-xs font-medium text-muted dark:border-border-dark dark:text-muted-dark">
+        <div className="min-w-0 flex-1">코인</div>
+        <div className="flex shrink-0 items-center gap-4">
+          <span className="w-28 text-right mobile:hidden">현재 가격</span>
+          <span className="w-16 text-right mobile:hidden">변화(24H)</span>
+          <span className="hidden mobile:block">가격 / 변화</span>
         </div>
-
-        <div className="  w-[25%] mr-[5%] flex tablet:justify-center mobile:flex-col  text-medium font-bold ">
-          <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-medium font-bold ">
-            최고가
-          </span>
-          <span className="hidden  onlyTablet:block  ">/</span>
-          <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-medium font-bold ">
-            최저가
-          </span>
-        </div>
-
-        <div className=" w-[20%]  text-right text-medium font-bold ">
-          거래량(24H)
+        <div className={colHL}>최고가</div>
+        <div className={colHL}>최저가</div>
+        <div className="w-28 shrink-0 text-right tabular-nums mobile:hidden">
+          거래대금(24H)
         </div>
       </div>
 
-      <ul className=" divide-border dark:divide-border-dark">
+      <ul className="divide-y divide-border dark:divide-border-dark">
         {coinList.map((coin) => (
-          <li
-            key={coin.symbol}
-            className="flex w-full items-center h-[80px] hover:bg-container hover:dark:bg-container-dark cursor-pointer px-4"
-          >
+          <li key={coin.symbol}>
             <Link
               href={`/detailcoin/${coin.symbol}/${encodeURIComponent(
                 coin.korean_name
               )}`}
-              className="flex items-center w-full"
+              className="flex min-h-[64px] items-center gap-4 px-3 py-2 transition-colors hover:bg-hover dark:hover:bg-hover-dark"
             >
-              <div className="w-[20%] flex items-center gap-4">
+              <div className="flex min-w-0 flex-1 items-center gap-3">
                 <CoinImg name={coin.korean_name} symbol={coin.symbol} />
-                <div className="flex flex-col">
-                  <span className="text-left text-medium">
+                <div className="flex min-w-0 flex-col">
+                  <span className="truncate font-medium text-ink dark:text-ink-dark">
                     {coin.korean_name}
                   </span>
-                  <span className="text-left text-medium">{coin.symbol}</span>
+                  <span className="text-xs text-muted dark:text-muted-dark">
+                    {coin.symbol}
+                  </span>
                 </div>
               </div>
-              <div className=" w-[25%] mr-[5%] justify-start flex tablet:justify-center tablet:flex-col  ">
-                <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-medium ">
+              <div className="flex shrink-0 items-center gap-4 tabular-nums mobile:flex-col mobile:items-end mobile:gap-0">
+                <span className="w-28 text-right mobile:w-auto">
                   ₩{formatKRW(coin.trade_price)}
                 </span>
-
                 <span
-                  className={`text-right w-[50%] tablet:w-auto tablet:text-center text-medium ${
-                    coin.signed_change_rate < 0 ? "text-red" : "text-green"
+                  className={`w-16 text-right mobile:w-auto ${
+                    coin.signed_change_rate < 0
+                      ? "text-down"
+                      : coin.signed_change_rate > 0
+                      ? "text-up"
+                      : "text-muted dark:text-muted-dark"
                   }`}
                 >
-                  {coin.signed_change_rate.toFixed(2)}%
+                  {coin.signed_change_rate > 0 ? "+" : ""}
+                  {(coin.signed_change_rate * 100).toFixed(2)}%
                 </span>
               </div>
-
-              <div className=" mr-[5%] w-[25%] flex justify-start tablet:justify-center tablet:flex-col">
-                <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-medium">
-                  ₩{formatKRW(coin.high_price)}
-                </span>
-
-                <span className="text-right w-[50%] tablet:w-auto tablet:text-center text-medium">
-                  ₩{formatKRW(coin.low_price)}
-                </span>
-              </div>
-
-              <div className="w-[20%] text-right text-medium">
-                {formatKRW(coin.acc_trade_price_24h)}
+              <div className={colHL}>₩{formatKRW(coin.high_price)}</div>
+              <div className={colHL}>₩{formatKRW(coin.low_price)}</div>
+              <div className="w-28 shrink-0 text-right tabular-nums mobile:hidden">
+                {formatKRW(Math.round(coin.acc_trade_price_24h))}
               </div>
             </Link>
           </li>
