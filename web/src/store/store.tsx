@@ -25,8 +25,8 @@ interface UserState {
   user: Iuser;
   setUser: (user: Iuser) => void;
   deleteUser: () => void;
-  Addcoin: (coin: Coin) => Promise<void>;
-  deleteCoin: (idx: number) => void;
+  addCoin: (coin: Coin) => void;
+  removeCoin: (idx: number) => void;
 }
 
 interface ICurrency {
@@ -152,69 +152,18 @@ export const useUserStore = create<UserState>()(
         set(() => ({
           user,
         })),
-      Addcoin: async (coin: Coin) => {
-        const { id, mycoin } = useUserStore.getState().user;
-
-        if (mycoin.some((c) => c.id === coin.id)) return;
-
-        try {
-          const res = await fetch("/api/addcoin", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              uid: id,
-              coin,
-            }),
-          });
-
-          if (!res.ok) {
-            throw new Error("이미 등록된 정보입니다.");
-          }
-
-          set((state) => ({
-            user: {
-              ...state.user,
-              mycoin: [...state.user.mycoin, coin],
-            },
-          }));
-        } catch (error) {
-          console.error("추가 코인 에러:", error);
-        }
-      },
-      deleteCoin: async (idx: number) => {
-        const { id, mycoin } = useUserStore.getState().user;
-
-        const coinToDelete = mycoin[idx];
-        if (!coinToDelete) return;
-
-        try {
-          const res = await fetch("/api/deletecoin", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              uid: id,
-              coin: coinToDelete,
-            }),
-          });
-
-          if (!res.ok) {
-            throw new Error("코인 삭제에 실패하였습니다.");
-          }
-
-          set((state) => ({
-            user: {
-              ...state.user,
-              mycoin: state.user.mycoin.filter((_, index) => index !== idx),
-            },
-          }));
-        } catch (error) {
-          console.error("Error deleting coin:", error);
-        }
-      },
+      // 서버 반영은 lib/mutations.ts 의 useMutation 이 하고, 성공하면 여기서 로컬 상태만 갱신한다
+      addCoin: (coin: Coin) =>
+        set((state) => ({
+          user: { ...state.user, mycoin: [...state.user.mycoin, coin] },
+        })),
+      removeCoin: (idx: number) =>
+        set((state) => ({
+          user: {
+            ...state.user,
+            mycoin: state.user.mycoin.filter((_, index) => index !== idx),
+          },
+        })),
 
       deleteUser: () =>
         set(() => ({
