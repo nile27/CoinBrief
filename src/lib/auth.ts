@@ -1,37 +1,24 @@
 import { headers } from "next/headers";
 
-import admin from "@/firebase/firebaseAdmin";
-
 export async function sessionCheck() {
-  const cookieHeader = (await headers()).get("cookie");
-
-  if (!cookieHeader) {
-    console.log("세션 없음");
-    return null;
-  }
-
-  const sessionCookie = cookieHeader
-    .split("; ")
-    .find((c: string) => c.startsWith("session="));
-
-  if (!sessionCookie) {
-    console.log("세션 쿠키 없음");
-    return null;
-  }
-
-  const token = sessionCookie.split("=")[1];
+  const cookie = (await headers()).get("cookie");
+  if (!cookie) return null;
 
   try {
-    const decodedToken = await admin.auth().verifyIdToken(token);
-
+    const res = await fetch(
+      `${process.env.API_URL ?? "http://localhost:4100"}/api/me`,
+      { headers: { cookie }, cache: "no-store" }
+    );
+    if (!res.ok) return null;
+    const me = await res.json();
     return {
       isAuthenticated: true,
-      uid: decodedToken.uid,
-      email: decodedToken.email,
-      displayName: decodedToken.name || "",
+      uid: me.uid as string,
+      email: me.email as string | undefined,
+      displayName: me.displayName as string,
     };
   } catch (error) {
-    console.error("🔥 Firebase 인증 에러:", error);
+    console.error("세션 확인 실패:", error);
     return null;
   }
 }
