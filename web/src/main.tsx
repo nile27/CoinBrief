@@ -50,7 +50,7 @@ createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
           <Routes>
             <Route element={<Layout />}>
-              <Route path="/" element={<Landing />} />
+              <Route path="/" element={<main className="w-full"><Landing /></main>} />
               <Route element={<WithFooter />}>
                 <Route path="/login" element={<Login />} />
                 <Route path="/kakaocb" element={<KakaoCb />} />
