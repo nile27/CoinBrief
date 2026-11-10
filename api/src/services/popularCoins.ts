@@ -1,4 +1,4 @@
-import { env } from "./firebase.js";
+import { env } from "../lib/firebase.js";
 // 서버 전용: 업비트 REST로 24h 거래대금 상위 KRW 마켓을 가져온다. (소켓/릴레이 사용 안 함)
 export interface PopularCoin {
   market: string;
