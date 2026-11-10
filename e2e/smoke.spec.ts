@@ -11,7 +11,7 @@ test.describe("signed-out", () => {
     const wsOpened: string[] = [];
     const socketReqs: string[] = [];
     page.on("websocket", (ws) => {
-      // dev HMR(Next webpack-hmr / Vite 는 같은 origin 의 ws) 제외
+      // dev HMR(Vite 는 같은 origin 의 ws) 제외
       if (new URL(ws.url()).host !== new URL(page.url()).host) wsOpened.push(ws.url());
     });
     page.on("request", (r) => {
