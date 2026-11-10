@@ -16,6 +16,7 @@ const SignUp = lazy(() => import("@/pages/auth/SignUp"));
 const SignEnd = lazy(() => import("@/pages/auth/SignEnd"));
 const PwFind = lazy(() => import("@/pages/auth/PwFind"));
 const PwChange = lazy(() => import("@/pages/auth/PwChange"));
+const Landing = lazy(() => import("@/pages/Landing"));
 const Placeholder = lazy(() => import("@/pages/Placeholder"));
 import "./index.css";
 
@@ -23,16 +24,21 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
 });
 
+// 랜딩('/')은 자체 푸터를 가지므로 main+Footer 래퍼는 나머지 화면에만 쓴다
 const Layout = () => (
   <>
     <Header />
-    <main className="flex min-h-[90vh] w-full flex-col items-center justify-between">
-      <Suspense fallback={<Loading />}>
-        <Outlet />
-      </Suspense>
-      <Footer />
-    </main>
+    <Suspense fallback={<Loading />}>
+      <Outlet />
+    </Suspense>
   </>
+);
+
+const WithFooter = () => (
+  <main className="flex min-h-[90vh] w-full flex-col items-center justify-between">
+    <Outlet />
+    <Footer />
+  </main>
 );
 
 createRoot(document.getElementById("root")!).render(
@@ -42,18 +48,20 @@ createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
           <Routes>
             <Route element={<Layout />}>
-              <Route path="/" element={<Placeholder />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/kakaocb" element={<KakaoCb />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/signend" element={<SignEnd />} />
-              <Route path="/pwfind" element={<PwFind />} />
-              <Route path="/pwchange" element={<PwChange />} />
-              <Route element={<RequireAuth />}>
-                <Route path="/mycoin" element={<Placeholder />} />
-                <Route path="/coinlist/:page" element={<CoinListPage />} />
-                <Route path="/detailcoin/:id/:name" element={<Placeholder />} />
-                <Route path="/mypage" element={<Placeholder />} />
+              <Route path="/" element={<Landing />} />
+              <Route element={<WithFooter />}>
+                <Route path="/login" element={<Login />} />
+                <Route path="/kakaocb" element={<KakaoCb />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/signend" element={<SignEnd />} />
+                <Route path="/pwfind" element={<PwFind />} />
+                <Route path="/pwchange" element={<PwChange />} />
+                <Route element={<RequireAuth />}>
+                  <Route path="/mycoin" element={<Placeholder />} />
+                  <Route path="/coinlist/:page" element={<CoinListPage />} />
+                  <Route path="/detailcoin/:id/:name" element={<Placeholder />} />
+                  <Route path="/mypage" element={<Placeholder />} />
+                </Route>
               </Route>
               <Route path="*" element={<NotFound />} />
             </Route>

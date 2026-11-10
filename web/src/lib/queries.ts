@@ -23,3 +23,18 @@ export const useUpbitCoins = () =>
     queryFn: () => apiFetch<ProcessedCoin[]>("/api/upbit/coins"),
     staleTime: 30_000,
   });
+
+export interface PopularCoin {
+  market: string;
+  symbol: string;
+  koreanName: string;
+  price: number;
+  changePercent: number;
+}
+
+export const usePopularCoins = () =>
+  useQuery({
+    queryKey: ["upbit", "popular"],
+    queryFn: () => apiFetch<{ coins: PopularCoin[]; fetchedAt: number | null }>("/api/upbit/popular"),
+    staleTime: 60_000,
+  });
