@@ -19,23 +19,53 @@ const PwFind = () => {
   const {
     register,
     watch,
+    reset,
     formState: { errors },
   } = useForm<FormData>({ mode: "onSubmit", reValidateMode: "onSubmit" });
   const [verify, setVerify] = useState(false);
   const [isInput, setIsInput] = useState<boolean>(false);
 
+  const [locked, setLocked] = useState(false);
+  const [otp, setOtp] = useState("");
   const [verifyMessage, setVerifyMessage] = useState("");
   const navi = useRouter();
 
-  const handleOnclick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (!verify) {
-      setVerifyMessage("본인 인증을 진행해주세요.");
-      return;
-    } else {
-      const encodeEmail = encodeBase64(watch("email"));
-      navi.push(`/pwchange?email=${encodeEmail} `);
+  const verifyOtp = async () => {
+    try {
+      const response = await fetch("/api/pwfind", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: watch("email"),
+          name: watch("name"),
+          otp: otp.trim(),
+        }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (response.ok) {
+        setVerify(true);
+        setVerifyMessage("OTP 인증 성공!");
+      } else {
+        setVerifyMessage(data.message || "OTP 검증 중 문제가 발생했습니다.");
+        if (response.status === 429) {
+          // 서버가 OTP를 삭제함: 입력 비우고 메일 다시 보내기 허용
+          setOtp("");
+          setLocked(true);
+        }
+      }
+    } catch (error) {
+      console.error("OTP 검증 에러:", error);
+      setVerifyMessage("OTP 검증 중 문제가 발생했습니다.");
     }
+  };
+
+  const handleReset = () => {
+    reset();
+    setVerify(false);
+    setIsInput(false);
+    setLocked(false);
+    setOtp("");
+    setVerifyMessage("");
   };
 
   return (
@@ -55,13 +85,13 @@ const PwFind = () => {
             회원가입
           </Link>
         </div>
-        <form className="flex flex-col gap-3 w-full h-auto  border-border dark:border-border-dark pb-3">
+        <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-3 w-full h-auto  border-border dark:border-border-dark pb-3">
           <div className="w-full h-auto flex flex-col gap-4 ">
             <label htmlFor="formName" className="hidden"></label>
             <InputStyle
               autoComplete="username"
               placeholder="이름"
-              disabled={verify}
+              disabled={isInput}
               {...register("name", { required: "이름을 입력해주세요." })}
             />
             <div className=" w-full h-auto flex justify-center items-center  gap-2">
@@ -69,7 +99,7 @@ const PwFind = () => {
               <InputStyle
                 autoComplete="email"
                 placeholder="이메일"
-                disabled={verify}
+                disabled={isInput}
                 {...register("email", {
                   required: "이메일을 입력해주세요",
                   pattern: {
@@ -81,8 +111,9 @@ const PwFind = () => {
               <PwFindOtp
                 email={watch("email")}
                 name={watch("name")}
-                isInput={isInput}
-                verify={verify}
+                canSend={!verify && (!isInput || locked)}
+                setLocked={setLocked}
+                setOtp={setOtp}
                 setIsInput={setIsInput}
                 setVerifyMessage={setVerifyMessage}
               />
@@ -90,12 +121,10 @@ const PwFind = () => {
 
             {isInput && watch("name") && (
               <PwFindInput
-                email={watch("email")}
-                name={watch("name")}
-                setIsInput={setIsInput}
-                setVerify={setVerify}
                 verify={verify}
-                setVerifyMessage={setVerifyMessage}
+                otp={otp}
+                setOtp={setOtp}
+                onVerify={verifyOtp}
               />
             )}
 
@@ -108,7 +137,23 @@ const PwFind = () => {
             )}
           </div>
 
-          <BtnStyle size="medium" onClick={handleOnclick}>
+          {isInput && (
+            <button
+              type="button"
+              onClick={handleReset}
+              className="self-start text-sm text-muted underline underline-offset-4 dark:text-muted-dark"
+            >
+              다시 입력
+            </button>
+          )}
+          <BtnStyle
+            size="medium"
+            type="button"
+            disabled={!verify}
+            onClick={() =>
+              navi.push(`/pwchange?email=${encodeBase64(watch("email"))}`)
+            }
+          >
             확인
           </BtnStyle>
         </form>
