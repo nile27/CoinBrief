@@ -1,6 +1,7 @@
 "use client";
 import { useCoinStore } from "@/store/store";
 import { useEffect, useState, useRef } from "react";
+import { formatKRWPrice } from "@/utill/utill";
 import io from "socket.io-client";
 
 interface UpbitData {
@@ -80,7 +81,7 @@ export default function BoxRealTime({ symbol }: { symbol: string }) {
   return (
     <div className="flex flex-col items-end gap-0.5 text-sm tabular-nums">
       <span className="font-medium text-ink dark:text-ink-dark">
-        {tradePrice ? `₩${tradePrice.toLocaleString()}` : "불러오는 중"}
+        {tradePrice ? `₩${formatKRWPrice(tradePrice)}` : "불러오는 중"}
       </span>
       <span
         className={

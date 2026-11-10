@@ -20,11 +20,9 @@ const timeFormatter = new Intl.DateTimeFormat("ko-KR", {
   hour12: false,
 });
 
-const trend = (p: number) => {
-  // 표시 소수(2자리) 기준으로 0 이면 보합
-  const r = Math.round(p * 100) / 100;
-  return r > 0 ? "up" : r < 0 ? "down" : "flat";
-};
+// 표시 소수(2자리)로 한 번만 반올림. "+ 0"은 -0 을 0 으로 만든다(-0.00% 방지).
+const round2 = (p: number) => Math.round(p * 100) / 100 + 0;
+const trend = (r: number) => (r > 0 ? "up" : r < 0 ? "down" : "flat");
 
 const LoginMain = ({ coins, fetchedAt, usd }: Props) => {
   return (
@@ -60,7 +58,8 @@ const LoginMain = ({ coins, fetchedAt, usd }: Props) => {
           {coins.length > 0 ? (
             <ul className={styles.grid}>
               {coins.map((c) => {
-                const t = trend(c.changePercent);
+                const pct = round2(c.changePercent);
+                const t = trend(pct);
                 const sign = t === "up" ? "+" : "";
                 return (
                   <li key={c.market} className={styles.coin}>
@@ -77,7 +76,7 @@ const LoginMain = ({ coins, fetchedAt, usd }: Props) => {
                         {t === "up" ? "▲" : t === "down" ? "▼" : "–"}
                       </span>
                       {sign}
-                      {c.changePercent.toFixed(2)}%
+                      {pct.toFixed(2)}%
                       <span className={styles.srOnly}>
                         {t === "up" ? " 상승" : t === "down" ? " 하락" : " 보합"}
                       </span>

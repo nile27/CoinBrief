@@ -59,7 +59,7 @@ const CoinName = ({ price, id, name, change }: Prop) => {
       prev_24H_price: price.prev_24H_price,
     });
   }, []);
-  const fall = change === "FALL";
+  const dir = change === "FALL" ? -1 : change === "RISE" ? 1 : 0;
   const prevPrice = Number(currencyData.prev_24H_price);
   const prevRate = currencyData.prev_24H_rate * 100;
   const dirClass = (v: number) =>
@@ -90,10 +90,10 @@ const CoinName = ({ price, id, name, change }: Prop) => {
           {currency}
           {Number(currencyData.price).toLocaleString()}
         </div>
-        <div className={`flex items-center gap-2 pb-1 tabular-nums ${fall ? "text-down" : "text-up"}`}>
-          {fall ? <RedArrow className="text-down" /> : <GreenArrow className="text-up" />}
+        <div className={`flex items-center gap-2 pb-1 tabular-nums ${dirClass(dir)}`}>
+          <Arrow v={dir} />
           <span>
-            {fall ? "-" : "+"}
+            {dir < 0 ? "-" : dir > 0 ? "+" : ""}
             {(currencyData.rate * 100).toFixed(2)}%
           </span>
         </div>

@@ -25,7 +25,7 @@ const MyCoinArticle = () => {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-3 tablet:grid-cols-2">
+    <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
       {[
         {
           title: "최고가",
@@ -53,7 +53,7 @@ const MyCoinArticle = () => {
           className="flex min-w-0 flex-col gap-1 rounded-[10px] border border-border bg-container p-4 dark:border-border-dark dark:bg-container-dark"
         >
           <p className="text-xs text-muted dark:text-muted-dark">{item.title}</p>
-          <p className="truncate text-[15px] font-medium tabular-nums text-ink dark:text-ink-dark">
+          <p className="break-words text-[15px] font-medium tabular-nums text-ink dark:text-ink-dark">
             {formatKRW(item.value)} {item.currency}
           </p>
         </div>
