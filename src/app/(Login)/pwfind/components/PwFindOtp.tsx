@@ -2,8 +2,9 @@
 interface IProps {
   email: string;
   name: string;
-  isInput: boolean;
-  verify: boolean;
+  canSend: boolean;
+  setLocked: React.Dispatch<React.SetStateAction<boolean>>;
+  setOtp: React.Dispatch<React.SetStateAction<string>>;
   setIsInput: React.Dispatch<React.SetStateAction<boolean>>;
   setVerifyMessage: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -12,7 +13,9 @@ const PwFindOtp = ({
   email,
   name,
   setVerifyMessage,
-  verify,
+  canSend,
+  setLocked,
+  setOtp,
   setIsInput,
 }: IProps) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -27,6 +30,9 @@ const PwFindOtp = ({
 
       if (response.ok) {
         setIsInput(true);
+        setLocked(false);
+        setOtp("");
+        setVerifyMessage("");
         alert("이메일을 보냈습니다. 이메일을 확인해주세요.");
       } else {
         const errorData = await response.json();
@@ -47,7 +53,7 @@ const PwFindOtp = ({
       <button
         type="button"
         onClick={handleModal}
-        disabled={!email || !name || !emailRegex.test(email) || verify}
+        disabled={!email || !name || !emailRegex.test(email) || !canSend}
         className={` bg-btn dark:bg-btn-dark  hover:bg-btn-hover dark:hover:bg-btn-hover-dark disabled:bg-secondary disabled:text-muted dark:disabled:bg-secondary-dark dark:disabled:text-muted-dark
          min-w-[80px] text-[14px] h-[40px]  text-btn-ink dark:text-btn-ink-dark font-semibold rounded-md`}
       >
