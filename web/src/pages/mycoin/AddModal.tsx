@@ -34,10 +34,23 @@ const AddModal = ({
     };
   }, []);
 
+  const mycoin = useUserStore((s) => s.user.mycoin);
+  const [message, setMessage] = useState("");
+  const isAdded = (id: string) => mycoin.some((c) => c.id === id);
+
   const handleSelectCoin = (coin: Coin) => {
-    setIsModal(false);
-    if (useUserStore.getState().user.mycoin.some((c) => c.id === coin.id)) return;
-    add.mutate({ id: coin.id, name: coin.id, symbol: coin.symbol });
+    if (isAdded(coin.id)) {
+      setMessage("이미 등록된 코인입니다.");
+      return;
+    }
+    setMessage("");
+    add.mutate(
+      { id: coin.id, name: coin.id, symbol: coin.symbol },
+      {
+        onSuccess: () => setIsModal(false),
+        onError: (e) => setMessage(e.message), // 서버 메시지(409 등)를 그대로 보여준다
+      }
+    );
   };
 
   return (
@@ -65,14 +78,23 @@ const AddModal = ({
           onChange={(e) => setSearch(e.target.value)}
         />
 
+        {message && (
+          <p role="alert" className="mt-2 text-sm text-red">
+            {message}
+          </p>
+        )}
+
         <ul className="w-full border border-border dark:border-border-dark rounded-md max-h-60 overflow-auto mt-2">
           {results.map((coin: Coin) => (
             <li
               key={coin.symbol}
-              className="px-4 py-2 cursor-pointer border-b  border-border dark:border-border-dark hover:bg-hover hover:dark:bg-hover-dark"
+              className={`flex items-center justify-between px-4 py-2 cursor-pointer border-b  border-border dark:border-border-dark hover:bg-hover hover:dark:bg-hover-dark ${
+                isAdded(coin.id) ? "text-muted dark:text-muted-dark" : ""
+              }`}
               onClick={() => handleSelectCoin(coin)}
             >
               {coin.symbol.toUpperCase()}
+              {isAdded(coin.id) && <span className="text-xs">등록됨</span>}
             </li>
           ))}
         </ul>
