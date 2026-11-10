@@ -4,6 +4,8 @@ import CoinListTable from "../components/CoinListTable";
 import SearchCoin from "../components/SearchCoin";
 import TopLosers from "../components/TopLosers";
 import { sessionCheck } from "@/lib/auth";
+import ExchangeSync from "@/components/ExchangeSync";
+import { getUsdKrw } from "@/lib/exchangeRate";
 
 import Link from "next/link";
 import notFound from "../../../not-found";
@@ -13,7 +15,7 @@ const CoinList = async ({ params }: { params: Promise<{ page: string }> }) => {
   const { page: pageParam } = await params;
   const page = Number(pageParam);
   const itemsPerPage = 50;
-  const session = await sessionCheck();
+  const [session, usd] = await Promise.all([sessionCheck(), getUsdKrw()]);
 
   const upbitCoins = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}api/upbit/coins`,
@@ -39,13 +41,14 @@ const CoinList = async ({ params }: { params: Promise<{ page: string }> }) => {
 
   return (
     <section className="mx-auto flex w-full max-w-[1100px] flex-col gap-8 px-4 py-8 tablet:px-4">
+      <ExchangeSync rate={usd?.rate ?? null} />
       <h1 className="font-serif text-[32px] font-semibold text-ink dark:text-ink-dark mobile:text-[26px]">
         코인리스트
       </h1>
       <section className="grid grid-cols-3 items-stretch gap-4 tablet:grid-cols-1">
         <TopVolume coins={allCoins} />
         <TopLosers coins={allCoins} />
-        <CurrencyCalc />
+        <CurrencyCalc rate={usd?.rate ?? null} />
       </section>
       <SearchCoin allCoins={allCoins} />
       <CoinListTable getCoinList={paginatedCoins} />
