@@ -4,18 +4,26 @@ import InputStyle from "@/components/CustomUI/InputStyle";
 
 interface IProps {
   verify: boolean;
+  otp: string;
   setOtp: React.Dispatch<React.SetStateAction<string>>;
   onVerify: () => void;
 }
 
-const PwFindInput = ({ verify, setOtp, onVerify }: IProps) => {
+const PwFindInput = ({ verify, otp, setOtp, onVerify }: IProps) => {
   return (
     <div className=" w-full h-auto flex justify-center items-center gap-2">
       <InputStyle
         disabled={verify}
         placeholder="인증 번호"
         autoComplete="off"
+        value={otp}
         onChange={(e) => setOtp(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            onVerify();
+          }
+        }}
       />
       <button
         type="button"
