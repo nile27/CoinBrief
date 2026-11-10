@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -6,9 +6,17 @@ import { ThemeProvider } from "@/components/DarkMode/Theme-provider";
 import Header from "@/components/CustomUI/Header";
 import Footer from "@/components/CustomUI/Footer";
 import RequireAuth from "@/components/RequireAuth";
-import CoinListPage from "@/pages/CoinListPage";
-import NotFound from "@/pages/NotFound";
-import { Placeholder } from "@/pages/Placeholder";
+import Loading from "@/components/Loading";
+
+const CoinListPage = lazy(() => import("@/pages/CoinListPage"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
+const Login = lazy(() => import("@/pages/auth/Login"));
+const KakaoCb = lazy(() => import("@/pages/auth/KakaoCb"));
+const SignUp = lazy(() => import("@/pages/auth/SignUp"));
+const SignEnd = lazy(() => import("@/pages/auth/SignEnd"));
+const PwFind = lazy(() => import("@/pages/auth/PwFind"));
+const PwChange = lazy(() => import("@/pages/auth/PwChange"));
+const Placeholder = lazy(() => import("@/pages/Placeholder"));
 import "./index.css";
 
 const queryClient = new QueryClient({
@@ -19,7 +27,9 @@ const Layout = () => (
   <>
     <Header />
     <main className="flex min-h-[90vh] w-full flex-col items-center justify-between">
-      <Outlet />
+      <Suspense fallback={<Loading />}>
+        <Outlet />
+      </Suspense>
       <Footer />
     </main>
   </>
@@ -32,9 +42,13 @@ createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
           <Routes>
             <Route element={<Layout />}>
-              {["/", "/login", "/signup", "/signend", "/pwfind", "/pwchange", "/kakaocb"].map((p) => (
-                <Route key={p} path={p} element={<Placeholder />} />
-              ))}
+              <Route path="/" element={<Placeholder />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/kakaocb" element={<KakaoCb />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/signend" element={<SignEnd />} />
+              <Route path="/pwfind" element={<PwFind />} />
+              <Route path="/pwchange" element={<PwChange />} />
               <Route element={<RequireAuth />}>
                 <Route path="/mycoin" element={<Placeholder />} />
                 <Route path="/coinlist/:page" element={<CoinListPage />} />
