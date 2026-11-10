@@ -1,19 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { auth, env } from "./firebase.js";
-
-const FIVE_DAYS = 5 * 24 * 60 * 60 * 1000;
-
-export const cookieOpts = {
-  httpOnly: true,
-  sameSite: "strict" as const,
-  path: "/",
-  secure: process.env.NODE_ENV === "production",
-};
-
-export async function setSession(res: Response, idToken: string) {
-  const cookie = await auth.createSessionCookie(idToken, { expiresIn: FIVE_DAYS });
-  res.cookie("session", cookie, { ...cookieOpts, maxAge: FIVE_DAYS });
-}
+import { auth } from "../lib/firebase.js";
 
 export async function readSession(req: Request) {
   const cookie = req.cookies?.session;
@@ -34,5 +20,3 @@ export async function requireSession(req: Request, res: Response, next: NextFunc
   res.locals.uid = s.uid;
   next();
 }
-
-export { env };

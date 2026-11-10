@@ -3,7 +3,7 @@ import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 
 // shortcut: fallback to old NEXT_PUBLIC_ names until .env is renamed, remove after
-const env = (n: string) => process.env[n] ?? process.env[`NEXT_PUBLIC_${n}`];
+export const env = (n: string) => process.env[n] ?? process.env[`NEXT_PUBLIC_${n}`];
 
 if (!getApps().length) {
   initializeApp({
@@ -17,5 +17,4 @@ if (!getApps().length) {
 
 export const auth = getAuth();
 export const db = getFirestore();
-export { env };
 export { FieldValue, Timestamp } from "firebase-admin/firestore";
