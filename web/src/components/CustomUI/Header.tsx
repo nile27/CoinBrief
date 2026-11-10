@@ -8,29 +8,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOut } from "firebase/auth";
-import { auth } from "@/firebase/firebase";
 
-import { Link, useNavigate, useLocation } from "react-router";
-import { useAuthStore, useUserStore } from "@/store/store";
+import { Link, useLocation } from "react-router";
+import { useAuthStore } from "@/store/store";
+import { useLogout } from "@/lib/session";
 
 
 const Header = () => {
   const navList = ["내 코인", "코인리스트"];
   const navLink = ["/mycoin", "/coinlist/1"];
-  const navi = useNavigate();
   const { pathname } = useLocation();
 
-  const { isLogin, logout } = useAuthStore();
-  const { deleteUser } = useUserStore();
+  const { isLogin } = useAuthStore();
 
-  const handleLogout = async () => {
-    await fetch("/api/logout", { method: "POST" });
-    logout();
-    deleteUser();
-    navi("/");
-    signOut(auth);
-  };
+  const handleLogout = useLogout();
 
   const navClass =
     "text-[15px] font-medium text-muted transition-colors hover:text-ink dark:text-muted-dark dark:hover:text-ink-dark";
