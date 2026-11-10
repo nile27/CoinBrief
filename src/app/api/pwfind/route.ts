@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { randomUUID } from "crypto";
 import admin from "@/firebase/firebaseAdmin";
 
 const db = admin.firestore();
@@ -59,9 +60,27 @@ export async function POST(req: Request) {
       }
 
       await db.collection("otps").doc(email).delete();
-      return new Response(JSON.stringify({ message: "OTP 인증 성공!" }), {
-        status: 200,
+
+      const token = randomUUID();
+      await db
+        .collection("pwreset")
+        .doc(email)
+        .set({
+          token,
+          expiresAt: admin.firestore.Timestamp.fromMillis(
+            Date.now() + 10 * 60 * 1000
+          ),
+        });
+
+      const response = NextResponse.json({ message: "OTP 인증 성공!" });
+      response.cookies.set("pwreset", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 600,
+        path: "/api",
       });
+      return response;
     } catch (error: unknown) {
       if (error instanceof Error) {
         return NextResponse.json(

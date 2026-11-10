@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import admin from "@/firebase/firebaseAdmin";
+import { guardUid } from "@/lib/auth";
 
 export async function DELETE(req: NextRequest) {
   try {
@@ -12,6 +13,9 @@ export async function DELETE(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    const denied = await guardUid(uid);
+    if (denied) return denied;
 
     const adminAuth = admin.auth();
     const user = await adminAuth.getUser(uid);

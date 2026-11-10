@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { guardUid } from "@/lib/auth";
 import { firestore } from "@/firebase/firebase";
 import { doc, updateDoc, arrayRemove } from "firebase/firestore";
 
@@ -9,6 +10,9 @@ export async function POST(request: Request) {
     if (!uid || !coin) {
       return NextResponse.json({ error: "데이터 누락" }, { status: 400 });
     }
+
+    const denied = await guardUid(uid);
+    if (denied) return denied;
 
     const userDoc = doc(firestore, "users", uid);
 
