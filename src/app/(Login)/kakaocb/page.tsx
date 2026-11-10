@@ -40,24 +40,10 @@ const KakaoCallback = () => {
         const tokenData = await tokenRes.json();
         const accessToken = tokenData.access_token;
 
-        const userInfoRes = await fetch(
-          `${process.env.NEXT_PUBLIC_KAKAO_KAPI_URL}`,
-          {
-            method: "GET",
-            headers: { Authorization: `Bearer ${accessToken}` },
-          }
-        );
-
-        if (!userInfoRes.ok) throw new Error("유저 정보를 받을 수 없습니다.");
-
-        const userInfo = await userInfoRes.json();
-        const email = userInfo.kakao_account.email;
-        const displayName = userInfo.properties.nickname;
-
         const customTokenRes = await fetch("/api/oauthemail", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, name: displayName, displayName }),
+          body: JSON.stringify({ accessToken }),
         });
 
         if (!customTokenRes.ok)

@@ -3,12 +3,38 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const { email, name, displayName } = await request.json();
+    const { accessToken } = await request.json();
 
-    if (!email || !name || !displayName) {
+    if (!accessToken || typeof accessToken !== "string") {
       return NextResponse.json(
-        { error: "이메일, 이름, 닉네임을 확인해주세요." },
+        { error: "카카오 토큰이 필요합니다." },
         { status: 400 }
+      );
+    }
+
+    // 클라이언트가 보낸 이메일은 믿지 않고, 카카오 서버에서 직접 확인한다.
+    const kakaoRes = await fetch("https://kapi.kakao.com/v2/user/me", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (!kakaoRes.ok) {
+      return NextResponse.json(
+        { error: "유효하지 않은 카카오 토큰입니다." },
+        { status: 401 }
+      );
+    }
+    const kakaoUser = await kakaoRes.json();
+    const email = kakaoUser?.kakao_account?.email;
+    const displayName = kakaoUser?.properties?.nickname;
+    const name = displayName;
+
+    if (
+      !email ||
+      !displayName ||
+      kakaoUser.kakao_account.is_email_verified === false
+    ) {
+      return NextResponse.json(
+        { error: "카카오 계정의 인증된 이메일/닉네임이 필요합니다." },
+        { status: 401 }
       );
     }
 
