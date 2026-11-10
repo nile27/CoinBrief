@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * 디자인 토큰 (warm monochrome). tailwind.config.ts 의 colors 와 같은 값을 쓴다.
+ * 랜딩(Landing.module.css)과 앱 전체가 이 변수를 공유한다.
+ */
+@layer base {
+  :root {
+    --bg: #fbfbfa;
+    --surface: #ffffff;
+    --surface-alt: #f7f6f3;
+    --ink: #111111;
+    --ink-soft: #2f3437;
+    --muted: #787774;
+    --line: #eaeaea;
+    --btn-bg: #111111;
+    --btn-ink: #ffffff;
+    --btn-hover: #333333;
+    --up: #d24f45;
+    --down: #2f6fd0;
+    --ok: #2f8f5b;
+    --danger: #d24f45;
+    --radius: 0.5rem;
+    color-scheme: light;
+  }
+  .dark {
+    --bg: #1a1918;
+    --surface: #211f1e;
+    --surface-alt: #262423;
+    --ink: #f1efea;
+    --ink-soft: #d6d3cc;
+    --muted: #a09c94;
+    --line: #34312f;
+    --btn-bg: #f1efea;
+    --btn-ink: #1a1918;
+    --btn-hover: #d6d3cc;
+    --up: #ef6b60;
+    --down: #6ea0f0;
+    --ok: #5fbf8a;
+    --danger: #ef6b60;
+    color-scheme: dark;
+  }
+
+  html {
+    @apply bg-background;
+  }
+  html.dark {
+    @apply bg-background-dark;
+  }
+  body {
+    @apply bg-background text-text font-sans;
+    line-height: 1.6;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  .dark body {
+    @apply bg-background-dark text-text-dark;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
