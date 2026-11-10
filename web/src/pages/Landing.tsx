@@ -105,11 +105,11 @@ const Landing = () => {
             <a
               target="_blank"
               rel="noreferrer"
-              to="https://www.figma.com/design/xxO2ItVjjcXe3QsYKTmkPR/coin_project?node-id=4-2&p=f&t=DBAnGhVx8fhAQNCT-0"
+              href="https://www.figma.com/design/xxO2ItVjjcXe3QsYKTmkPR/coin_project?node-id=4-2&p=f&t=DBAnGhVx8fhAQNCT-0"
             >
               Figma
             </a>
-            <a target="_blank" rel="noreferrer" to="https://github.com/nile27/CoinBrief">
+            <a target="_blank" rel="noreferrer" href="https://github.com/nile27/CoinBrief">
               Github
             </a>
           </div>

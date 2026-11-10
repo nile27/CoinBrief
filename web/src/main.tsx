@@ -17,6 +17,7 @@ const SignEnd = lazy(() => import("@/pages/auth/SignEnd"));
 const PwFind = lazy(() => import("@/pages/auth/PwFind"));
 const PwChange = lazy(() => import("@/pages/auth/PwChange"));
 const Landing = lazy(() => import("@/pages/Landing"));
+const DetailCoinPage = lazy(() => import("@/pages/DetailCoinPage"));
 const Placeholder = lazy(() => import("@/pages/Placeholder"));
 import "./index.css";
 
@@ -59,7 +60,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route element={<RequireAuth />}>
                   <Route path="/mycoin" element={<Placeholder />} />
                   <Route path="/coinlist/:page" element={<CoinListPage />} />
-                  <Route path="/detailcoin/:id/:name" element={<Placeholder />} />
+                  <Route path="/detailcoin/:id/:name" element={<DetailCoinPage />} />
                   <Route path="/mypage" element={<Placeholder />} />
                 </Route>
               </Route>
