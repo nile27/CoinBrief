@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import ApexChart from "react-apexcharts";
 import { useQuery } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
+import { ChartSkeleton } from "@/pages/detail/DetailSkeleton";
 import { apiFetch } from "@/lib/api";
 import { useCoinStore, useCurrency, useUserStore } from "@/store/store";
 import { formatCurrency } from "@/utill/utill";
@@ -15,7 +16,7 @@ interface IKlineChart {
   trade_price: number;
 }
 
-export default function MyCoinChart({ exchange }: { exchange: number }) {
+export default function MyCoinChart({ exchange }: { exchange?: number }) {
   const { theme, systemTheme } = useTheme();
   const { mycoin } = useUserStore().user;
   const { currency } = useCurrency();
@@ -35,7 +36,7 @@ export default function MyCoinChart({ exchange }: { exchange: number }) {
     staleTime: 30_000,
   });
   const loading = kline.isPending;
-  const div = currency === "$" ? exchange : 1;
+  const div = currency === "$" ? exchange ?? 1 : 1;
 
   const klineData = useMemo(
     () =>
@@ -61,10 +62,8 @@ export default function MyCoinChart({ exchange }: { exchange: number }) {
 
   return (
     <>
-      {loading || mycoin.length === 0 ? (
-        <div className="flex h-[400px] w-full items-center justify-center text-muted dark:text-muted-dark">
-          불러오는 중...
-        </div>
+      {loading || exchange === undefined || mycoin.length === 0 ? (
+        <ChartSkeleton />
       ) : (
         <section className="w-full flex tablet:flex-col rounded-[10px] border border-border dark:border-border-dark p-4 tablet:gap-3">
           <div className=" w-auto flex justify-end items-center h-full pt-10 tablet:pt-1">

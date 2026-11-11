@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { signOut } from "firebase/auth";
-import { auth } from "@/firebase/firebase";
 import { apiFetch } from "@/lib/api";
 import { useAuthStore, useUserStore, type Iuser } from "@/store/store";
 
@@ -21,6 +19,7 @@ export function useLogout() {
     useUserStore.getState().deleteUser();
     qc.clear();
     navi("/");
-    signOut(auth);
+    // Firebase 는 로그아웃 시점에만 불러온다
+    Promise.all([import("firebase/auth"), import("@/firebase/firebase")]).then(([{ signOut }, { auth }]) => signOut(auth));
   };
 }

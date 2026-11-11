@@ -1,17 +1,12 @@
-import { auth, firestore } from "@/firebase/firebase";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import {
-  doc,
-  getDoc,
-  setDoc,
-  collection,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
 import { Iuser } from "@/store/store";
 
+// 팝업은 클릭 직후에 열려야 하므로 로그인 화면이 뜨면 미리 받아 둔다
+export const preloadFirebase = () =>
+  Promise.all([import("@/firebase/firebase"), import("firebase/auth"), import("firebase/firestore")]);
+
 export const googleLogin = async (): Promise<Iuser | null> => {
+  const [{ auth, firestore }, { signInWithPopup, GoogleAuthProvider }, { doc, getDoc, setDoc, collection, query, where, getDocs }] =
+    await preloadFirebase();
   const provider = new GoogleAuthProvider();
 
   try {

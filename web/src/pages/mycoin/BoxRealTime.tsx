@@ -2,6 +2,7 @@ import { useCoinStore } from "@/store/store";
 import { useEffect, useState, useRef } from "react";
 import { formatKRWPrice } from "@/utill/utill";
 import io from "socket.io-client";
+import Skeleton from "@/components/Skeleton";
 
 interface UpbitData {
   market: string;
@@ -80,7 +81,7 @@ export default function BoxRealTime({ symbol }: { symbol: string }) {
   return (
     <div className="flex flex-col items-end gap-0.5 text-sm tabular-nums">
       <span className="font-medium text-ink dark:text-ink-dark">
-        {tradePrice ? `₩${formatKRWPrice(tradePrice)}` : "불러오는 중"}
+        {tradePrice ? `₩${formatKRWPrice(tradePrice)}` : <Skeleton className="w-20" />}
       </span>
       <span
         className={
@@ -91,7 +92,7 @@ export default function BoxRealTime({ symbol }: { symbol: string }) {
             : "text-muted dark:text-muted-dark"
         }
       >
-        {changeRate ? `${dir === "FALL" ? "-" : dir === "RISE" ? "+" : ""}${changeRate}%` : ""}
+        {changeRate ? `${dir === "FALL" ? "-" : dir === "RISE" ? "+" : ""}${changeRate}%` : <Skeleton className="w-12" />}
       </span>
     </div>
   );

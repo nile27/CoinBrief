@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import InputStyle from "@/components/CustomUI/InputStyle";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { finishLogin } from "@/lib/session";
-import { googleLogin, kakaoLogin } from "./AuthLogin";
+import { googleLogin, kakaoLogin, preloadFirebase } from "./AuthLogin";
 
 interface FormData {
   email: string;
@@ -25,6 +25,7 @@ const Login = () => {
   } = useForm<FormData>({ mode: "onSubmit", reValidateMode: "onSubmit" });
   const navi = useNavigate();
   const qc = useQueryClient();
+  useEffect(() => void preloadFirebase(), []);
   const [errMessage, setErrMessage] = useState<string>("");
 
   const testUser = {

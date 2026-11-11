@@ -20,6 +20,7 @@ const Landing = lazy(() => import("@/pages/Landing"));
 const DetailCoinPage = lazy(() => import("@/pages/DetailCoinPage"));
 const MyCoinPage = lazy(() => import("@/pages/MyCoinPage"));
 const MyPage = lazy(() => import("@/pages/MyPage"));
+import { coinsQuery, exchangeQuery, meQuery, popularQuery } from "@/lib/queries";
 import "./index.css";
 
 const queryClient = new QueryClient({
@@ -27,6 +28,18 @@ const queryClient = new QueryClient({
 });
 
 // 랜딩('/')은 자체 푸터를 가지므로 main+Footer 래퍼는 나머지 화면에만 쓴다
+// 첫 화면 데이터는 React 렌더/라우트 청크 로딩을 기다리지 않고 지금 요청한다.
+// 같은 queryKey 를 쓰므로 화면의 useQuery 가 이 요청을 그대로 이어받는다(중복 요청 없음).
+const { pathname } = window.location;
+if (pathname === "/") {
+  queryClient.prefetchQuery(popularQuery);
+  queryClient.prefetchQuery(exchangeQuery);
+} else if (/^\/(coinlist|detailcoin|mycoin|mypage)/.test(pathname)) {
+  queryClient.prefetchQuery(meQuery);
+  if (!pathname.startsWith("/mypage")) queryClient.prefetchQuery(exchangeQuery);
+  if (pathname.startsWith("/coinlist")) queryClient.prefetchQuery(coinsQuery);
+}
+
 const Layout = () => (
   <>
     <Header />
