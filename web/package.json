@@ -40,5 +40,8 @@
     "tailwind-merge": "^2.6.1",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^5.1.0"
+  },
+  "engines": {
+    "node": "24.x"
   }
 }
