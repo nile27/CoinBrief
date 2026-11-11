@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { cookieOpts, FIVE_DAYS, fail } from "../lib/http.js";
 import { readSession } from "../middlewares/session.js";
 import * as svc from "../services/auth.js";
+import { consumeSignupToken } from "../services/otp.js";
 
 const setSessionCookie = async (res: Response, idToken: string) =>
   res.cookie("session", await svc.createSessionCookie(idToken), { ...cookieOpts, maxAge: FIVE_DAYS });
@@ -59,6 +60,8 @@ export async function register(req: Request, res: Response) {
     return;
   }
   try {
+    await consumeSignupToken(email, req.cookies?.signupok);
+    res.clearCookie("signupok", { ...cookieOpts, path: "/api" });
     await svc.register(email, password, displayName, name);
     res.status(200).json({ message: "회원가입 성공!" });
   } catch (e) {

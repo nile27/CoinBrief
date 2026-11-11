@@ -9,7 +9,8 @@ export async function sendOtp(req: Request, res: Response) {
     return;
   }
   try {
-    await svc.sendOtp(email, name, purpose === "pwfind");
+    const ip = String(req.headers["x-forwarded-for"] ?? "").split(",")[0].trim() || req.ip || "unknown";
+    await svc.sendOtp(email, name, purpose === "pwfind", ip);
     res.status(200).json({ message: "OTP가 전송되었습니다." });
   } catch (e) {
     throw fail(e, (error) => ({ message: "OTP 전송에 실패했습니다.", error }), "OTP 전송 실패:");
@@ -24,6 +25,8 @@ export async function verifyOtp(req: Request, res: Response) {
       return;
     }
     await svc.checkOtp(email, otp);
+    const token = await svc.issueSignupToken(email);
+    res.cookie("signupok", token, { ...cookieOpts, path: "/api", maxAge: 15 * 60 * 1000 });
     res.status(200).json({ message: "OTP 인증 성공!" });
   } catch (e) {
     throw fail(e, (error) => ({ message: "서버 에러가 발생했습니다.", error }), "OTP 검증 실패:");

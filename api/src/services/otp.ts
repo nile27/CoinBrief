@@ -1,4 +1,4 @@
-import { randomBytes } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import nodemailer from "nodemailer";
 import { auth, db, FieldValue, Timestamp } from "../lib/firebase.js";
 import { HttpError } from "../lib/http.js";
@@ -6,7 +6,30 @@ import { HttpError } from "../lib/http.js";
 const findUser = (email: string, name: string) =>
   db.collection("users").where("email", "==", email).where("name", "==", name).get();
 
-export async function sendOtp(email: string, name: string, isPwFind: boolean) {
+const HOUR = 60 * 60 * 1000;
+const TOO_MANY = { message: "인증 메일 요청이 너무 많습니다. 잠시 후 다시 시도해주세요." };
+
+// 메일 발송 제한 (Firestore, 서버리스라 메모리 상태 없음): 이메일당 60초 1회·시간당 5회, IP당 시간당 20회.
+// IP는 해시해서 저장. 발송 전에 호출하며 통과하면 시도를 기록한다.
+async function checkRate(email: string, ip: string) {
+  const emailRef = db.collection("otpRate").doc(email);
+  const ipRef = db.collection("otpRate").doc(`ip_${createHash("sha256").update(ip).digest("hex")}`);
+  await db.runTransaction(async (tx) => {
+    const now = Date.now();
+    const recent = async (ref: typeof emailRef) =>
+      ((await tx.get(ref)).data()?.hits as number[] | undefined)?.filter((t) => now - t < HOUR) ?? [];
+    const [eh, ih] = [await recent(emailRef), await recent(ipRef)];
+    if (eh.length && now - eh[eh.length - 1] < 60_000) {
+      throw new HttpError(429, { message: "1분 후 다시 시도해주세요." });
+    }
+    if (eh.length >= 5 || ih.length >= 20) throw new HttpError(429, TOO_MANY);
+    tx.set(emailRef, { hits: [...eh, now] });
+    tx.set(ipRef, { hits: [...ih, now] });
+  });
+}
+
+export async function sendOtp(email: string, name: string, isPwFind: boolean, ip: string) {
+  await checkRate(email, ip);
   const users = await findUser(email, name);
   if (isPwFind && users.empty) {
     throw new HttpError(404, { message: "가입 정보를 찾을 수 없습니다. 이름과 이메일을 확인해주세요." });
@@ -70,6 +93,25 @@ export async function issueResetToken(email: string, name: string, otp: string) 
     expiresAt: Timestamp.fromMillis(Date.now() + 10 * 60 * 1000),
   });
   return token;
+}
+
+// 회원가입용 이메일 소유 증명 (15분, 일회용). register 가 소비한다.
+export async function issueSignupToken(email: string) {
+  const token = randomBytes(32).toString("hex");
+  await db.collection("signupVerified").doc(email).set({
+    token,
+    expiresAt: Timestamp.fromMillis(Date.now() + 15 * 60 * 1000),
+  });
+  return token;
+}
+
+export async function consumeSignupToken(email: string, cookieToken?: string) {
+  const ref = db.collection("signupVerified").doc(email);
+  const d = (await ref.get()).data() as { token: string; expiresAt: InstanceType<typeof Timestamp> } | undefined;
+  if (!d || !cookieToken || d.token !== cookieToken || Date.now() > d.expiresAt.toMillis()) {
+    throw new HttpError(403, { message: "이메일 인증이 필요합니다." });
+  }
+  await ref.delete();
 }
 
 export async function consumeResetToken(email: string, cookieToken?: string) {
