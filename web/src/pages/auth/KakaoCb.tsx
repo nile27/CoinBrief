@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { getAuth, signInWithCustomToken } from "firebase/auth";
 import { useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { finishLogin } from "@/lib/session";
@@ -55,6 +54,7 @@ const KakaoCallback = () => {
 
         const { customToken, user } = await customTokenRes.json();
 
+        const { getAuth, signInWithCustomToken } = await import("firebase/auth");
         const auth = getAuth();
         const userCredential = await signInWithCustomToken(auth, customToken);
         const userData = {

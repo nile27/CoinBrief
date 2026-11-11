@@ -1,7 +1,5 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { collection, getDocs } from "firebase/firestore";
-import { firestore } from "@/firebase/firebase";
 export interface Coin {
   id: string;
   symbol: string;
@@ -114,6 +112,11 @@ export const useSearchData = create<SearchState>()(
       data: [],
       fetchCoins: async () => {
         try {
+          // Firebase 는 크므로 필요할 때만 불러온다 (초기 로딩 경로에서 제외)
+          const [{ collection, getDocs }, { firestore }] = await Promise.all([
+            import("firebase/firestore"),
+            import("@/firebase/firebase"),
+          ]);
           const coinsCollection = collection(firestore, "coinSymbol");
           const snapshot = await getDocs(coinsCollection);
 
