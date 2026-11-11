@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import styles from "./Landing.module.css";
-import { formatKRWPrice } from "@/utill/utill";
+import { formatKRWPrice } from "@/utils/utils";
 import Skeleton from "@/components/Skeleton";
 import { useExchange, usePopularCoins } from "@/lib/queries";
 

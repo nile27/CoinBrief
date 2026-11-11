@@ -7,7 +7,7 @@ import { apiFetch } from "@/lib/api";
 import { useTheme } from "next-themes";
 import { ChartSkeleton } from "@/pages/detail/DetailSkeleton";
 import { useCurrency } from "@/store/store";
-import { formatCurrency } from "@/utill/utill";
+import { formatCurrency } from "@/utils/utils";
 import { chartTheme } from "@/lib/chartTheme";
 import type { KlineCandle } from "@/type/type";
 

@@ -3,7 +3,7 @@ import BtnStyle from "@/components/CustomUI/BtnStyle";
 import { Link } from "react-router";
 import PwFindOtp from "./PwFindOtp";
 import PwFindInput from "./PwFindInput";
-import { encodeBase64 } from "@/utill/utill";
+import { encodeBase64 } from "@/utils/utils";
 
 import { useState } from "react";
 import { useNavigate } from "react-router";

@@ -1,6 +1,6 @@
 import { useCurrency } from "@/store/store";
 import type { TickerData } from "@/type/type";
-import { formatCurrency, formatKRW } from "@/utill/utill";
+import { formatCurrency, formatKRW } from "@/utils/utils";
 
 const CoinArticle = ({ coinData, exchange }: { coinData: TickerData; exchange: number }) => {
   const lastUpdated = new Date(Number(coinData.timestamp)).toLocaleString(

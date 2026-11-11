@@ -1,6 +1,6 @@
 import CoinImg from "@/components/CustomUI/CoinImg";
 import type { ProcessedCoin } from "@/type/type";
-import { formatKRW } from "@/utill/utill";
+import { formatKRW } from "@/utils/utils";
 import { Link } from "react-router";
 const TopCoinList = ({ coins }: { coins: ProcessedCoin[] }) => {
   const sortedCoins = [...coins]

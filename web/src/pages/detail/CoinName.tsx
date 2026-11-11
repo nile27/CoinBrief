@@ -1,6 +1,6 @@
 
 import { useCurrency } from "@/store/store";
-import { formatCurrency } from "@/utill/utill";
+import { formatCurrency } from "@/utils/utils";
 import GreenArrow from "@/../public/GreenArrow.svg?react";
 import RedArrow from "@/../public/RedArrow.svg?react";
 import CoinImg from "@/components/CustomUI/CoinImg";
