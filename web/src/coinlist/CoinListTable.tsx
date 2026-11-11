@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ProcessedCoin } from "@/type/type";
+import type { ProcessedCoin } from "@/type/type";
 import { formatKRW } from "@/utill/utill";
 import CoinImg from "@/components/CustomUI/CoinImg";
 import { Link } from "react-router";

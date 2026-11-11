@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api";
-import { useAuthStore, useUserStore, type Iuser } from "@/store/store";
+import { useAuthStore, useUserStore } from "@/store/store";
+import type { User } from "@/type/type";
 
 // 로그인 성공 공통 처리: zustand 스토어 설정 + ['me'] 캐시 채우기 (RequireAuth 가 바로 통과)
-export function finishLogin(qc: ReturnType<typeof useQueryClient>, user: Iuser) {
+export function finishLogin(qc: ReturnType<typeof useQueryClient>, user: User) {
   useAuthStore.getState().login();
   useUserStore.getState().setUser(user);
   qc.setQueryData(["me"], { uid: user.id, email: user.email, displayName: user.displayName });

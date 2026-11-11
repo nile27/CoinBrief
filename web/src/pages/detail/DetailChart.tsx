@@ -9,14 +9,7 @@ import { ChartSkeleton } from "@/pages/detail/DetailSkeleton";
 import { useCurrency } from "@/store/store";
 import { formatCurrency } from "@/utill/utill";
 import { chartTheme } from "@/lib/chartTheme";
-
-interface IKlineChart {
-  candle_date_time_kst: string;
-  opening_price: number;
-  high_price: number;
-  low_price: number;
-  trade_price: number;
-}
+import type { KlineCandle } from "@/type/type";
 
 export default function KlineChart({ symbol, exchange }: { symbol: string; exchange: number }) {
   const [changeDate, setChangeDate] = useState<"days" | "weeks" | "months">(
@@ -32,7 +25,7 @@ export default function KlineChart({ symbol, exchange }: { symbol: string; excha
   const kline = useQuery({
     queryKey: ["upbit", "kline", symbol, changeDate],
     queryFn: () =>
-      apiFetch<IKlineChart[]>(
+      apiFetch<KlineCandle[]>(
         `/api/upbit/kline?market=KRW-${symbol}&interval=${changeDate}&count=30`
       ),
     staleTime: 30_000,

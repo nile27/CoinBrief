@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api";
-import { useUserStore, type Coin } from "@/store/store";
+import { useUserStore } from "@/store/store";
+import type { Coin } from "@/type/type";
 
 const post = (path: string, body: unknown) =>
   apiFetch(path, {

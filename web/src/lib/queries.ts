@@ -1,6 +1,6 @@
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api";
-import type { ProcessedCoin } from "@/type/type";
+import type { PopularCoin, ProcessedCoin } from "@/type/type";
 
 export const meQuery = queryOptions({
     queryKey: ["me"],
@@ -23,14 +23,6 @@ export const coinsQuery = queryOptions({
     staleTime: 30_000,
 });
 export const useUpbitCoins = () => useQuery(coinsQuery);
-
-export interface PopularCoin {
-  market: string;
-  symbol: string;
-  koreanName: string;
-  price: number;
-  changePercent: number;
-}
 
 export const popularQuery = queryOptions({
     queryKey: ["upbit", "popular"],

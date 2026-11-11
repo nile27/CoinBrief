@@ -1,7 +1,7 @@
 
 import React from "react";
 import CoinImg from "@/components/CustomUI/CoinImg";
-import { ProcessedCoin } from "@/type/type";
+import type { ProcessedCoin } from "@/type/type";
 import { Link } from "react-router";
 
 const TopGainers = ({ coins }: { coins: ProcessedCoin[] }) => {
