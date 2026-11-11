@@ -9,9 +9,9 @@ export const SHOT_DIR =
 /** 모바일 프로젝트인지 (뷰포트 너비 기준) */
 export const isNarrow = (page: Page) => (page.viewportSize()?.width ?? 1440) <= 500;
 
-/** Next dev 오류 오버레이가 없는지 */
+/** Vite 개발 오류 오버레이가 없는지 */
 export async function expectNoErrorOverlay(page: Page) {
-  await expect(page.locator("[data-nextjs-dialog], [data-nextjs-dialog-overlay]")).toHaveCount(0);
+  await expect(page.locator("vite-error-overlay")).toHaveCount(0);
 }
 
 /** 모바일에서 가로 스크롤이 생기지 않는지 */

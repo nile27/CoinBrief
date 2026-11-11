@@ -9,6 +9,7 @@ const server = http.createServer(app);
 const ALLOWED_ORIGINS = [
   "https://coinbrief.vercel.app",
   "http://localhost:3000",
+  "http://localhost:5173", // Vite SPA dev
 ];
 
 const io = new Server(server, {
