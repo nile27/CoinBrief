@@ -1,5 +1,6 @@
 import { useCoinStore, useUserStore } from "@/store/store";
 import { formatKRW } from "@/utill/utill";
+import Skeleton from "@/components/Skeleton";
 
 const MyCoinArticle = () => {
   const user = useUserStore((state) => state.user);
@@ -17,8 +18,16 @@ const MyCoinArticle = () => {
 
   if (!coinSymbol || !staticData[coinSymbol]) {
     return (
-      <div className="flex justify-center items-center w-full h-[150px]">
-        <p className="text-muted dark:text-muted-dark">데이터 불러오는 중...</p>
+      <div aria-busy="true" className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+        {[0, 1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="flex min-w-0 flex-col gap-1 rounded-[10px] border border-border bg-container p-4 dark:border-border-dark dark:bg-container-dark"
+          >
+            <p className="text-xs"><Skeleton className="w-14" /></p>
+            <p className="text-[15px]"><Skeleton className="w-24" /></p>
+          </div>
+        ))}
       </div>
     );
   }

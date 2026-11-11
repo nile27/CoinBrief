@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import CoinArticle from "@/pages/detail/CoinArticle";
 import DetailChart from "@/pages/detail/DetailChart";
 import CoinName from "@/pages/detail/CoinName";
-import Loading from "@/components/Loading";
+import DetailSkeleton from "@/pages/detail/DetailSkeleton";
 import { apiFetch } from "@/lib/api";
 import { useExchange } from "@/lib/queries";
 import type { TickerData } from "@/type/type";
@@ -17,7 +17,7 @@ const DetailCoinPage = () => {
   });
   const exchange = useExchange();
 
-  if (ticker.isPending || exchange.isPending) return <Loading />;
+  if (ticker.isPending || exchange.isPending) return <DetailSkeleton />;
   const coin = ticker.data?.[0];
   if (!coin || exchange.isError)
     return (

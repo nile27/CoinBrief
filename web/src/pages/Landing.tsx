@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import styles from "./Landing.module.css";
 import { formatKRWPrice } from "@/utill/utill";
+import Skeleton from "@/components/Skeleton";
 import { useExchange, usePopularCoins } from "@/lib/queries";
 
 // "2026-11-10" -> "11/10"
@@ -83,12 +84,28 @@ const Landing = () => {
                 );
               })}
             </ul>
+          ) : popular.isPending ? (
+            <ul className={styles.grid} aria-busy="true">
+              {[0, 1, 2, 3].map((i) => (
+                <li key={i} className={styles.coin}>
+                  <div className={styles.coinTop}>
+                    <span className={styles.coinName}><Skeleton className="w-24" /></span>
+                    <span className={styles.coinSymbol}><Skeleton className="w-8" /></span>
+                  </div>
+                  <div className={styles.price}><Skeleton className="w-32" /></div>
+                  <div className={styles.change}><Skeleton className="w-16" /></div>
+                </li>
+              ))}
+            </ul>
           ) : (
-            <p className={styles.empty}>
-              {popular.isPending ? "\u00a0" : "시세를 불러오지 못했습니다"}
-            </p>
+            <p className={styles.empty}>시세를 불러오지 못했습니다</p>
           )}
 
+          {exchange.isPending && (
+            <p className={styles.fx}>
+              <Skeleton className="w-56" />
+            </p>
+          )}
           {usd && (
             <p className={styles.fx}>
               USD/KRW {usd.USD.toLocaleString("en-US", { maximumFractionDigits: 2 })} ·{" "}

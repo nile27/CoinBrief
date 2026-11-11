@@ -4,6 +4,7 @@ import TopVolume from "@/coinlist/TopVolume";
 import CoinListTable from "@/coinlist/CoinListTable";
 import SearchCoin from "@/coinlist/SearchCoin";
 import TopLosers from "@/coinlist/TopLosers";
+import CoinListSkeleton, { CalcSkeleton } from "@/coinlist/CoinListSkeleton";
 import { useExchange, useUpbitCoins } from "@/lib/queries";
 
 const ITEMS_PER_PAGE = 50;
@@ -30,14 +31,14 @@ const CoinListPage = () => {
           코인 목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
         </p>
       ) : coins.isPending ? (
-        <div className="min-h-[900px]" aria-busy="true" />
+        <CoinListSkeleton />
       ) : (
         <>
           <section className="grid grid-cols-3 items-stretch gap-4 tablet:grid-cols-1">
             <TopVolume coins={allCoins} />
             <TopLosers coins={allCoins} />
             {exchange.isPending ? (
-              <div className="tablet:hidden" />
+              <CalcSkeleton />
             ) : exchange.isError ? (
               <p className="text-sm text-muted tablet:hidden dark:text-muted-dark">
                 환율을 불러오지 못했습니다.

@@ -5,6 +5,7 @@ import ApexChart from "react-apexcharts";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api";
 import { useTheme } from "next-themes";
+import { ChartSkeleton } from "@/pages/detail/DetailSkeleton";
 import { useCurrency } from "@/store/store";
 import { formatCurrency } from "@/utill/utill";
 import { chartTheme } from "@/lib/chartTheme";
@@ -64,9 +65,7 @@ export default function KlineChart({ symbol, exchange }: { symbol: string; excha
   return (
     <>
       {loading ? (
-        <div className="flex h-[400px] w-full items-center justify-center text-muted dark:text-muted-dark">
-          불러오는 중...
-        </div>
+        <ChartSkeleton />
       ) : (
         <section className="w-full flex tablet:flex-col rounded-[10px] border border-border dark:border-border-dark p-4 tablet:gap-3">
           <div className=" w-auto flex justify-end items-center h-full pt-10 tablet:pt-1">
