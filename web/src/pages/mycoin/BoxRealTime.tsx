@@ -1,6 +1,6 @@
 import { useCoinStore } from "@/store/store";
 import { useEffect, useState, useRef } from "react";
-import { formatKRWPrice } from "@/utill/utill";
+import { formatKRWPrice } from "@/utils/utils";
 import io from "socket.io-client";
 import Skeleton from "@/components/Skeleton";
 import type { UpbitData } from "@/type/type";

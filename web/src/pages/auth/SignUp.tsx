@@ -1,7 +1,7 @@
 import InputStyle from "@/components/CustomUI/InputStyle";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
 import OTPDiv from "./OTPBtn";
-import { errorMessages, passwordRegex } from "@/utill/utill";
+import { errorMessages, passwordRegex } from "@/utils/utils";
 
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";

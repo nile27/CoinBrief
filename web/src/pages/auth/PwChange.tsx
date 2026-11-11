@@ -1,7 +1,7 @@
 import InputStyle from "@/components/CustomUI/InputStyle";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
 
-import { decodeBase64, errorMessages, passwordRegex } from "@/utill/utill";
+import { decodeBase64, errorMessages, passwordRegex } from "@/utils/utils";
 import { useSearchParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { useState } from "react";

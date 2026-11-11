@@ -1,5 +1,5 @@
 import { useCoinStore, useUserStore } from "@/store/store";
-import { formatKRW } from "@/utill/utill";
+import { formatKRW } from "@/utils/utils";
 import Skeleton from "@/components/Skeleton";
 
 const MyCoinArticle = () => {
