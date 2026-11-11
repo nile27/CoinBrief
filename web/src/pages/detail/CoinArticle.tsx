@@ -1,5 +1,5 @@
 import { useCurrency } from "@/store/store";
-import { TickerData } from "@/type/type";
+import type { TickerData } from "@/type/type";
 import { formatCurrency, formatKRW } from "@/utill/utill";
 
 const CoinArticle = ({ coinData, exchange }: { coinData: TickerData; exchange: number }) => {

@@ -7,14 +7,7 @@ import { apiFetch } from "@/lib/api";
 import { useCoinStore, useCurrency, useUserStore } from "@/store/store";
 import { formatCurrency } from "@/utill/utill";
 import { chartTheme } from "@/lib/chartTheme";
-
-interface IKlineChart {
-  candle_date_time_kst: string;
-  opening_price: number;
-  high_price: number;
-  low_price: number;
-  trade_price: number;
-}
+import type { KlineCandle } from "@/type/type";
 
 export default function MyCoinChart({ exchange }: { exchange?: number }) {
   const { theme, systemTheme } = useTheme();
@@ -31,7 +24,7 @@ export default function MyCoinChart({ exchange }: { exchange?: number }) {
   const kline = useQuery({
     queryKey: ["upbit", "kline", coinSymbol, "days"],
     queryFn: () =>
-      apiFetch<IKlineChart[]>(`/api/upbit/kline?market=KRW-${coinSymbol}&interval=days&count=30`),
+      apiFetch<KlineCandle[]>(`/api/upbit/kline?market=KRW-${coinSymbol}&interval=days&count=30`),
     enabled: !!coinSymbol,
     staleTime: 30_000,
   });

@@ -1,10 +1,10 @@
-import { Iuser } from "@/store/store";
+import type { User } from "@/type/type";
 
 // 팝업은 클릭 직후에 열려야 하므로 로그인 화면이 뜨면 미리 받아 둔다
 export const preloadFirebase = () =>
   Promise.all([import("@/firebase/firebase"), import("firebase/auth"), import("firebase/firestore")]);
 
-export const googleLogin = async (): Promise<Iuser | null> => {
+export const googleLogin = async (): Promise<User | null> => {
   const [{ auth, firestore }, { signInWithPopup, GoogleAuthProvider }, { doc, getDoc, setDoc, collection, query, where, getDocs }] =
     await preloadFirebase();
   const provider = new GoogleAuthProvider();
@@ -33,7 +33,7 @@ export const googleLogin = async (): Promise<Iuser | null> => {
 
     if (!querySnapshot.empty) {
       const signedUserDoc = querySnapshot.docs[0];
-      const signedUserData = signedUserDoc.data() as Iuser;
+      const signedUserData = signedUserDoc.data() as User;
       const uid = signedUserDoc.id;
       return {
         ...signedUserData,
@@ -45,10 +45,10 @@ export const googleLogin = async (): Promise<Iuser | null> => {
     const userSnap = await getDoc(userRef);
 
     if (userSnap.exists()) {
-      return userSnap.data() as Iuser;
+      return userSnap.data() as User;
     }
 
-    const newUser: Iuser = {
+    const newUser: User = {
       id: user.uid,
       name: user.displayName || "",
       email: user.email,
@@ -58,7 +58,7 @@ export const googleLogin = async (): Promise<Iuser | null> => {
 
     await setDoc(userRef, newUser);
 
-    const userData: Iuser = {
+    const userData: User = {
       id: user.uid,
       name: user.displayName || "",
       email: user.email,

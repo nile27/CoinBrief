@@ -3,11 +3,7 @@ import { CircleX } from "lucide-react";
 import InputStyle from "@/components/CustomUI/InputStyle";
 import { useUserStore, useSearchData } from "@/store/store";
 import { useAddCoin } from "@/lib/mutations";
-
-interface Coin {
-  id: string;
-  symbol: string;
-}
+import type { CoinSymbol } from "@/type/type";
 
 const AddModal = ({
   setIsModal,
@@ -17,10 +13,10 @@ const AddModal = ({
   const add = useAddCoin();
   const { data } = useSearchData();
   const [search, setSearch] = useState("");
-  const [results, setResults] = useState<Coin[]>([]);
+  const [results, setResults] = useState<CoinSymbol[]>([]);
 
   useEffect(() => {
-    const filteredResults: Coin[] = data.filter((coin: Coin) =>
+    const filteredResults: CoinSymbol[] = data.filter((coin: CoinSymbol) =>
       coin.symbol.toUpperCase().includes(search.toUpperCase())
     );
     setResults(filteredResults);
@@ -38,7 +34,7 @@ const AddModal = ({
   const [message, setMessage] = useState("");
   const isAdded = (id: string) => mycoin.some((c) => c.id === id);
 
-  const handleSelectCoin = (coin: Coin) => {
+  const handleSelectCoin = (coin: CoinSymbol) => {
     if (isAdded(coin.id)) {
       setMessage("이미 등록된 코인입니다.");
       return;
@@ -85,7 +81,7 @@ const AddModal = ({
         )}
 
         <ul className="w-full border border-border dark:border-border-dark rounded-md max-h-60 overflow-auto mt-2">
-          {results.map((coin: Coin) => (
+          {results.map((coin: CoinSymbol) => (
             <li
               key={coin.symbol}
               className={`flex items-center justify-between px-4 py-2 cursor-pointer border-b  border-border dark:border-border-dark hover:bg-hover hover:dark:bg-hover-dark ${

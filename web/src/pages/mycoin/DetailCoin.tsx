@@ -2,16 +2,10 @@ import { useCoinStore, useUserStore } from "@/store/store";
 import BoxRealTime from "./BoxRealTime";
 import CoinImg from "@/components/CustomUI/CoinImg";
 import { useEffect, useState } from "react";
-
-interface mycoin {
-  id: string;
-  symbol: string;
-  name: string;
-}
-[];
+import type { Coin } from "@/type/type";
 
 const DetailCoin = () => {
-  const [myCoinArr, setMyCoinArr] = useState<mycoin[]>([]);
+  const [myCoinArr, setMyCoinArr] = useState<Coin[]>([]);
   const { mycoin } = useUserStore().user;
   const { setSelectedCoin, selectedCoin } = useCoinStore();
 

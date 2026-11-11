@@ -3,24 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { formatKRWPrice } from "@/utill/utill";
 import io from "socket.io-client";
 import Skeleton from "@/components/Skeleton";
-
-interface UpbitData {
-  market: string;
-  trade_price: number;
-  change_rate: number;
-  acc_trade_price_24h: number;
-  acc_trade_volume_24h: number;
-  code: string;
-  change: string;
-  high_price: number;
-  low_price: number;
-}
-export interface StaticData {
-  acc_trade_volume_24h: number;
-  acc_trade_price_24h: number;
-  high_price: number;
-  low_price: number;
-}
+import type { UpbitData } from "@/type/type";
 
 export default function BoxRealTime({ symbol }: { symbol: string }) {
   const tradePriceRef = useRef<number>(0);

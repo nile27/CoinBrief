@@ -1,27 +1,16 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-export interface Coin {
-  id: string;
-  symbol: string;
-  name: string;
-}
+import type { Coin, CoinSymbol, StaticData, User } from "@/type/type";
+
 interface AuthState {
   isLogin: boolean;
   login: () => void;
   logout: () => void;
 }
 
-export interface Iuser {
-  id: string;
-  name: string;
-  email: string;
-  mycoin: { id: string; symbol: string; name: string }[];
-  displayName: string;
-}
-
 interface UserState {
-  user: Iuser;
-  setUser: (user: Iuser) => void;
+  user: User;
+  setUser: (user: User) => void;
   deleteUser: () => void;
   addCoin: (coin: Coin) => void;
   removeCoin: (idx: number) => void;
@@ -33,26 +22,10 @@ interface ICurrency {
   usd: () => void;
 }
 
-interface SearchDate {
-  id: string;
-  symbol: string;
-}
 interface SearchState {
-  data: SearchDate[];
+  data: CoinSymbol[];
   fetchCoins: () => Promise<void>;
 }
-export interface RealTimeData {
-  trade_price: number;
-  change_rate: string;
-}
-
-export interface StaticData {
-  acc_trade_volume_24h: number;
-  acc_trade_price_24h: number;
-  high_price: number;
-  low_price: number;
-}
-
 interface CoinState {
   selectedCoin: number;
   staticData: Record<string, StaticData>;
@@ -123,7 +96,7 @@ export const useSearchData = create<SearchState>()(
           const coins = snapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
-          })) as SearchDate[];
+          })) as CoinSymbol[];
 
           set({ data: coins });
         } catch (error) {
