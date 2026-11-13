@@ -14,14 +14,20 @@ export default function BoxRealTime({ symbol }: { symbol: string }) {
   const [tradePrice, setTradePrice] = useState<number>(0);
   const [changeRate, setChangeRate] = useState<string>("");
 
+  const [disconnected, setDisconnected] = useState<boolean>(false);
+
   const { setStaticData } = useCoinStore();
 
   useEffect(() => {
     const newSocket = io(`${import.meta.env.VITE_WEBSOCKET_URL}`);
 
+    // connect 는 최초 연결뿐 아니라 자동 재연결 시에도 발생하므로 매번 다시 구독한다.
     newSocket.on("connect", () => {
+      setDisconnected(false);
       newSocket.emit("subscribe", symbol);
     });
+    newSocket.on("disconnect", () => setDisconnected(true));
+    newSocket.on("connect_error", () => setDisconnected(true));
 
     newSocket.on("upbit_data", (message: UpbitData) => {
       const messageSymbol = message.code.slice(4);
@@ -56,6 +62,9 @@ export default function BoxRealTime({ symbol }: { symbol: string }) {
       clearInterval(updateInterval);
       newSocket.emit("unsubscribe", symbol);
       newSocket.off("upbit_data");
+      newSocket.off("connect");
+      newSocket.off("disconnect");
+      newSocket.off("connect_error");
       newSocket.disconnect();
     };
   }, [symbol]);
@@ -64,7 +73,7 @@ export default function BoxRealTime({ symbol }: { symbol: string }) {
   return (
     <div className="flex flex-col items-end gap-0.5 text-sm tabular-nums">
       <span className="font-medium text-ink dark:text-ink-dark">
-        {tradePrice ? `₩${formatKRWPrice(tradePrice)}` : <Skeleton className="w-20" />}
+        {tradePrice ? `₩${formatKRWPrice(tradePrice)}` : disconnected ? "—" : <Skeleton className="w-20" />}
       </span>
       <span
         className={
@@ -75,8 +84,13 @@ export default function BoxRealTime({ symbol }: { symbol: string }) {
             : "text-muted dark:text-muted-dark"
         }
       >
-        {changeRate ? `${dir === "FALL" ? "-" : dir === "RISE" ? "+" : ""}${changeRate}%` : <Skeleton className="w-12" />}
+        {changeRate ? `${dir === "FALL" ? "-" : dir === "RISE" ? "+" : ""}${changeRate}%` : disconnected ? "—" : <Skeleton className="w-12" />}
       </span>
+      {disconnected && (
+        <span className="text-xs text-down" role="status">
+          실시간 연결 끊김 · 재연결 중
+        </span>
+      )}
     </div>
   );
 }
