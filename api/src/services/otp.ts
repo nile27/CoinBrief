@@ -6,6 +6,9 @@ import { HttpError } from "../lib/http.js";
 const findUser = (email: string, name: string) =>
   db.collection("users").where("email", "==", email).where("name", "==", name).get();
 
+// 회원가입 중복 검사는 이름과 무관하게 이메일만 본다 (Auth 는 이메일이 유일키라 이름이 달라도 가입이 실패한다)
+const findByEmail = (email: string) => db.collection("users").where("email", "==", email).limit(1).get();
+
 const HOUR = 60 * 60 * 1000;
 const TOO_MANY = { message: "인증 메일 요청이 너무 많습니다. 잠시 후 다시 시도해주세요." };
 
@@ -30,11 +33,13 @@ async function checkRate(email: string, ip: string) {
 
 export async function sendOtp(email: string, name: string, isPwFind: boolean, ip: string) {
   await checkRate(email, ip);
-  const users = await findUser(email, name);
-  if (isPwFind && users.empty) {
-    throw new HttpError(404, { message: "가입 정보를 찾을 수 없습니다. 이름과 이메일을 확인해주세요." });
+  if (isPwFind) {
+    if ((await findUser(email, name)).empty) {
+      throw new HttpError(404, { message: "가입 정보를 찾을 수 없습니다. 이름과 이메일을 확인해주세요." });
+    }
+  } else if (!(await findByEmail(email)).empty) {
+    throw new HttpError(409, { message: "이미 가입된 이메일입니다." });
   }
-  if (!isPwFind && !users.empty) throw new HttpError(401, { message: "이미 가입된 회원입니다." });
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   await db.collection("otps").doc(email).set({
     otp,
@@ -126,13 +131,19 @@ export async function issueSignupToken(email: string) {
   return token;
 }
 
+// 읽기·검증·삭제를 한 트랜잭션으로 처리해, 같은 토큰으로 동시에 들어온 요청 중 정확히 1건만 소비에 성공한다.
 export async function consumeSignupToken(email: string, cookieToken?: string) {
   const ref = db.collection("signupVerified").doc(email);
-  const d = (await ref.get()).data() as { token: string; expiresAt: InstanceType<typeof Timestamp> } | undefined;
-  if (!d || !cookieToken || d.token !== cookieToken || Date.now() > d.expiresAt.toMillis()) {
-    throw new HttpError(403, { message: "이메일 인증이 필요합니다." });
-  }
-  await ref.delete();
+  const ok = await db.runTransaction(
+    async (tx) => {
+      const d = (await tx.get(ref)).data() as { token: string; expiresAt: InstanceType<typeof Timestamp> } | undefined;
+      if (!d || !cookieToken || d.token !== cookieToken || Date.now() > d.expiresAt.toMillis()) return false;
+      tx.delete(ref);
+      return true;
+    },
+    { maxAttempts: 30 },
+  );
+  if (!ok) throw new HttpError(403, { message: "이메일 인증이 필요합니다." });
 }
 
 export async function consumeResetToken(email: string, cookieToken?: string) {

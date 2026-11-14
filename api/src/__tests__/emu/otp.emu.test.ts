@@ -3,6 +3,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 // 안전장치: 에뮬레이터 + demo- 프로젝트가 아니면 즉시 실패 (실제 Firebase 접근 차단)
 const projectId = process.env.GCLOUD_PROJECT ?? process.env.FIREBASE_PROJECT_ID ?? "";
 if (!process.env.FIRESTORE_EMULATOR_HOST) throw new Error("FIRESTORE_EMULATOR_HOST 가 설정되지 않았습니다. npm run test:emu 로 실행하세요.");
+if (!process.env.FIREBASE_AUTH_EMULATOR_HOST) throw new Error("FIREBASE_AUTH_EMULATOR_HOST 가 설정되지 않았습니다. npm run test:emu 로 실행하세요.");
 if (!projectId.startsWith("demo-")) throw new Error(`demo- 프로젝트가 아닙니다: "${projectId}"`);
 
 type Svc = typeof import("../../services/otp.js");

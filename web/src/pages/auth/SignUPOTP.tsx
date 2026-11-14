@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import InputStyle from "@/components/CustomUI/InputStyle";
 import BtnStyle from "@/components/CustomUI/BtnStyle";
+import { useSingleFlight } from "@/hooks/useSingleFlight";
 
 const SignUPOTP = ({
   setIsModal,
@@ -16,8 +17,7 @@ const SignUPOTP = ({
   const [otp, setOtp] = useState("");
   const [verifyMessage, setVerifyMessage] = useState<string>("");
 
-  const verifyOtp = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const doVerify = async () => {
     try {
       const response = await fetch("/api/verifyotp", {
         method: "POST",
@@ -36,6 +36,12 @@ const SignUPOTP = ({
       console.error("OTP 검증 에러:", error);
       setVerifyMessage("OTP 검증 중 문제가 발생했습니다.");
     }
+  };
+
+  const { run: runVerify, pending } = useSingleFlight(doVerify);
+  const verifyOtp = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    runVerify();
   };
 
   useEffect(() => {
@@ -66,7 +72,7 @@ const SignUPOTP = ({
               autoComplete="off"
               onChange={(e) => setOtp(e.target.value)}
             />
-            <BtnStyle size="small" onClick={verifyOtp}>
+            <BtnStyle size="small" onClick={verifyOtp} disabled={pending}>
               인증
             </BtnStyle>
           </div>
