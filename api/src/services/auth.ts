@@ -43,7 +43,15 @@ export async function loginWithPassword(email: string, password: string) {
 }
 
 export async function register(email: string, password: string, displayName: string, name: string) {
-  const user = await auth.createUser({ email, password, displayName });
+  let user;
+  try {
+    user = await auth.createUser({ email, password, displayName });
+  } catch (e) {
+    if ((e as { code?: string }).code === "auth/email-already-exists") {
+      throw new HttpError(409, { message: "이미 가입된 이메일입니다." });
+    }
+    throw e;
+  }
   await db.collection("users").doc(user.uid).set({ email, displayName, name, mycoin: [] });
 }
 
