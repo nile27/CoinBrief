@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test:e2e": "playwright test",
-    "test:emu": "firebase emulators:exec --only firestore --project demo-coinbrief \"npm --prefix api run test:emu:inner\""
+    "test:emu": "firebase emulators:exec --only firestore,auth --project demo-coinbrief \"npm --prefix api run test:emu:inner\""
   },
   "devDependencies": {
     "@playwright/test": "^1.65.0",
