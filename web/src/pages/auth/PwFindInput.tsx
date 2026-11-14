@@ -3,12 +3,13 @@ import InputStyle from "@/components/CustomUI/InputStyle";
 
 interface IProps {
   verify: boolean;
+  pending?: boolean;
   otp: string;
   setOtp: React.Dispatch<React.SetStateAction<string>>;
   onVerify: () => void;
 }
 
-const PwFindInput = ({ verify, otp, setOtp, onVerify }: IProps) => {
+const PwFindInput = ({ verify, pending = false, otp, setOtp, onVerify }: IProps) => {
   return (
     <div className=" w-full h-auto flex justify-center items-center gap-2">
       <InputStyle
@@ -27,7 +28,7 @@ const PwFindInput = ({ verify, otp, setOtp, onVerify }: IProps) => {
       <button
         type="button"
         onClick={onVerify}
-        disabled={verify}
+        disabled={verify || pending}
         className={` bg-btn dark:bg-btn-dark  hover:bg-btn-hover dark:hover:bg-btn-hover-dark disabled:bg-secondary disabled:text-muted dark:disabled:bg-secondary-dark dark:disabled:text-muted-dark
          min-w-[80px] text-[14px] h-[40px]  text-btn-ink dark:text-btn-ink-dark font-semibold rounded-md`}
       >

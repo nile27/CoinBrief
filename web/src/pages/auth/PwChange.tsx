@@ -6,6 +6,7 @@ import { useSearchParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useSingleFlight } from "@/hooks/useSingleFlight";
 interface FormData {
   password: string;
   confirmPassword: string;
@@ -24,7 +25,7 @@ const PwChange = () => {
   const [errMessages, setErrMessages] = useState("");
   const navi = useNavigate();
 
-  const onSubmit = async (data: FormData) => {
+  const submitChange = async (data: FormData) => {
     const password = data.password || "";
 
     try {
@@ -46,6 +47,8 @@ const PwChange = () => {
       setErrMessages("비밀번호 변경에 문제가 발생했습니다.");
     }
   };
+
+  const { run: onSubmit, pending } = useSingleFlight(submitChange);
 
   return (
     <section className="flex w-full flex-1 items-center justify-center px-4 py-10">
@@ -98,7 +101,7 @@ const PwChange = () => {
               ))}
           </div>
 
-          <BtnStyle size="medium">SIGN UP</BtnStyle>
+          <BtnStyle size="medium" disabled={pending}>SIGN UP</BtnStyle>
         </form>
       </div>
     </section>

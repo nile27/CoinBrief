@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useSingleFlight } from "@/hooks/useSingleFlight";
 
 interface FormData {
   name: string;
@@ -28,7 +29,7 @@ const SignUp = () => {
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
   const navi = useNavigate();
 
-  const onSubmit = async (data: FormData) => {
+  const submitRegister = async (data: FormData) => {
     const jsonData = JSON.stringify(data);
 
     if (!verify) {
@@ -59,6 +60,8 @@ const SignUp = () => {
       }
     }
   };
+
+  const { run: onSubmit, pending } = useSingleFlight(submitRegister);
 
   return (
     <section className="flex w-full flex-1 items-center justify-center px-4 py-10">
@@ -167,7 +170,7 @@ const SignUp = () => {
             )}
           </div>
 
-          <BtnStyle size="medium" onClick={() => setIsSubmit(true)}>
+          <BtnStyle size="medium" disabled={pending} onClick={() => setIsSubmit(true)}>
             SIGN UP
           </BtnStyle>
         </form>
