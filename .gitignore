@@ -20,3 +20,7 @@ node_modules
 .vercel
 *.tsbuildinfo
 .env*
+
+# firebase emulator
+firestore-debug.log
+*-debug.log

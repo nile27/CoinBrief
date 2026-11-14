@@ -62,25 +62,46 @@ export async function sendOtp(email: string, name: string, isPwFind: boolean, ip
 }
 
 // verifyotp / pwfind 공통: OTP 검사 후 일회용으로 삭제. 실패하면 HttpError.
+// 읽기·비교·증가/삭제를 한 트랜잭션에서 처리해 동시 요청에도 시도 제한 우회·재사용이 불가능하다.
+// 실패 응답도 시도 증가/삭제가 커밋돼야 하므로, 트랜잭션 안에서는 throw 하지 않고 결과만 반환한 뒤 밖에서 던진다.
+type OtpOutcome = "ok" | "missing" | "expired" | "mismatch" | "locked";
+const MAX_ATTEMPTS = 5;
+
 export async function checkOtp(email: string, otp: string) {
   const ref = db.collection("otps").doc(email);
-  const doc = await ref.get();
-  if (!doc.exists) throw new HttpError(404, { message: "OTP가 존재하지 않습니다." });
-  const { otp: stored, expiresAt } = doc.data() as { otp: string; expiresAt: InstanceType<typeof Timestamp> };
-  if (Date.now() > expiresAt.toMillis()) {
-    await ref.delete();
-    throw new HttpError(400, { message: "OTP가 만료되었습니다." });
+  const outcome = await db.runTransaction(
+    async (tx): Promise<OtpOutcome> => {
+      const doc = await tx.get(ref);
+      if (!doc.exists) return "missing";
+      const { otp: stored, expiresAt, attempts = 0 } = doc.data() as {
+        otp: string;
+        expiresAt: InstanceType<typeof Timestamp>;
+        attempts?: number;
+      };
+      if (Date.now() > expiresAt.toMillis()) {
+        tx.delete(ref);
+        return "expired";
+      }
+      if (stored === otp) {
+        tx.delete(ref);
+        return "ok";
+      }
+      // 5회 틀리면 OTP 폐기
+      if (attempts + 1 >= MAX_ATTEMPTS) {
+        tx.delete(ref);
+        return "locked";
+      }
+      tx.update(ref, { attempts: FieldValue.increment(1) });
+      return "mismatch";
+    },
+    { maxAttempts: 30 }, // 같은 문서에 동시 요청이 몰리면 충돌 재시도가 많아진다
+  );
+  if (outcome === "missing") throw new HttpError(404, { message: "OTP가 존재하지 않습니다." });
+  if (outcome === "expired") throw new HttpError(400, { message: "OTP가 만료되었습니다." });
+  if (outcome === "locked") {
+    throw new HttpError(429, { message: "인증 시도 횟수를 초과했습니다. 인증 번호를 다시 받아주세요." });
   }
-  if (stored !== otp) {
-    // 5회 틀리면 OTP 폐기
-    await ref.update({ attempts: FieldValue.increment(1) });
-    if (((await ref.get()).data()?.attempts ?? 0) >= 5) {
-      await ref.delete();
-      throw new HttpError(429, { message: "인증 시도 횟수를 초과했습니다. 인증 번호를 다시 받아주세요." });
-    }
-    throw new HttpError(400, { message: "OTP가 일치하지 않습니다." });
-  }
-  await ref.delete();
+  if (outcome === "mismatch") throw new HttpError(400, { message: "OTP가 일치하지 않습니다." });
 }
 
 // 가입자 확인 + OTP 검사 후 비밀번호 변경 증명용 일회성 토큰(10분) 발급

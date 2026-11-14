@@ -7,7 +7,8 @@
     "dev": "tsx watch --env-file=../.env --env-file=../.env.local src/server.ts",
     "start": "tsx src/server.ts",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:emu:inner": "vitest run --config vitest.emu.config.ts"
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",

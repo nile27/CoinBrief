@@ -27,6 +27,7 @@ export function createFakeFirebase() {
         get: (r: any) => r.get(),
         set: (r: any, d: any) => r.set(d),
         update: (r: any, d: any) => r.update(d),
+        delete: (r: any) => r.delete(),
       }),
   };
   const FieldValue = {
