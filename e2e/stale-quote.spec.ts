@@ -134,9 +134,10 @@ test.describe("시세 수신 중단 감지 (테스트 계정, 읽기 전용)", (
     await expect(page.getByText(/시세 지연 · \d+초 전 기준/).first()).toBeVisible();
     await expect(page.getByText("실시간 연결 끊김 · 재연결 중")).toHaveCount(0);
 
-    // 다시 수신되면 즉시 사라진다
+    // 시세가 다시 수신된 코인만 지연 표시가 사라진다 (다른 코인은 계속 침묵 중)
+    const before = await page.getByText(/시세 지연/).count();
     relay.quote(1_100_000);
-    await expect(page.getByText(/시세 지연/)).toHaveCount(0);
+    await expect(page.getByText(/시세 지연/)).toHaveCount(before - 1);
   });
 
   test("연결 끊김이 시세 지연보다 우선한다", async ({ page }) => {
