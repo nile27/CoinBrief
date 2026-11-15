@@ -6,6 +6,7 @@ import PwFindInput from "./PwFindInput";
 import { encodeBase64 } from "@/utils/utils";
 
 import { useState } from "react";
+import { useSingleFlight } from "@/hooks/useSingleFlight";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 
@@ -29,7 +30,7 @@ const PwFind = () => {
   const [verifyMessage, setVerifyMessage] = useState("");
   const navi = useNavigate();
 
-  const verifyOtp = async () => {
+  const doVerify = async () => {
     try {
       const response = await fetch("/api/pwfind", {
         method: "POST",
@@ -57,6 +58,8 @@ const PwFind = () => {
       setVerifyMessage("OTP 검증 중 문제가 발생했습니다.");
     }
   };
+
+  const { run: verifyOtp, pending: verifying } = useSingleFlight(doVerify);
 
   const handleReset = () => {
     reset();
@@ -121,6 +124,7 @@ const PwFind = () => {
             {isInput && watch("name") && (
               <PwFindInput
                 verify={verify}
+                pending={verifying}
                 otp={otp}
                 setOtp={setOtp}
                 onVerify={verifyOtp}

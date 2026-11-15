@@ -20,7 +20,10 @@ export function createFakeFirebase() {
   const db = {
     collection: (c: string) => ({
       doc: (id: string) => ref(`${c}/${id}`),
-      where: () => ({ where: () => ({ get: async () => ({ empty: true }) }) }),
+      where: () => ({
+        where: () => ({ get: async () => ({ empty: true }) }),
+        limit: () => ({ get: async () => ({ empty: true }) }),
+      }),
     }),
     runTransaction: async (fn: any) =>
       fn({
