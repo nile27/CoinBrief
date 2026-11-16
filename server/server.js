@@ -4,20 +4,24 @@ const http = require("http");
 const { Server } = require("socket.io");
 const WebSocket = require("ws");
 
-const app = express();
-const server = http.createServer(app);
 const ALLOWED_ORIGINS = [
   "https://coinbrief.vercel.app",
   "http://localhost:3000",
   "http://localhost:5173", // Vite SPA dev
 ];
 
+function createRelay(options = {}) {
+const app = express();
+const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: { origin: ALLOWED_ORIGINS },
 });
 
 const UPBIT_WEBSOCKET_URL =
-  process.env.UPBIT_WEBSOCKET_URL || "wss://api.upbit.com/websocket/v1";
+  options.upbitUrl ||
+  process.env.UPBIT_WEBSOCKET_URL ||
+  "wss://api.upbit.com/websocket/v1";
 
 // 헬스체크 / 깨우기(keep-alive)용 엔드포인트
 app.get("/", (req, res) => {
@@ -90,7 +94,15 @@ io.on("connection", (socket) => {
   });
 });
 
-const PORT = process.env.PORT || process.env.SERVER_PORT || 4000;
-server.listen(PORT, () => {
-  console.log(`웹소켓 서버 시작 ${PORT}`);
-});
+return { app, server, io };
+}
+
+module.exports = { createRelay, ALLOWED_ORIGINS };
+
+if (require.main === module) {
+  const { server } = createRelay();
+  const PORT = process.env.PORT || process.env.SERVER_PORT || 4000;
+  server.listen(PORT, () => {
+    console.log(`웹소켓 서버 시작 ${PORT}`);
+  });
+}
