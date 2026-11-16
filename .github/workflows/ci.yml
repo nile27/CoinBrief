@@ -53,6 +53,26 @@ jobs:
       - run: npm run typecheck
       - run: npm test
 
+  relay:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            server/package-lock.json
+            web/package-lock.json
+      - run: npm ci
+      # 테스트가 web/node_modules 의 socket.io-client 를 빌려 쓰므로 web 도 설치
+      - run: npm ci
+        working-directory: web
+      - run: npm test
+
   emulator:
     runs-on: ubuntu-latest
     steps:
